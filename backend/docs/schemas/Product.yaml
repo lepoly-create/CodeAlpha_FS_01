@@ -1,0 +1,48 @@
+type: object
+
+properties:
+  _id:
+    type: string
+    example: "6a65ba09d5996d86848e02b9"
+
+  name:
+    type: string
+    example: "MacBook Pro M4"
+
+  description:
+    type: string
+    example: "Ordinateur portable Apple"
+
+  price:
+    type: number
+    example: 2300
+
+  image:
+    type: string
+    example: "/assets/macbook.jpg"
+
+  category:
+    type: string
+    example: "Ordinateurs"
+
+  stock:
+    type: integer
+    example: 20
+
+  isActive:
+    type: boolean
+    example: true
+
+  createdAt:
+    type: string
+    format: date-time
+
+  updatedAt:
+    type: string
+    format: date-time
+
+required:
+  - name
+  - description
+  - price
+  - stock

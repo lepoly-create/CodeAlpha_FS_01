@@ -1,0 +1,84 @@
+openapi: 3.1.0
+
+info:
+  title: MarketElectro API
+  version: 1.0.0
+  description: |
+    API REST de la plateforme MarketElectro.
+
+    Fonctionnalités :
+
+      - Authentification JWT
+      - Gestion des utilisateurs
+      - Gestion des produits
+      - Gestion du panier
+      - Gestion des commandes
+
+  contact:
+    name: Josué Amegadjin
+    email: josue@example.com
+
+servers:
+  - url: http://localhost:5000/api
+    description: Serveur de développement
+
+tags:
+  - name: Authentication
+  - name: Products
+  - name: Cart
+  - name: Orders
+
+paths:
+
+  /auth/register:
+    $ref: "./paths/auth.yaml#/register"
+
+  /auth/login:
+    $ref: "./paths/auth.yaml#/login"
+
+  /auth/profile:
+    $ref: "./paths/auth.yaml#/profile"
+
+components:
+
+  securitySchemes:
+    bearerAuth:
+      $ref: "./components/security.yaml#/bearerAuth"
+
+  schemas:
+    User:
+      $ref: "./schemas/User.yaml"
+
+    Product:
+      $ref: "./schemas/Product.yaml"
+
+    Cart:
+      $ref: "./schemas/Cart.yaml"
+
+    Order:
+      $ref: "./schemas/Order.yaml"
+
+    Error:
+      $ref: "./schemas/Error.yaml"
+
+  responses:
+    Success:
+      $ref: "./components/responses.yaml#/Success"
+
+    BadRequest:
+      $ref: "./components/responses.yaml#/BadRequest"
+
+    Unauthorized:
+      $ref: "./components/responses.yaml#/Unauthorized"
+
+    Forbidden:
+      $ref: "./components/responses.yaml#/Forbidden"
+
+    NotFound:
+      $ref: "./components/responses.yaml#/NotFound"
+
+    InternalServerError:
+      $ref: "./components/responses.yaml#/InternalServerError"
+
+security:
+  - bearerAuth: []

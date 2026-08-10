@@ -1,0 +1,184 @@
+register:
+  post:
+    tags:
+      - Authentication
+
+    summary: Créer un nouveau compte utilisateur
+
+    description: >
+      Permet à un nouvel utilisateur de créer un compte.
+
+    requestBody:
+      required: true
+
+      content:
+        application/json:
+          schema:
+            type: object
+
+            required:
+              - fullName
+              - email
+              - password
+
+            properties:
+
+              fullName:
+                type: string
+                example: "Josué Amegadjin"
+
+              email:
+                type: string
+                format: email
+                example: "josue@example.com"
+
+              password:
+                type: string
+                format: password
+                example: "123456"
+
+    responses:
+
+      "201":
+
+        description: Utilisateur créé avec succès
+
+        content:
+
+          application/json:
+
+            schema:
+
+              type: object
+
+              properties:
+
+                success:
+                  type: boolean
+                  example: true
+
+                message:
+                  type: string
+                  example: Utilisateur créé avec succès
+
+                data:
+                  $ref: "../schemas/User.yaml"
+
+      "400":
+        $ref: "../components/responses.yaml#/BadRequest"
+
+login:
+  post:
+
+    tags:
+      - Authentication
+
+    summary: Authentifier un utilisateur
+
+    description: >
+      Retourne un JWT après authentification.
+
+    requestBody:
+
+      required: true
+
+      content:
+
+        application/json:
+
+          schema:
+
+            type: object
+
+            required:
+              - email
+              - password
+
+            properties:
+
+              email:
+                type: string
+                format: email
+                example: "josue@example.com"
+
+              password:
+                type: string
+                format: password
+                example: "123456"
+
+    responses:
+
+      "200":
+
+        description: Connexion réussie
+
+        content:
+
+          application/json:
+
+            schema:
+
+              type: object
+
+              properties:
+
+                success:
+                  type: boolean
+                  example: true
+
+                message:
+                  type: string
+                  example: Connexion réussie
+
+                data:
+
+                  type: object
+
+                  properties:
+
+                    token:
+                      type: string
+
+                    user:
+                      $ref: "../schemas/User.yaml"
+
+      "401":
+        $ref: "../components/responses.yaml#/Unauthorized"
+
+profile:
+
+  get:
+
+    tags:
+      - Authentication
+
+    summary: Récupérer le profil de l'utilisateur connecté
+
+    security:
+      - bearerAuth: []
+
+    responses:
+
+      "200":
+
+        description: Profil récupéré
+
+        content:
+
+          application/json:
+
+            schema:
+
+              type: object
+
+              properties:
+
+                success:
+                  type: boolean
+                  example: true
+
+                user:
+                  $ref: "../schemas/User.yaml"
+
+      "401":
+        $ref: "../components/responses.yaml#/Unauthorized"

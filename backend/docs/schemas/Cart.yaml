@@ -1,0 +1,28 @@
+type: object
+
+properties:
+  _id:
+    type: string
+
+  user:
+    type: string
+
+  items:
+    type: array
+    items:
+      type: object
+      properties:
+        product:
+          $ref: "./Product.yaml"
+
+        quantity:
+          type: integer
+          example: 2
+
+  createdAt:
+    type: string
+    format: date-time
+
+  updatedAt:
+    type: string
+    format: date-time

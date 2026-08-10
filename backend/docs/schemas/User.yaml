@@ -1,0 +1,35 @@
+type: object
+
+properties:
+  _id:
+    type: string
+    example: "6a62432a868285c94ad14f58"
+
+  fullName:
+    type: string
+    example: "Josué Amegadjin"
+
+  email:
+    type: string
+    format: email
+    example: "josue@example.com"
+
+  role:
+    type: string
+    enum:
+      - customer
+      - admin
+    example: customer
+
+  createdAt:
+    type: string
+    format: date-time
+
+  updatedAt:
+    type: string
+    format: date-time
+
+required:
+  - fullName
+  - email
+  - role

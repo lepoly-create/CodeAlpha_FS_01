@@ -1,0 +1,46 @@
+type: object
+
+properties:
+  _id:
+    type: string
+
+  user:
+    type: string
+
+  items:
+    type: array
+    items:
+      type: object
+      properties:
+        product:
+          $ref: "./Product.yaml"
+
+        quantity:
+          type: integer
+          example: 5
+
+        price:
+          type: number
+          example: 2300
+
+  totalAmount:
+    type: number
+    example: 11500
+
+  status:
+    type: string
+    enum:
+      - pending
+      - paid
+      - shipped
+      - delivered
+      - cancelled
+    example: pending
+
+  createdAt:
+    type: string
+    format: date-time
+
+  updatedAt:
+    type: string
+    format: date-time

@@ -1,0 +1,17 @@
+Success:
+  description: Requête exécutée avec succès
+
+BadRequest:
+  description: Requête invalide
+
+Unauthorized:
+  description: Authentification requise
+
+Forbidden:
+  description: Accès interdit
+
+NotFound:
+  description: Ressource introuvable
+
+InternalServerError:
+  description: Erreur interne du serveur
