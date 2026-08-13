@@ -23,6 +23,7 @@ export default function ProductCard({
   onAddToCart,
 }: ProductCardProps) {
   const [adding, setAdding] = useState(false);
+  const [saved, setSaved] = useState(false);
   const { addToCart } = useCart();
   const handleAddToCart = async () => {
   try {
@@ -60,10 +61,22 @@ export default function ProductCard({
         <Button
           variant="secondary"
           size="icon"
-          className="absolute right-3 top-3 h-8 w-8 rounded-full bg-white shadow-sm hover:bg-white"
+          aria-label={
+            saved
+              ? "Remove from saved items"
+              : "Save item"
+          }
+          className="absolute right-3 top-3 h-8 w-8 rounded-full cursor-pointer bg-white shadow-sm hover:bg-white"
+          onClick={() => setSaved((current) => !current)}
         >
-          <Heart className="h-4 w-4" />
-        </Button>
+          <Heart
+            className={`h-4 w-4 transition-colors ${
+              saved
+                ? "fill-red-500 text-red-500"
+                : "text-neutral-600"
+            }`}
+          />
+          </Button>
 
         {/* Stock */}
         {product.stock <= 5 && (

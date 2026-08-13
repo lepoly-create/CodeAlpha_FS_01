@@ -26,17 +26,18 @@ export default function AppRoutes() {
       </Route>
 
       <Route element={<ProtectedRoute />}>
-      <Route element={<AppLayout />}>
-        <Route
-          path="/dashboard"
-          element={<Dashboard />}
-        />
+        <Route element={<AppLayout />}>
+              <Route
+                path="/dashboard"
+                element={<Dashboard />}
+              />
 
-        <Route
-          path="/products"
-          element={<Products />}
-        />
-        <Route path="/cart" element={<CartPage />} />
+              <Route
+                path="/products"
+                element={<Products />}
+              />
+              <Route path="/cart" element={<CartPage />} />
+        </Route>
       </Route>
       <Route
       path="/checkout"

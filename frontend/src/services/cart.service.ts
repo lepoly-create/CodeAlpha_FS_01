@@ -1,51 +1,46 @@
 import api from "@/api/axios";
 
 export interface AddToCartPayload {
-  productId: string;
-  quantity: number;
+    productId: string;
+    quantity: number;
 }
 
-export interface CartItem {
-  _id: string;
-  product: {
-    _id: string;
-    name: string;
-    description: string;
-    price: number;
-    image: string;
-    category: string;
-    stock: number;
-    isActive: boolean;
-  };
-  quantity: number;
+export interface UpdateCartPayload {
+    quantity: number;
 }
 
-export interface Cart {
-  _id: string;
-  user: string;
-  items: CartItem[];
-  createdAt: string;
-  updatedAt: string;
-}
+export const getCart = async () => {
+    const response = await api.get("/cart");
 
-interface CartResponse {
-  success: boolean;
-  data: Cart;
-}
-
-export const getCart = async (): Promise<Cart> => {
-  const response = await api.get<CartResponse>("/cart");
-
-  return response.data.data;
+    return response.data.data;
 };
 
 export const addToCart = async (
-  payload: AddToCartPayload,
-): Promise<Cart> => {
-  const response = await api.post<CartResponse>(
-    "/cart",
-    payload,
-  );
+    payload: AddToCartPayload,
+) => {
+    const response = await api.post("/cart", payload);
 
-  return response.data.data;
+    return response.data.data;
+};
+
+export const updateCartItem = async (
+    productId: string,
+    quantity: number,
+) => {
+    const response = await api.put(
+        `/cart/${productId}`,
+        { quantity },
+    );
+
+    return response.data.data;
+};
+
+export const removeFromCart = async (
+    productId: string,
+) => {
+    const response = await api.delete(
+        `/cart/${productId}`,
+    );
+
+    return response.data.data;
 };
