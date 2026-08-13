@@ -39,11 +39,12 @@ export default function AppRoutes() {
               <Route path="/cart" element={<CartPage />} />
         </Route>
       </Route>
-
       <Route
-        path="/checkout"
-        element={<CheckoutPage />}
-      />
+      path="/checkout"
+      element={<CheckoutPage />}
+    />
+    </Route>
+    
     </Routes>
   );
 }

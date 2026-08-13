@@ -270,13 +270,18 @@ export default function CartPage() {
             </div>
           </div>
 
-          {/* Checkout — à brancher plus tard */}
-          <Link
-            to="/checkout"
-            className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-xl bg-primary px-6 text-base font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
-          >
+          <Button className="mt-6 h-12 w-full
+           rounded-xl text-base">
+            
+            <Link
+              to="/checkout"
+              className="mt-6 h-12 w-full
+            rounded-xl text-base"
+            >
             Proceed to checkout
-          </Link>
+            </Link>
+            
+          </Button>
 
           <Link
             to="/products"
