@@ -6,6 +6,7 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import ProtectedRoute from "./ProtectedRoute";
 import CartPage from "@/pages/CartPage";
+import CheckoutPage from "@/pages/CheckoutPage";
 
 export default function AppRoutes() {
   return (
@@ -37,7 +38,12 @@ export default function AppRoutes() {
         />
         <Route path="/cart" element={<CartPage />} />
       </Route>
+      <Route
+      path="/checkout"
+      element={<CheckoutPage />}
+    />
     </Route>
+    
     </Routes>
   );
 }

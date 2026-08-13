@@ -188,8 +188,17 @@ export default function CartPage() {
             </div>
           </div>
 
-          <Button className="mt-6 h-12 w-full rounded-xl text-base">
+          <Button className="mt-6 h-12 w-full
+           rounded-xl text-base">
+            
+            <Link
+              to="/checkout"
+              className="mt-6 h-12 w-full
+            rounded-xl text-base"
+            >
             Proceed to checkout
+            </Link>
+            
           </Button>
 
           <Link
