@@ -5,6 +5,8 @@ export interface IUser extends Document {
     email: string;
     password: string;
     role: "customer" | "admin";
+
+    favoriteProducts: Types.ObjectId[];
 }
 
 const userSchema = new Schema<IUser>(
@@ -29,6 +31,16 @@ const userSchema = new Schema<IUser>(
             type: String,
             enum: ["customer", "admin"],
             default: "customer"
+        },
+
+        favoriteProducts: {
+            type: [
+                {
+                    type: Schema.Types.ObjectId,
+                    ref: "Product"
+                }
+            ],
+            default: []
         }
     },
     {
