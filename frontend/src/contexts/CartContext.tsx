@@ -1,7 +1,7 @@
 import {
-  useCallback,
   createContext,
   useContext,
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -11,19 +11,42 @@ import {
 import {
   addToCart as addToCartRequest,
   getCart,
-  type Cart,
+  updateCartItem,
+  removeFromCart,
 } from "@/services/cart.service";
 
+
 import { useAuth } from "@/contexts/AuthContext";
+import type { Product } from "@/types/product";
+
+interface CartItem{
+  product: Product;
+  quantity: number;
+}
+interface Cart {
+  items: CartItem[];
+  total?: number;
+}
 
 interface CartContextValue {
   cart: Cart | null;
   cartCount: number;
   loading: boolean;
+
   refreshCart: () => Promise<void>;
+
   addToCart: (
     productId: string,
     quantity?: number,
+  ) => Promise<void>;
+
+  updateQuantity: (
+    productId: string,
+    quantity: number,
+  ) => Promise<void>;
+
+  removeItem: (
+    productId: string,
   ) => Promise<void>;
 }
 
@@ -43,9 +66,13 @@ export function CartProvider({
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Récupérer le panier depuis le backend
+   */
   const refreshCart = useCallback(async () => {
     if (!user) {
       setCart(null);
+      setLoading(false);
       return;
     }
 
@@ -53,7 +80,6 @@ export function CartProvider({
       setLoading(true);
 
       const data = await getCart();
-      console.log("Réponse GET /api/cart :", data);
 
       setCart(data);
     } catch (error) {
@@ -64,39 +90,105 @@ export function CartProvider({
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  } , [user]);
 
+  /**
+   * Ajouter un produit
+   */
   const addToCart = async (
     productId: string,
     quantity = 1,
   ) => {
-    const updatedCart = await addToCartRequest({
-      productId,
-      quantity,
-    });
+    try {
+      const updatedCart = await addToCartRequest({
+        productId,
+        quantity,
+      });
 
-    setCart(updatedCart);
+      setCart(updatedCart);
+    } catch (error) {
+      console.error(
+        "Impossible d'ajouter le produit au panier :",
+        error,
+      );
+
+      throw error;
+    }
   };
 
+  /**
+   * Modifier la quantité
+   */
+  const updateQuantity = async (
+    productId: string,
+    quantity: number,
+  ) => {
+    if (quantity < 1) {
+      return;
+    }
+
+    try {
+      const updatedCart = await updateCartItem(
+        productId,
+        quantity,
+      );
+
+      setCart(updatedCart);
+    } catch (error) {
+      console.error(
+        "Impossible de modifier la quantité :",
+        error,
+      );
+
+      throw error;
+    }
+  };
+
+  /**
+   * Supprimer un produit
+   */
+  const removeItem = async (
+    productId: string,
+  ) => {
+    try {
+      const updatedCart = await removeFromCart(
+        productId,
+      );
+
+      setCart(updatedCart);
+    } catch (error) {
+      console.error(
+        "Impossible de supprimer le produit :",
+        error,
+      );
+
+      throw error;
+    }
+  };
+
+  /**
+   * Nombre total d'articles
+   */
   const cartCount = useMemo(() => {
-  if (!cart) {
-    return 0;
-  }
+    if (!cart) {
+      return 0;
+    }
 
-  return cart.items.reduce(
-    (total, item) => total + item.quantity,
-    0,
-  );
-}, [cart]);
+    return cart.items.reduce(
+      (total, item) => total + item.quantity,
+      0,
+    );
+  }, [cart]);
 
+  /**
+   * Charger le panier lorsqu'un utilisateur
+   * authentifié est disponible.
+   */
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      void refreshCart();
-    }, 0);
-
-    return () => {
-      window.clearTimeout(timeoutId);
-    };
+    const id = setTimeout(() => {
+      void refreshCart()
+    } ,0);
+    return () => clearTimeout(id);
   }, [refreshCart]);
 
   return (
@@ -107,6 +199,8 @@ export function CartProvider({
         loading,
         refreshCart,
         addToCart,
+        updateQuantity,
+        removeItem,
       }}
     >
       {children}
@@ -114,7 +208,6 @@ export function CartProvider({
   );
 }
 
-// eslint-disable-next-line react-refresh/only-export-components
 export function useCart() {
   const context = useContext(CartContext);
 

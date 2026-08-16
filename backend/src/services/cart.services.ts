@@ -79,7 +79,7 @@ export const addToCart = async (
 
 
     await cart.save();
-
+    await cart.populate("items.product");
 
     return cart;
 };
@@ -95,6 +95,9 @@ export const updateCartItem = async (
     quantity: number
 ) => {
 
+    if (quantity < 1) {
+        throw new Error("La quantité doit être supérieure ou égale à 1");
+    }
 
     const cart = await Cart.findOne({
         user: userId
@@ -123,7 +126,7 @@ export const updateCartItem = async (
 
 
     await cart.save();
-
+    await cart.populate("items.product");
 
     return cart;
 
@@ -158,7 +161,7 @@ export const removeFromCart = async (
 
 
     await cart.save();
-
+    await cart.populate("items.product");
 
     return cart;
 
