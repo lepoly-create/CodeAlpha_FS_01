@@ -94,6 +94,9 @@ export const updateCartItem = async (
     productId: string,
     quantity: number
 ) => {
+    if (quantity < 1) {
+        throw new Error("La quantité doit être supérieure ou égale à 1");
+    }
 
     if (quantity < 1) {
         throw new Error("La quantité doit être supérieure ou égale à 1");
