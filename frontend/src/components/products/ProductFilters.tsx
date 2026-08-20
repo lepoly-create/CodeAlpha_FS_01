@@ -1,4 +1,4 @@
-import { SlidersHorizontal } from "lucide-react";
+import { Heart, SlidersHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -41,6 +41,24 @@ export default function ProductFilters({
           {category}
         </Button>
       ))}
+
+      <Button
+        variant={
+          selectedCategory === "favorites" ? "default" : "outline"
+        }
+        className="shrink-0 rounded-full"
+        onClick={() => onCategoryChange("favorites")}
+      >
+        <Heart
+          className={`mr-2 h-4 w-4 ${
+            selectedCategory === "favorites"
+              ? "fill-current"
+              : ""
+          }`}
+        />
+        Favorites
+          
+      </Button>
 
       <Button
         variant="outline"

@@ -94,12 +94,15 @@ export default function Products() {
           .includes(search.toLowerCase());
 
       const matchesCategory =
-        selectedCategory === "all" ||
-        product.category === selectedCategory;
+        selectedCategory === "all"
+        ? true
+        : selectedCategory === "favorites"
+          ? favoriteIds.includes(product._id)
+          : product.category === selectedCategory;
 
       return matchesSearch && matchesCategory;
     });
-  }, [products, search, selectedCategory]);
+  }, [products, search, selectedCategory, favoriteIds]);
 
   const handleAddFavorite = async (productId: string) => {
     setFavoriteIds((current) => [...current, productId]);
