@@ -21,7 +21,7 @@ export default function ProductFilters({
             ? "default"
             : "outline"
         }
-        className="shrink-0 rounded-full"
+        className="shrink-0 cursor-pointer rounded-full"
         onClick={() => onCategoryChange("all")}
       >
         All
@@ -35,7 +35,7 @@ export default function ProductFilters({
               ? "default"
               : "outline"
           }
-          className="shrink-0 rounded-full"
+          className="shrink-0 cursor-pointer rounded-full"
           onClick={() => onCategoryChange(category)}
         >
           {category}
@@ -46,7 +46,7 @@ export default function ProductFilters({
         variant={
           selectedCategory === "favorites" ? "default" : "outline"
         }
-        className="shrink-0 rounded-full"
+        className="shrink-0 cursor-pointer rounded-full"
         onClick={() => onCategoryChange("favorites")}
       >
         <Heart
@@ -63,7 +63,7 @@ export default function ProductFilters({
       <Button
         variant="outline"
         size="icon"
-        className="ml-auto shrink-0 rounded-full"
+        className="ml-auto cursor-pointer shrink-0 rounded-full"
       >
         <SlidersHorizontal className="h-5 w-5" />
       </Button>
