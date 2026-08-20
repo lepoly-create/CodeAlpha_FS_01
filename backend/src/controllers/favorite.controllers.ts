@@ -1,112 +1,75 @@
 import { Request, Response } from "express";
 
 import {
-    createOrder,
-    getMyOrders,
-    getOrderById
-} from "../services/order.services";
+    getFavorites,
+    addFavorite,
+    removeFavorite
+} from "../services/favorite.services";
 
-// Créer une commande
-
-export const checkout = async (
+export const getMyFavorites = async (
     req: Request,
     res: Response
 ) => {
-
     try {
-        const order = await createOrder(
-            req.user.id
-        );
+        const favorites = await getFavorites(req.user.id);
 
-        res.status(201).json({
-
+        res.status(200).json({
             success: true,
-
-            message: "Commande créée avec succès",
-
-            data: order
-
+            data: favorites
         });
 
     } catch (error: any) {
-
         res.status(400).json({
-
             success: false,
-
             message: error.message
-
         });
-
     }
 };
 
-
-// Voir toutes mes commandes
-
-export const getOrders = async (
+export const addProductToFavorites = async (
     req: Request,
     res: Response
 ) => {
-
     try {
-
-        const orders = await getMyOrders(
-            req.user.id
+        const favorites = await addFavorite(
+            req.user.id,
+            req.params.productId as string
         );
 
         res.status(200).json({
-
             success: true,
-            data: orders
-
+            message: "Produit ajouté aux favoris",
+            data: favorites
         });
 
     } catch (error: any) {
-
         res.status(400).json({
-
             success: false,
-
             message: error.message
         });
     }
-
 };
 
-// Voir une commande
-
-export const getOrder = async (
+export const removeProductFromFavorites = async (
     req: Request,
     res: Response
 ) => {
-
     try {
-
-        const order = await getOrderById(
-
-            Array.isArray(req.params.id) ? req.params.id[0] : req.params.id,
-
-            req.user.id
-
+        const favorites = await removeFavorite(
+            req.user.id,
+            req.params.productId as string
         );
 
         res.status(200).json({
-
             success: true,
-
-            data: order
-
+            message: "Produit retiré des favoris",
+            data: favorites
         });
 
     } catch (error: any) {
-
-        res.status(404).json({
-
+        res.status(400).json({
             success: false,
-
             message: error.message
-
         });
     }
 };

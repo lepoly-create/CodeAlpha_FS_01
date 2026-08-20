@@ -11,8 +11,8 @@ export function LoginPage() {
     >
       <div className="min-h-screen bg-black/20 px-4 py-6 md:px-8 md:py-8">
         <section className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-6xl items-center justify-center">
-          <div className="w-full max-w-[780px] overflow-hidden rounded-[32px] border border-white/20 bg-white/15 shadow-[0_24px_120px_-40px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
-            <div className="grid min-h-[720px] lg:grid-cols-[1.05fr_1fr]">
+          <div className="w-full max-w-195 overflow-hidden rounded-[32px] border border-white/20 bg-white/15 shadow-[0_24px_120px_-40px_rgba(0,0,0,0.8)] backdrop-blur-2xl">
+            <div className="grid min-h-180 lg:grid-cols-[1.05fr_1fr]">
               <div className="hidden flex-col justify-between bg-transparent px-10 py-10 text-white lg:flex">
                 <div />
                 <div className="space-y-8 pb-10">
@@ -25,7 +25,7 @@ export function LoginPage() {
               </div>
 
               <div className="flex h-full flex-col justify-center bg-[#f9f9f9] px-6 py-10 text-slate-900 sm:px-10">
-                <div className="mx-auto w-full max-w-[520px]">
+                <div className="mx-auto w-full max-w-130">
                   <h1 className="text-center text-4xl font-semibold tracking-[-0.04em] text-black">LOGIN</h1>
 
                   <form className="mt-12 space-y-8">
@@ -35,7 +35,7 @@ export function LoginPage() {
                         <input
                           type="email"
                           placeholder="Email"
-                          className="bg-transparent text-2xl font-semibold outline-none placeholder:text-slate-900/100"
+                          className="bg-transparent text-2xl font-semibold outline-none placeholder:text-slate-900"
                         />
                         <IconMail size={28} stroke={1.8} className="text-black" />
                       </div>
@@ -47,7 +47,7 @@ export function LoginPage() {
                         <input
                           type="password"
                           placeholder="Password"
-                          className="bg-transparent text-2xl font-semibold outline-none placeholder:text-slate-900/100"
+                          className="bg-transparent text-2xl font-semibold outline-none placeholder:text-slate-900"
                         />
                         <IconLock size={28} stroke={1.8} className="text-black" />
                       </div>

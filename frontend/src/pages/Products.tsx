@@ -7,15 +7,21 @@ import type { Product } from "@/types/product";
 import { Input } from "@/components/ui/input";
 import ProductFilters from "@/components/products/ProductFilters";
 import ProductGrid from "@/components/products/ProductGrid";
+import {
+  getFavorites,
+  addFavorite,
+  removeFavorite,
+} from "@/services/favorite.service";
 
 export default function Products() {
   const [products, setProducts] = useState<Product[]>([]);
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] =
-    useState("all");
+  const [selectedCategory, setSelectedCategory] = useState("all");
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
+  const [pendingFavoriteIds, setPendingFavoriteIds] = useState<string[]>([]);
 
   /*
    * Récupération des produits depuis le backend
@@ -39,6 +45,29 @@ export default function Products() {
 
     loadProducts();
   }, []);
+  
+  /*
+   * Ici je fais la récupération des produits favoris mais en gardant que leur ids depuis le backend
+   */
+
+  useEffect(() => {
+  const loadFavorites = async () => {
+    try {
+      const favorites = await getFavorites();
+
+      setFavoriteIds(
+        favorites.map((product) => product._id),
+      );
+    } catch (error) {
+      console.error(
+        "Impossible de charger les favoris :",
+        error,
+      );
+    }
+  };
+
+  loadFavorites();
+}, []);
 
   /*
    * Extraction des catégories disponibles
@@ -65,12 +94,51 @@ export default function Products() {
           .includes(search.toLowerCase());
 
       const matchesCategory =
-        selectedCategory === "all" ||
-        product.category === selectedCategory;
+        selectedCategory === "all"
+        ? true
+        : selectedCategory === "favorites"
+          ? favoriteIds.includes(product._id)
+          : product.category === selectedCategory;
 
       return matchesSearch && matchesCategory;
     });
-  }, [products, search, selectedCategory]);
+  }, [products, search, selectedCategory, favoriteIds]);
+
+  const handleAddFavorite = async (productId: string) => {
+    setFavoriteIds((current) => [...current, productId]);
+    setPendingFavoriteIds((current) => [...current, productId]);
+
+    try {
+      await addFavorite(productId);
+    } catch (error) {
+      console.error("Impossible d'ajouter le favori :", error);
+      setFavoriteIds((current) =>
+        current.filter((favoriteId) => favoriteId !== productId),
+      );
+    } finally {
+      setPendingFavoriteIds((current) =>
+        current.filter((favoriteId) => favoriteId !== productId),
+      );
+    }
+  };
+
+  const handleRemoveFavorite = async (productId: string) => {
+    setFavoriteIds((current) =>
+      current.filter((favoriteId) => favoriteId !== productId),
+    );
+    setPendingFavoriteIds((current) => [...current, productId]);
+
+    try {
+      await removeFavorite(productId);
+    } catch (error) {
+      console.error("Impossible de retirer le favori :", error);
+      setFavoriteIds((current) => [...current, productId]);
+    } finally {
+      setPendingFavoriteIds((current) =>
+        current.filter((favoriteId) => favoriteId !== productId),
+      );
+    }
+  };
 
   return (
     <section className="space-y-8">
@@ -123,7 +191,7 @@ export default function Products() {
           {Array.from({ length: 8 }).map((_, index) => (
             <div
               key={index}
-              className="h-[460px] animate-pulse rounded-2xl bg-neutral-100"
+              className="h-115 animate-pulse rounded-2xl bg-neutral-100"
             />
           ))}
         </div>
@@ -140,7 +208,13 @@ export default function Products() {
 
       {/* Products */}
       {!loading && !error && (
-        <ProductGrid products={filteredProducts} />
+        <ProductGrid 
+        products={filteredProducts} 
+        favoriteIds={favoriteIds}
+        pendingFavoriteIds={pendingFavoriteIds}
+        onAddFavorite={handleAddFavorite}
+        onRemoveFavorite={handleRemoveFavorite}
+        />
       )}
     </section>
   );

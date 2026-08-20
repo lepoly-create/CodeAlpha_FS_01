@@ -18,33 +18,13 @@ export default function AppRoutes() {
       {/* Pages protégées */}
       <Route element={<ProtectedRoute />}>
         <Route element={<AppLayout />}>
-          <Route
-            path="/dashboard"
-            element={<Dashboard />}
-          />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/cart" element={<CartPage />} />
         </Route>
       </Route>
 
-      <Route element={<ProtectedRoute />}>
-        <Route element={<AppLayout />}>
-              <Route
-                path="/dashboard"
-                element={<Dashboard />}
-              />
-
-              <Route
-                path="/products"
-                element={<Products />}
-              />
-              <Route path="/cart" element={<CartPage />} />
-        </Route>
-      </Route>
-      <Route
-      path="/checkout"
-      element={<CheckoutPage />}
-    />
-    </Route>
-    
+      <Route path="/checkout" element={<CheckoutPage />} />
     </Routes>
   );
 }

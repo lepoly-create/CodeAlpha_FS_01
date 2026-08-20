@@ -1,8 +1,5 @@
 import Cart from "../models/Cart";
 import Order from "../models/Order";
-import Product from "../models/Product";
-
-
 
 // Créer une commande à partir du panier
 
@@ -21,26 +18,21 @@ export const createOrder = async (
         throw new Error("Panier introuvable");
     }
 
-
     if (cart.items.length === 0) {
         throw new Error("Votre panier est vide");
     }
-
 
     let totalAmount = 0;
 
     const orderItems = [];
 
-
     for (const item of cart.items) {
 
         const product: any = item.product;
 
-
         if (!product) {
             throw new Error("Produit introuvable");
         }
-
 
         if (product.stock < item.quantity) {
 
@@ -49,10 +41,7 @@ export const createOrder = async (
             );
 
         }
-
-
         totalAmount += product.price * item.quantity;
-
 
         orderItems.push({
 
@@ -63,16 +52,12 @@ export const createOrder = async (
             price: product.price
 
         });
-
-
         // Décrémenter le stock
 
         product.stock -= item.quantity;
 
         await product.save();
-
     }
-
 
     // Créer la commande
 
@@ -86,7 +71,6 @@ export const createOrder = async (
 
     });
 
-
     // Vider le panier
 
     cart.items = [];
@@ -98,9 +82,6 @@ export const createOrder = async (
 
 };
 
-
-
-
 // Récupérer les commandes d'un utilisateur
 
 export const getMyOrders = async (
@@ -110,7 +91,6 @@ export const getMyOrders = async (
     return await Order.find({
 
         user: userId
-
     })
 
     .populate("items.product")
@@ -120,8 +100,6 @@ export const getMyOrders = async (
     });
 
 };
-
-
 
 
 // Voir une commande
@@ -134,11 +112,9 @@ export const getOrderById = async (
     const order = await Order.findOne({
 
         _id: orderId,
-
         user: userId
 
     }).populate("items.product");
-
 
     if (!order) {
 
@@ -147,8 +123,5 @@ export const getOrderById = async (
         );
 
     }
-
-
     return order;
-
 };

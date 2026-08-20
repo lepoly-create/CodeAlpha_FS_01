@@ -16,14 +16,15 @@ import {
   updateCartItem,
   removeFromCart,
 } from "@/services/cart.service";
+
+
 import { useAuth } from "@/contexts/AuthContext";
 import type { Product } from "@/types/product";
 
-interface CartItem {
+interface CartItem{
   product: Product;
   quantity: number;
 }
-
 interface Cart {
   items: CartItem[];
   total?: number;
@@ -91,7 +92,7 @@ export function CartProvider({
     } finally {
       setLoading(false);
     }
-  }, [user]);
+  } , [user]);
 
   /**
    * Ajouter un produit
@@ -186,12 +187,9 @@ export function CartProvider({
    * authentifié est disponible.
    */
   useEffect(() => {
-    // Avoid calling setState synchronously within the effect body to prevent
-    // cascading renders. Schedule the refresh on the next macrotask.
     const id = setTimeout(() => {
-      void refreshCart();
-    }, 0);
-
+      void refreshCart()
+    } ,0);
     return () => clearTimeout(id);
   }, [refreshCart]);
 

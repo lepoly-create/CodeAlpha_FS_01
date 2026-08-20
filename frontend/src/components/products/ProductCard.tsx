@@ -16,15 +16,23 @@ import type { Product } from "@/types/product";
 interface ProductCardProps {
   product: Product;
   onAddToCart?: (product: Product) => void;
+  isFavorite: boolean;
+  favoritePending: boolean;
+  onAddFavorite: (productId: string) => void;
+  onRemoveFavorite: (productId: string) => void;
 }
 
 export default function ProductCard({
   product,
   onAddToCart,
+  isFavorite,
+  favoritePending,
+  onAddFavorite,
+  onRemoveFavorite,
 }: ProductCardProps) {
   const [adding, setAdding] = useState(false);
-  const [saved, setSaved] = useState(false);
   const { addToCart } = useCart();
+
   const handleAddToCart = async () => {
   try {
     setAdding(true);
@@ -61,26 +69,35 @@ export default function ProductCard({
         <Button
           variant="secondary"
           size="icon"
+          disabled={favoritePending}
+          className="absolute cursor-pointer right-3 top-3 h-8 w-8 rounded-full bg-white shadow-sm hover:bg-white"
           aria-label={
-            saved
-              ? "Remove from saved items"
-              : "Save item"
+            isFavorite
+              ? "Remove from favorites"
+              : "Add to favorites"
           }
-          className="absolute right-3 top-3 h-8 w-8 rounded-full cursor-pointer bg-white shadow-sm hover:bg-white"
-          onClick={() => setSaved((current) => !current)}
+          onClick={() => {
+            if (isFavorite) {
+              onRemoveFavorite(product._id);
+            } else {
+              onAddFavorite(product._id);
+            }
+          }}
         >
           <Heart
             className={`h-4 w-4 transition-colors ${
-              saved
+              isFavorite
                 ? "fill-red-500 text-red-500"
                 : "text-neutral-600"
             }`}
           />
-          </Button>
+        </Button>
 
         {/* Stock */}
         {product.stock <= 5 && (
-          <span className="absolute left-3 top-3 rounded-full bg-black px-2.5 py-1 text-[11px] font-medium text-white">
+          <span className="absolute left-3 
+          top-3 rounded-full bg-black px-2.5 
+          py-1 text-[11px] font-medium text-white">
             Low stock
           </span>
         )}

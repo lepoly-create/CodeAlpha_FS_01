@@ -73,7 +73,24 @@ export default function CartPage() {
     );
   }
 
-  if (!cart || cart.items.length === 0) {
+  type CartItemWithProduct = {
+    _id?: string;
+    productId: string;
+    quantity: number;
+    product?: {
+      _id: string;
+      name: string;
+      price: number;
+      image: string;
+      category: string;
+    };
+  };
+
+  const cartWithProducts = cart as
+    | { items: CartItemWithProduct[] } 
+    | null;
+
+  if (!cartWithProducts || cartWithProducts.items.length === 0) {
     return (
       <section className="mx-auto flex min-h-[60vh] max-w-7xl flex-col items-center justify-center px-6 py-12 text-center">
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neutral-100">
@@ -99,9 +116,9 @@ export default function CartPage() {
     );
   }
 
-  const subtotal = cart.items.reduce(
+  const subtotal = cartWithProducts.items.reduce(
     (total, item) =>
-      total + item.product.price * item.quantity,
+      total + (item.product?.price ?? 0) * item.quantity,
     0,
   );
 
@@ -128,20 +145,26 @@ export default function CartPage() {
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_360px]">
         {/* Products */}
         <div className="space-y-4">
-          {cart.items.map((item) => {
-            const productId = item.product._id;
+          {cartWithProducts.items.map((item) => {
+            const product = item.product;
+
+            if (!product) {
+              return null;
+            }
+
+            const productId = product._id;
             const isUpdating = updatingItem === productId;
 
             return (
               <article
-                key={productId}
+                key={item._id ?? productId}
                 className="flex gap-5 rounded-2xl border border-neutral-200 bg-white p-4"
               >
                 {/* Image */}
                 <div className="h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-neutral-100">
                   <img
-                    src={item.product.image}
-                    alt={item.product.name}
+                    src={product.image}
+                    alt={product.name}
                     className="h-full w-full object-cover"
                   />
                 </div>
@@ -150,15 +173,15 @@ export default function CartPage() {
                 <div className="flex min-w-0 flex-1 flex-col justify-between">
                   <div>
                     <p className="text-xs font-medium uppercase tracking-wider text-neutral-500">
-                      {item.product.category}
+                      {product.category}
                     </p>
 
                     <h2 className="mt-1 truncate text-lg font-semibold">
-                      {item.product.name}
+                      {product.name}
                     </h2>
 
                     <p className="mt-1 text-sm text-neutral-500">
-                      ${item.product.price.toLocaleString()}
+                      ${product.price.toLocaleString()}
                     </p>
                   </div>
 
@@ -219,10 +242,9 @@ export default function CartPage() {
                 {/* Item total */}
                 <div className="hidden text-right sm:block">
                   <p className="font-semibold">
-                    $
-                    {(
-                      item.product.price * item.quantity
-                    ).toLocaleString()}
+                    ${
+                      (product.price * item.quantity).toLocaleString()
+                    }
                   </p>
                 </div>
               </article>
@@ -270,18 +292,15 @@ export default function CartPage() {
             </div>
           </div>
 
-          <Button className="mt-6 h-12 w-full
-           rounded-xl text-base">
-            
-            <Link
-              to="/checkout"
-              className="mt-6 h-12 w-full
-            rounded-xl text-base"
-            >
+          {/* Checkout — à brancher plus tard */}
+          
+          <Link
+            to="/checkout"
+            className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-xl bg-primary px-6 text-base font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
+          >
             Proceed to checkout
-            </Link>
-            
-          </Button>
+          
+          </Link>
 
           <Link
             to="/products"

@@ -5,6 +5,7 @@ import productRoutes from "./routes/product.routes";
 import cartRoutes from "./routes/cart.routes";
 import orderRoutes from "./routes/order.routes";
 import swaggerUi from "swagger-ui-express";
+import favoriteRoutes from "./routes/favorite.routes";
 
 const swaggerDocument = {
     openapi: "3.0.0",
@@ -35,6 +36,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
 
+app.use("/api/favorites", favoriteRoutes);
 
 app.get("/", (req, res) => {
 

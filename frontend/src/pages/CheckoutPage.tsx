@@ -9,6 +9,8 @@ export default function CheckoutPage() {
 
   const { cart, cartCount } = useCart();
 
+  
+
   if (!cart || cart.items.length === 0) {
     return (
       <section className="mx-auto flex min-h-[60vh] max-w-3xl flex-col items-center justify-center px-6 py-12 text-center">
@@ -19,7 +21,7 @@ export default function CheckoutPage() {
         </h1>
 
         <p className="mt-2 text-neutral-500">
-          Add products to your cart before continuing.
+          Add some products before proceeding to checkout.
         </p>
 
         <Link
@@ -76,7 +78,7 @@ export default function CheckoutPage() {
           <div className="mt-6 divide-y divide-neutral-200">
             {cart.items.map((item) => (
               <div
-                key={item._id ?? item.product._id}
+                key={`${item.product._id}-${item.quantity}`}
                 className="flex gap-4 py-5 first:pt-0"
               >
                 <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-neutral-100">

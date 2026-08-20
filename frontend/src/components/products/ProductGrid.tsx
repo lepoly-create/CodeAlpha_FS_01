@@ -4,10 +4,20 @@ import type { Product } from "@/types/product";
 
 interface ProductGridProps {
   products: Product[];
+  favoriteIds: string[];
+  pendingFavoriteIds: string[];
+
+  onAddFavorite: (productId: string) => void;
+
+  onRemoveFavorite: (productId: string) => void;
 }
 
 export default function ProductGrid({
   products,
+  favoriteIds,
+  pendingFavoriteIds,
+  onAddFavorite,
+  onRemoveFavorite,
 }: ProductGridProps) {
   if (products.length === 0) {
     return (
@@ -25,6 +35,10 @@ export default function ProductGrid({
         <ProductCard
           key={product._id}
           product={product}
+          isFavorite={favoriteIds.includes(product._id)}
+          favoritePending={pendingFavoriteIds.includes(product._id)}
+          onAddFavorite={onAddFavorite}
+          onRemoveFavorite={onRemoveFavorite}
         />
       ))}
     </div>
