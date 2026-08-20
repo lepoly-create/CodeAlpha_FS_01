@@ -13,16 +13,12 @@ export const getCart = async (
     })
     .populate("items.product");
 
-
     if (!cart) {
         throw new Error("Panier introuvable");
     }
 
-
     return cart;
 };
-
-
 
 // Ajouter un produit au panier
 
@@ -32,7 +28,6 @@ export const addToCart = async (
     quantity: number
 ) => {
 
-
     // Vérifier que le produit existe
 
     const product = await Product.findById(productId);
@@ -41,7 +36,6 @@ export const addToCart = async (
     if (!product) {
         throw new Error("Produit introuvable");
     }
-
 
     // Chercher le panier utilisateur
 
@@ -54,15 +48,11 @@ export const addToCart = async (
         throw new Error("Panier introuvable");
     }
 
-
-
     // Vérifier si le produit existe déjà dans le panier
 
     const existingItem = cart.items.find(
         item => item.product.toString() === productId
     );
-
-
 
     if (existingItem) {
 
@@ -77,14 +67,11 @@ export const addToCart = async (
 
     }
 
-
     await cart.save();
     await cart.populate("items.product");
 
     return cart;
 };
-
-
 
 
 // Modifier la quantité
@@ -98,10 +85,6 @@ export const updateCartItem = async (
         throw new Error("La quantité doit être supérieure ou égale à 1");
     }
 
-    if (quantity < 1) {
-        throw new Error("La quantité doit être supérieure ou égale à 1");
-    }
-
     const cart = await Cart.findOne({
         user: userId
     });
@@ -111,22 +94,15 @@ export const updateCartItem = async (
         throw new Error("Panier introuvable");
     }
 
-
-
     const item = cart.items.find(
         item => item.product.toString() === productId
     );
-
-
 
     if (!item) {
         throw new Error("Produit absent du panier");
     }
 
-
-
     item.quantity = quantity;
-
 
     await cart.save();
     await cart.populate("items.product");
@@ -134,8 +110,6 @@ export const updateCartItem = async (
     return cart;
 
 };
-
-
 
 
 // Supprimer un produit du panier
@@ -155,13 +129,9 @@ export const removeFromCart = async (
         throw new Error("Panier introuvable");
     }
 
-
-
     cart.items = cart.items.filter(
         item => item.product.toString() !== productId
     );
-
-
 
     await cart.save();
     await cart.populate("items.product");

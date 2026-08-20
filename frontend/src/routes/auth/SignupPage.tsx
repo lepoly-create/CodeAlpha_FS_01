@@ -23,8 +23,8 @@ export function SignupPage() {
     >
       <div className="min-h-screen bg-white/15 px-4 py-6 md:px-8 md:py-8">
         <section className="mx-auto flex min-h-[calc(100vh-3rem)] max-w-7xl items-center justify-center">
-          <div className="grid w-full overflow-hidden rounded-[2px] bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.02)] lg:grid-cols-2">
-            <aside className="hidden min-h-[760px] bg-transparent px-10 py-14 text-white lg:flex lg:flex-col lg:justify-between">
+          <div className="grid w-full overflow-hidden rounded-xs bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.02)] lg:grid-cols-2">
+            <aside className="hidden min-h-190 bg-transparent px-10 py-14 text-white lg:flex lg:flex-col lg:justify-between">
               <div />
               <div className="space-y-10 pb-10">
                 <div className="space-y-6 text-[clamp(3rem,7vw,5.2rem)] font-semibold leading-[0.92] tracking-[-0.06em]">
@@ -35,9 +35,9 @@ export function SignupPage() {
               </div>
             </aside>
 
-            <div className="flex min-h-[760px] flex-col justify-center bg-white px-6 py-10 sm:px-10 lg:px-12">
-              <div className="mx-auto w-full max-w-[620px]">
-                <h1 className="text-center text-5xl font-semibold tracking-[-0.05em] text-black">Sign Up</h1>
+            <div className="flex min-h-190 flex-col justify-center bg-white px-6 py-10 sm:px-10 lg:px-12">
+              <div className="mx-auto w-full max-w-155">
+                <h1 className="text-center text-5xl font-semibold tracking-tighter text-black">Sign Up</h1>
 
                 <form className="mt-10 space-y-8">
                   <div className="grid gap-6 md:grid-cols-2">

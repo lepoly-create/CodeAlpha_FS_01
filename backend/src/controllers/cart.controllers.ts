@@ -7,8 +7,6 @@ import {
     removeFromCart
 } from "../services/cart.services";
 
-
-
 // Voir le panier
 
 export const getMyCart = async (
@@ -30,8 +28,6 @@ export const getMyCart = async (
             data: cart
 
         });
-
-
     } catch (error: any) {
 
 
@@ -42,13 +38,9 @@ export const getMyCart = async (
             message: error.message
 
         });
-
-
     }
 
 };
-
-
 
 
 // Ajouter un produit
@@ -59,14 +51,10 @@ export const addProductToCart = async (
 ) => {
 
     try {
-
-
         const {
             productId,
             quantity
         } = req.body;
-
-
 
         const cart = await addToCart(
 
@@ -78,8 +66,6 @@ export const addProductToCart = async (
 
         );
 
-
-
         res.status(200).json({
 
             success: true,
@@ -89,8 +75,6 @@ export const addProductToCart = async (
             data: cart
 
         });
-
-
 
     } catch(error:any) {
 
@@ -102,13 +86,9 @@ export const addProductToCart = async (
             message:error.message
 
         });
-
-
     }
 
 };
-
-
 
 
 // Modifier quantité
@@ -119,8 +99,6 @@ export const updateQuantity = async (
 ) => {
 
     try {
-
-
         const cart = await updateCartItem(
 
             req.user.id,
@@ -128,9 +106,7 @@ export const updateQuantity = async (
             req.params.productId as string,
 
             req.body.quantity
-
         );
-
 
         res.status(200).json({
 
@@ -142,10 +118,7 @@ export const updateQuantity = async (
 
         });
 
-
-
     } catch(error:any) {
-
 
         res.status(400).json({
 
@@ -154,13 +127,9 @@ export const updateQuantity = async (
             message:error.message
 
         });
-
-
     }
 
 };
-
-
 
 
 // Supprimer un produit
@@ -169,9 +138,7 @@ export const removeProductFromCart = async (
     req: Request,
     res: Response
 ) => {
-
     try {
-
 
         const cart = await removeFromCart(
 
@@ -180,7 +147,6 @@ export const removeProductFromCart = async (
             req.params.productId as string
 
         );
-
 
         res.status(200).json({
 
@@ -192,8 +158,6 @@ export const removeProductFromCart = async (
 
         });
 
-
-
     } catch(error:any) {
 
 
@@ -204,8 +168,6 @@ export const removeProductFromCart = async (
             message:error.message
 
         });
-
-
     }
 
 };

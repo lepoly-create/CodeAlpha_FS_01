@@ -40,8 +40,7 @@ export const addFavorite = async (
 
     await user.save();
 
-    return await User.findById(userId)
-        .populate("favoriteProducts");
+    return { productId };
 };
 
 export const removeFavorite = async (
@@ -60,6 +59,5 @@ export const removeFavorite = async (
 
     await user.save();
 
-    return await User.findById(userId)
-        .populate("favoriteProducts");
+    return { productId };
 };

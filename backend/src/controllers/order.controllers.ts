@@ -6,8 +6,6 @@ import {
     getOrderById
 } from "../services/order.services";
 
-
-
 // Créer une commande
 
 export const checkout = async (
@@ -16,7 +14,6 @@ export const checkout = async (
 ) => {
 
     try {
-
         const order = await createOrder(
             req.user.id
         );
@@ -42,10 +39,7 @@ export const checkout = async (
         });
 
     }
-
 };
-
-
 
 
 // Voir toutes mes commandes
@@ -64,7 +58,6 @@ export const getOrders = async (
         res.status(200).json({
 
             success: true,
-
             data: orders
 
         });
@@ -76,15 +69,10 @@ export const getOrders = async (
             success: false,
 
             message: error.message
-
         });
-
     }
 
 };
-
-
-
 
 // Voir une commande
 
@@ -120,7 +108,5 @@ export const getOrder = async (
             message: error.message
 
         });
-
     }
-
 };
