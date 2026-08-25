@@ -3,7 +3,9 @@ import { Request, Response } from "express";
 import {
     getMyProfile,
     updateMyProfile,
-    changeMyPassword
+    changeMyPassword,
+    updateMyProfileImage,
+    removeMyProfileImage
 } from "../services/user.services";
 
 
@@ -81,6 +83,64 @@ export const changePassword = async (
 
         res.status(400).json({
 
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+export const updateProfileImage = async (
+    req: Request,
+    res: Response
+) => {
+
+    try {
+
+        if (!req.file) {
+            return res.status(400).json({
+                success: false,
+                message: "Aucune image fournie"
+            });
+        }
+
+        const user = await updateMyProfileImage(
+            req.user.id,
+            req.file
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "Photo de profil mise à jour avec succès",
+            data: user
+        });
+
+    } catch (error: any) {
+
+        res.status(400).json({
+            success: false,
+            message: error.message
+        });
+    }
+};
+
+export const removeProfileImage = async (
+    req: Request,
+    res: Response
+) => {
+
+    try {
+        const user = await removeMyProfileImage(
+            req.user.id
+        );
+
+        res.status(200).json({
+            success: true,
+            message: "Photo de profil supprimée avec succès",
+            data: user
+        });
+
+    } catch (error: any) {
+        res.status(400).json({
             success: false,
             message: error.message
         });
