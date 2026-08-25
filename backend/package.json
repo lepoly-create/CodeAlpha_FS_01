@@ -2,7 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
@@ -10,7 +10,7 @@
     "seed:admin": "ts-node script/create-admin.ts",
     "test:user": "ts-node-dev script/test-User.ts",
     "build": "tsc",
-    "start": "nodemon index.js",
+    "start": "node dist/server.js",
     "bundle-api": "redocly bundle docs/openapi.yaml -o dist/openapi.bundle.yaml",
     "lint-api": "redocly lint docs/openapi.yaml"
   },

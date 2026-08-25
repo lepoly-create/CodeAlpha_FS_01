@@ -7,6 +7,7 @@ import orderRoutes from "./routes/order.routes";
 import swaggerUi from "swagger-ui-express";
 import favoriteRoutes from "./routes/favorite.routes";
 import userRoutes from "./routes/user.routes";
+
 const swaggerDocument = {
     openapi: "3.0.0",
     info: {
@@ -26,12 +27,16 @@ app.use(
     })
 );
 
+
 app.use(cors());
+
 
 app.use(express.json());
 
 
-app.use("/api/auth", authRoutes);
+
+app.use('/api/auth', authRoutes);
+
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
