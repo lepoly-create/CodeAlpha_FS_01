@@ -9,10 +9,9 @@ import {
 } from "../controllers/user.controllers";
 
 import upload from "../middleware/upload.middleware";
-import {
-    authMiddleware
-} from "../middleware/auth.middleware";
-
+import { authMiddleware } from "../middleware/auth.middleware";
+import { validate } from "../middleware/validate.middleware";
+import { updateProfileSchema, changePasswordSchema } from "../schemas/user.schemas";
 
 const router = Router();
 
@@ -25,12 +24,14 @@ router.get(
 router.put(
     "/me",
     authMiddleware,
+    validate(updateProfileSchema),
     updateProfile
 );
 
 router.put(
     "/me/password",
     authMiddleware,
+    validate(changePasswordSchema),
     changePassword
 );
 
@@ -46,6 +47,5 @@ router.delete(
     authMiddleware,
     removeProfileImage
 );
-
 
 export default router;
