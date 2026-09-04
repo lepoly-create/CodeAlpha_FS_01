@@ -1,5 +1,4 @@
 import {
-  Heart,
   House,
   MessageSquare,
   PanelLeft,
@@ -26,11 +25,6 @@ const navigationItems = [
     label: "My Cart",
     icon: Store,
     path: "/cart",
-  },
-  {
-    label: "Saved items",
-    icon: Heart,
-    path: "/saved",
   },
   {
     label: "Profile",

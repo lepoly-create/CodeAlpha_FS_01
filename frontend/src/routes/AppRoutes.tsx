@@ -7,7 +7,7 @@ import Register from "@/pages/Register";
 import ProtectedRoute from "./ProtectedRoute";
 import CartPage from "@/pages/CartPage";
 import CheckoutPage from "@/pages/CheckoutPage";
-
+import Profile from "@/pages/Profile";
 export default function AppRoutes() {
   return (
     <Routes>
@@ -21,9 +21,9 @@ export default function AppRoutes() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/products" element={<Products />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
       </Route>
-
       <Route path="/checkout" element={<CheckoutPage />} />
     </Routes>
   );
