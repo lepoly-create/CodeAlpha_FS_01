@@ -1,2 +1,0 @@
- git clean -fd  elle permet d'éffacer les fichier js qui sont générés apres un build coté backend
- 
