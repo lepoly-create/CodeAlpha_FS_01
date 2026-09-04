@@ -105,21 +105,22 @@ export default function ProfileInformation({
                   Adresse email
                 </div>
 
-                <div className="rounded-xl border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-medium">
+                <div className="rounded-xl focus:border-0 border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-medium">
                   {user.email}
                 </div>
               </div>
             </div>
 
             {/* Action */}
-            <div className="mt-6 flex justify-end cursor-pointer">
+            <div className="mt-6 flex justify-end">
               <Button
-                variant="outline"
+                variant="default"
                 onClick={() => {
                   setFullName(user.fullName);
                   setEmail(user.email);
                   setIsEditing(true);
                 }}
+                className="cursor-pointer hover:bg-blue-700 hover:text-amber-50"
               >
                 Modifier les informations
               </Button>

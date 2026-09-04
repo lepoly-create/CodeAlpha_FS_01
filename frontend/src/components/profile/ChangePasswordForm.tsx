@@ -270,10 +270,11 @@ export default function ChangePasswordForm() {
           </div>
 
           {/* Bouton */}
-          <div className="flex justify-end pt-2 cursor-pointer">
+          <div className="flex justify-end pt-2">
             <Button
               type="submit"
               disabled={isChanging}
+              className="cursor-pointer hover:bg-blue-700 hover:text-amber-50"
             >
               {isChanging ? (
                 <>
