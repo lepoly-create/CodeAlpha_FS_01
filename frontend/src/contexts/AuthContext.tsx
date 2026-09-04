@@ -1,7 +1,7 @@
 import {
   createContext,
   useContext,
-  useEffect,
+  useCallback,
   useState,
   type ReactNode,
 } from "react";
@@ -18,6 +18,7 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  updateUser: (user: AuthUser) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(
@@ -28,29 +29,33 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+const getStoredAuth = () => {
+  const storedToken = localStorage.getItem("token");
+  const storedUser = localStorage.getItem("user");
+
+  if (!storedToken || !storedUser) {
+    return { token: null, user: null };
+  }
+
+  try {
+    return {
+      token: storedToken,
+      user: JSON.parse(storedUser) as AuthUser,
+    };
+  } catch {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    return { token: null, user: null };
+  }
+};
+
 export function AuthProvider({
   children,
 }: AuthProviderProps) {
-  const [user, setUser] = useState<AuthUser | null>(null);
-  const [token, setToken] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-
-    if (storedToken && storedUser) {
-      try {
-        setToken(storedToken);
-        setUser(JSON.parse(storedUser) as AuthUser);
-      } catch {
-        localStorage.removeItem("token");
-        localStorage.removeItem("user");
-      }
-    }
-
-    setLoading(false);
-  }, []);
+  const storedAuth = getStoredAuth();
+  const [user, setUser] = useState<AuthUser | null>(storedAuth.user);
+  const [token, setToken] = useState<string | null>(storedAuth.token);
+  const loading = false;
 
   const login = async (
     email: string,
@@ -78,6 +83,11 @@ export function AuthProvider({
     setUser(null);
   };
 
+  const updateUser = useCallback((updatedUser: AuthUser) => {
+    setUser(updatedUser);
+    localStorage.setItem("user", JSON.stringify(updatedUser));
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
@@ -87,6 +97,7 @@ export function AuthProvider({
         loading,
         login,
         logout,
+        updateUser,
       }}
     >
       {children}

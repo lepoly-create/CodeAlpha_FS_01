@@ -5,7 +5,8 @@ export interface IUser extends Document {
     email: string;
     password: string;
     role: "customer" | "admin";
-
+    profileImage?: string | null ;
+    profileImagePublicId: string | null;
     favoriteProducts: Types.ObjectId[];
 }
 
@@ -32,6 +33,10 @@ const userSchema = new Schema<IUser>(
             enum: ["customer", "admin"],
             default: "customer"
         },
+        profileImage: {
+            type: String,
+            default: null
+        },
 
         favoriteProducts: {
             type: [
@@ -41,6 +46,10 @@ const userSchema = new Schema<IUser>(
                 }
             ],
             default: []
+        },
+        profileImagePublicId: {
+            type: String,
+            default: null
         }
     },
     {

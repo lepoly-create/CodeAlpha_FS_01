@@ -1,6 +1,5 @@
 import {
   Bell,
-  ChevronDown,
   CircleUserRound,
   Search,
 } from "lucide-react";
@@ -15,12 +14,12 @@ export default function AppHeader() {
   return (
     <header className="flex h-24 items-center justify-between px-9">
       {/* Search */}
-      <div className="relative w-95">
-        <Search className="absolute left-4 top-1/2 h-7 w-7 -translate-y-1/2 stroke-[1.5]" />
+      <div className="relative w-70">
+        <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 stroke-[1.5]" />
 
         <Input
           placeholder="Search"
-          className="h-14 rounded-xl border-0 bg-neutral-200 pl-14 text-xl shadow-none placeholder:text-black focus-visible:ring-1"
+          className="h-10 rounded border-0 bg-neutral-200 pl-14 text-xl shadow-none placeholder:text-black focus-visible:ring-1"
         />
       </div>
 
@@ -32,10 +31,6 @@ export default function AppHeader() {
 
         <Button variant="ghost" size="icon" className="h-10 w-10">
           <CircleUserRound className="h-6 w-6 stroke-[1.5]" />
-        </Button>
-
-        <Button variant="ghost" size="icon" className="h-10 w-10">
-          <ChevronDown className="h-6 w-6 stroke-[1.5]" />
         </Button>
 
         <Button

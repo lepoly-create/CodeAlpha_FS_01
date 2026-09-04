@@ -291,8 +291,6 @@ export default function CartPage() {
               </div>
             </div>
           </div>
-
-          {/* Checkout — à brancher plus tard */}
           
           <Link
             to="/checkout"

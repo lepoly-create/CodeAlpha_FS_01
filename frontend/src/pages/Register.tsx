@@ -22,7 +22,7 @@ export default function Register() {
   const [error, setError] = useState("");
 
   const handleSubmit = async (
-    event: React.FormEvent<HTMLFormElement>,
+    event: React.SyntheticEvent<HTMLFormElement>,
   ) => {
     event.preventDefault();
 

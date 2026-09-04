@@ -2,26 +2,22 @@ import { Router } from "express";
 import { register, login } from "../controllers/auth.controllers";
 import { authMiddleware } from "../middleware/auth.middleware";
 import { authorizeRoles } from "../middleware/role.middleware";
+import { validate } from "../middleware/validate.middleware";
+import { registerSchema, loginSchema } from "../schemas/auth.schemas";
 
 const router = Router();
 
-
-router.post("/register", register);
-router.post("/login", login);
+router.post("/register", validate(registerSchema), register);
+router.post("/login", validate(loginSchema), login);
 
 router.get(
     "/profile",
     authMiddleware,
     (req, res) => {
-
         res.json({
-
             success: true,
-
             user: req.user
-
         });
-
     }
 );
 
