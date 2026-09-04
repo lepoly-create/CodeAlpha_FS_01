@@ -326,3 +326,4 @@ Le mot de passe `"123456"` est stocké **sans hashage** dans MongoDB.
 
 > [!IMPORTANT]
 > **Priorité absolue** : régénérer les secrets exposés dans le `.env` et nettoyer l'historique Git avant tout push public. Les clés MongoDB Atlas, JWT et Cloudinary sont toutes compromises.
+
