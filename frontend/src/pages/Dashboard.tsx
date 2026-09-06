@@ -11,7 +11,7 @@ import {
   getUserDashboard,
   type UserDashboard,
 } from "@/services/dashboard.service";
-//import RecommendedProducts from "@/components/dashboard/RecommendedProducts";
+import RecommendedProducts from "@/components/dashboard/RecommendedProducts";
 
 export default function Dashboard() {
   const [dashboard, setDashboard] = useState<UserDashboard | null>(null);
@@ -126,11 +126,10 @@ export default function Dashboard() {
             onViewProfile={() => navigate("/profile")}
           />
         </div>
-        {/*
-          <RecommendedProducts
-          products={dashboard.rec}
+        <RecommendedProducts
+          products={dashboard.recommendedProducts}
+          onViewProducts={() => navigate("/products")}
         />
-        */}
         
 
       

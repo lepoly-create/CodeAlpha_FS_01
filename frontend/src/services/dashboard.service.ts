@@ -44,6 +44,7 @@ export interface UserDashboard {
   user: DashboardUser;
   statistics: DashboardStatistics;
   recentOrders: DashboardOrder[];
+  recommendedProducts: DashboardProduct[];
 }
 
 export const getUserDashboard =
