@@ -16,7 +16,7 @@ interface AuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<AuthUser>;
   logout: () => void;
   updateUser: (user: AuthUser) => void;
 }
@@ -73,6 +73,8 @@ export function AuthProvider({
 
     setToken(token);
     setUser(user);
+
+    return user;
   };
 
   const logout = () => {
