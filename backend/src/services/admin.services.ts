@@ -108,3 +108,71 @@ export const getAdminProducts = async () => {
     createdAt: -1,
   });
 };
+
+export const getAdminOrders = async () => {
+  return await Order.find()
+    .populate("user", "fullName email")
+    .populate("items.product", "name price image")
+    .sort({
+      createdAt: -1,
+    });
+};
+
+export const getAdminOrderById = async (
+  orderId: string
+) => {
+  const order = await Order.findById(orderId)
+    .populate("user", "fullName email")
+    .populate("items.product", "name price image");
+
+  if (!order) {
+    throw new Error("Commande introuvable");
+  }
+
+  return order;
+};
+
+export const updateAdminOrderStatus = async (
+  orderId: string,
+  status: "pending" | "confirmed" | "cancelled"
+) => {
+  const order = await Order.findById(orderId);
+
+  if (!order) {
+    throw new Error("Commande introuvable");
+  }
+
+  if (order.status === status) {
+    return order;
+  }
+
+  if (
+    order.status === "confirmed" ||
+    order.status === "cancelled"
+  ) {
+    throw new Error(
+      "Cette commande ne peut plus être modifiée"
+    );
+  }
+
+  if (status === "cancelled") {
+    for (const item of order.items) {
+      await Product.findByIdAndUpdate(
+        item.product,
+        {
+          $inc: {
+            stock: item.quantity,
+          },
+        }
+      );
+    }
+  }
+
+  order.status = status;
+
+  await order.save();
+
+  return await Order.findById(order._id)
+    .populate("user", "fullName email")
+    .populate("items.product", "name price image");
+};

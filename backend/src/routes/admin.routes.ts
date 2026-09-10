@@ -1,8 +1,12 @@
 import { Router } from "express";
 
-import { getDashboard,
-    getProducts,
- } from "../controllers/admin.controllers";
+import {
+  getDashboard,
+  getProducts,
+  getOrders,
+  getOrder,
+  updateOrderStatus,
+} from "../controllers/admin.controllers";
 
 import { authMiddleware } from "../middleware/auth.middleware";
 import { authorizeRoles } from "../middleware/role.middleware";
@@ -20,6 +24,28 @@ router.get(
   authMiddleware,
   authorizeRoles("admin"),
   getProducts,
+);
+
+
+router.get(
+  "/orders",
+  authMiddleware,
+  authorizeRoles("admin"),
+  getOrders,
+);
+
+router.get(
+  "/orders/:id",
+  authMiddleware,
+  authorizeRoles("admin"),
+  getOrder,
+);
+
+router.put(
+  "/orders/:id/status",
+  authMiddleware,
+  authorizeRoles("admin"),
+  updateOrderStatus,
 );
 
 export default router;
