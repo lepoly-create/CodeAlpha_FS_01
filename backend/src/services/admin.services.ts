@@ -102,3 +102,9 @@ export const getAdminDashboard = async () => {
     lowStockProducts,
   };
 };
+
+export const getAdminProducts = async () => {
+  return await Product.find().sort({
+    createdAt: -1,
+  });
+};

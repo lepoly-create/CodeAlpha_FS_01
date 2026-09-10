@@ -1,6 +1,8 @@
 import { Router } from "express";
 
-import { getDashboard } from "../controllers/admin.controllers";
+import { getDashboard,
+    getProducts,
+ } from "../controllers/admin.controllers";
 
 import { authMiddleware } from "../middleware/auth.middleware";
 import { authorizeRoles } from "../middleware/role.middleware";
@@ -12,6 +14,12 @@ router.get(
   authMiddleware,
   authorizeRoles("admin"),
   getDashboard,
+);
+router.get(
+  "/products",
+  authMiddleware,
+  authorizeRoles("admin"),
+  getProducts,
 );
 
 export default router;
