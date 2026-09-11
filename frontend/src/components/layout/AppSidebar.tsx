@@ -7,10 +7,12 @@ import {
   Store,
   UserCircle,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
-const navigationItems = [
+const customerNavigationItems = [
   {
     label: "Dashboard",
     icon: House,
@@ -43,7 +45,20 @@ const navigationItems = [
   },
 ];
 
+const adminNavigationItems = [
+  { label: "Dashboard", icon: House, path: "/admin" },
+  { label: "Produits", icon: ShoppingCart, path: "/admin/products" },
+  { label: "Commandes", icon: Store, path: "/admin/orders" },
+  { label: "Utilisateurs", icon: UserCircle, path: "/admin/users" },
+];
+
 export default function AppSidebar() {
+  const { user } = useAuth();
+  const navigationItems =
+    user?.role === "admin"
+      ? adminNavigationItems
+      : customerNavigationItems;
+
   return (
     <aside className="sticky top-0 flex h-screen w-80 shrink-0 flex-col overflow-hidden border-r border-black bg-slate-100 px-5 py-5">
       {/* Logo */}
@@ -70,15 +85,15 @@ export default function AppSidebar() {
           const Icon = item.icon;
 
           return (
-            <a
+            <Link
               key={item.label}
-              href={item.path}
+              to={item.path}
               className="flex h-10 items-center gap-4 rounded-lg px-1 text-[20px] transition-colors hover:bg-white"
             >
               <Icon className="h-6 w-6 stroke-[1.5]" />
 
               <span>{item.label}</span>
-            </a>
+            </Link>
           );
         })}
       </nav>

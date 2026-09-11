@@ -77,9 +77,9 @@ export default function Login() {
   setLoading(true);
 
   try {
-    await login(email, password);
+    const user = await login(email, password);
 
-    navigate("/dashboard");
+    navigate(user.role === "admin" ? "/admin" : "/dashboard");
   } catch (error) {
     console.error(error);
 

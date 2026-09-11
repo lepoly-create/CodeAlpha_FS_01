@@ -1,13 +1,17 @@
 import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { toast } from "sonner";
+import { createOrder } from "@/services/order.service";
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
 
   const { cart, cartCount } = useCart();
+  const [loading, setLoading] = useState(false);
 
   
 
@@ -40,10 +44,24 @@ export default function CheckoutPage() {
     0,
   );
 
-  const handleContinueToPayment = () => {
-    navigate("/payment");
-  };
+  const handleCreateOrder = async () => {
+  try {
+    setLoading(true);
 
+    await createOrder();
+
+    toast.success("Commande créée avec succès.");
+
+    navigate("/dashboard");
+  } catch (error: any) {
+    toast.error(
+      error?.response?.data?.message ||
+        "Impossible de créer la commande."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
   return (
     <section className="mx-auto max-w-6xl px-6 py-10">
       <Link
@@ -155,10 +173,11 @@ export default function CheckoutPage() {
           </div>
 
           <Button
-            onClick={handleContinueToPayment}
+            onClick={handleCreateOrder}
+            disabled={loading}
             className="mt-6 h-12 w-full rounded-xl"
           >
-            Continue to payment
+            {loading ? "Creating order..." : "Place order"}
           </Button>
         </aside>
       </div>

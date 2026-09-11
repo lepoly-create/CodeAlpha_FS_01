@@ -24,11 +24,11 @@ export interface Order {
   updatedAt: string;
 }
 
-export const createOrder = async (): Promise<Order> => {
-  const response = await api.post("/orders");
+//export const createOrder = async (): Promise<Order> => {
+ // const response = await api.post("/orders");
 
-  return response.data.data;
-};
+//  return response.data.data;
+//};
 
 export const getOrders = async (): Promise<Order[]> => {
   const response = await api.get("/orders");
@@ -40,6 +40,22 @@ export const getOrderById = async (
   orderId: string,
 ): Promise<Order> => {
   const response = await api.get(`/orders/${orderId}`);
+
+  return response.data.data;
+};
+
+export interface OrderResponse {
+  success: boolean;
+  message?: string;
+  data: {
+    _id: string;
+    totalAmount: number;
+    status: "pending" | "confirmed" | "cancelled";
+  };
+}
+
+export const createOrder = async (): Promise<OrderResponse["data"]> => {
+  const response = await api.post<OrderResponse>("/orders");
 
   return response.data.data;
 };

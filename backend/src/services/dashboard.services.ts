@@ -1,6 +1,7 @@
 import User from "../models/User";
 import Order from "../models/Order";
 import Cart from "../models/Cart";
+import Product from "../models/Product";
 
 export const getUserDashboard = async (
     userId: string
@@ -24,6 +25,13 @@ export const getUserDashboard = async (
     const cart = await Cart.findOne({
         user: userId
     });
+
+    const recommendedProducts = await Product.find({
+        isActive: true,
+        stock: { $gt: 0 },
+    })
+        .sort({ createdAt: -1 })
+        .limit(4);
 
     const totalOrders = orders.length;
 
@@ -79,7 +87,9 @@ export const getUserDashboard = async (
             cartItemsCount
         },
 
-        recentOrders
+         recentOrders,
+
+        recommendedProducts
 
     };
 };

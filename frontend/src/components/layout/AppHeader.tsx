@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/AuthContext";
 
 export default function AppHeader() {
-    const { logout } = useAuth();
+  const { logout, user } = useAuth();
   return (
     <header className="flex h-24 items-center justify-between px-9">
       {/* Search */}
@@ -41,7 +41,7 @@ export default function AppHeader() {
             Logout
         </Button>
       </div>
-      <CartButton />
+      {user?.role !== "admin" && <CartButton />}
     
     </header>
   );

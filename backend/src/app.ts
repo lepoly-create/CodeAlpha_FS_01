@@ -10,6 +10,7 @@ import swaggerUi from "swagger-ui-express";
 import favoriteRoutes from "./routes/favorite.routes";
 import userRoutes from "./routes/user.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
+import adminRoutes from "./routes/admin.routes";
 
 const swaggerDocument = {
     openapi: "3.0.0",
@@ -93,6 +94,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/favorites", favoriteRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/admin", adminRoutes);
 app.get("/", (req, res) => {
     res.json({
         message: "API fonctionnelle"
