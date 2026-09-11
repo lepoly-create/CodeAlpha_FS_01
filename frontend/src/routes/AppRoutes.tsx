@@ -13,7 +13,7 @@ import CustomerRoute from "./CustomerRoute";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminManagementPage from "@/pages/admin/AdminManagementPage";
 import AdminProducts from "@/pages/admin/AdminProducts";
-
+import AdminOrders from "@/pages/admin/AdminOrders";
 
 export default function AppRoutes() {
   return (
@@ -43,11 +43,11 @@ export default function AppRoutes() {
           />
 
           <Route path="/admin/products" element={<AdminProducts />} />
-          
           <Route
             path="/admin/orders"
-            element={<AdminManagementPage section="orders" />}
+            element={<AdminOrders />}
           />
+          
           <Route
             path="/admin/users"
             element={<AdminManagementPage section="users" />}
