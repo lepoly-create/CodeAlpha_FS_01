@@ -97,7 +97,7 @@ export default function AdminProductTable({
 
                 {/* Price */}
                 <td className="px-5 py-4 font-medium">
-                  {product.price.toLocaleString()} FCFA
+                  {product.price.toLocaleString()} $
                 </td>
 
                 {/* Stock */}

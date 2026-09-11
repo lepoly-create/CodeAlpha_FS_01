@@ -99,7 +99,7 @@ export default function AdminOrderTable({
                   {order.totalAmount.toLocaleString(
                     "fr-FR"
                   )}{" "}
-                  FCFA
+                  $
                 </td>
 
                 <td className="px-4 py-4">

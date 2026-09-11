@@ -176,3 +176,47 @@ export const updateAdminOrderStatus = async (
     .populate("user", "fullName email")
     .populate("items.product", "name price image");
 };
+
+export const getAdminUsers = async () => {
+  const users = await User.find({
+      role: "customer",
+    })
+    .select("-password")
+    .sort({ createdAt: -1 })
+    .lean();
+
+  const usersWithStats = await Promise.all(
+    users.map(async (user) => {
+      const [totalOrders, revenueResult] = await Promise.all([
+        Order.countDocuments({
+          user: user._id,
+        }),
+
+        Order.aggregate([
+          {
+            $match: {
+              user: user._id,
+              status: "confirmed",
+            },
+          },
+          {
+            $group: {
+              _id: null,
+              total: {
+                $sum: "$totalAmount",
+              },
+            },
+          },
+        ]),
+      ]);
+
+      return {
+        ...user,
+        totalOrders,
+        totalSpent: revenueResult[0]?.total || 0,
+      };
+    })
+  );
+
+  return usersWithStats;
+};

@@ -170,7 +170,7 @@ export default function AdminOrderDetails({
                       {item.price.toLocaleString(
                         "fr-FR"
                       )}{" "}
-                      FCFA
+                      $
                     </p>
                   </div>
 
@@ -178,7 +178,7 @@ export default function AdminOrderDetails({
                     {(
                       item.price * item.quantity
                     ).toLocaleString("fr-FR")}{" "}
-                    FCFA
+                    $
                   </p>
                 </div>
               ))}
@@ -193,7 +193,7 @@ export default function AdminOrderDetails({
                 {order.totalAmount.toLocaleString(
                   "fr-FR"
                 )}{" "}
-                FCFA
+                $
               </span>
             </div>
           </section>

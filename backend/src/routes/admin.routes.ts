@@ -6,6 +6,7 @@ import {
   getOrders,
   getOrder,
   updateOrderStatus,
+  getUsers
 } from "../controllers/admin.controllers";
 
 import { authMiddleware } from "../middleware/auth.middleware";
@@ -46,6 +47,13 @@ router.put(
   authMiddleware,
   authorizeRoles("admin"),
   updateOrderStatus,
+);
+
+router.get(
+  "/users",
+  authMiddleware,
+  authorizeRoles("admin"),
+  getUsers
 );
 
 export default router;
