@@ -12,6 +12,17 @@ import {
 import { authMiddleware } from "../middleware/auth.middleware";
 import { authorizeRoles } from "../middleware/role.middleware";
 
+import {
+  getSettings,
+  updateSettings,
+} from "../controllers/store-settings.controllers";
+
+import { validate } from "../middleware/validate.middleware";
+
+import {
+  updateStoreSettingsSchema,
+} from "../schemas/store-settings.schemas";
+
 const router = Router();
 
 router.get(
@@ -54,6 +65,21 @@ router.get(
   authMiddleware,
   authorizeRoles("admin"),
   getUsers
+);
+
+router.get(
+  "/settings/store",
+  authMiddleware,
+  authorizeRoles("admin"),
+  getSettings
+);
+
+router.put(
+  "/settings/store",
+  authMiddleware,
+  authorizeRoles("admin"),
+  validate(updateStoreSettingsSchema),
+  updateSettings
 );
 
 export default router;
