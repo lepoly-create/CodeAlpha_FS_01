@@ -81,10 +81,10 @@ export default function Register() {
       </section>
 
       {/* Partie droite */}
-      <section className="flex min-h-screen items-center justify-center px-2 py-2">
-        <Card className="w-full max-w-xl">
+      <section className="flex min-h-screen items-center justify-center px-4 py-6 sm:px-6 sm:py-10">
+        <Card className="w-full max-w-xl p-1 sm:p-2">
           <div className="space-y-1">
-            <h2 className="mt-0 mb-1 text-center text-4xl font-bold">
+            <h2 className="mt-0 mb-1 text-center text-3xl font-bold sm:text-4xl">
               Sign Up
             </h2>
 

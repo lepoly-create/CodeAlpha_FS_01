@@ -8,6 +8,11 @@ import {
 } from "../controllers/cart.controllers";
 
 import { authMiddleware } from "../middleware/auth.middleware";
+import { validate } from "../middleware/validate.middleware";
+import {
+    addCartItemSchema,
+    updateCartItemSchema,
+} from "../schemas/cart.schemas";
 
 
 const router = Router();
@@ -25,6 +30,7 @@ router.get(
 router.post(
     "/",
     authMiddleware,
+    validate(addCartItemSchema),
     addProductToCart
 );
 
@@ -33,6 +39,7 @@ router.post(
 router.put(
     "/:productId",
     authMiddleware,
+    validate(updateCartItemSchema),
     updateQuantity
 );
 

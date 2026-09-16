@@ -1,6 +1,7 @@
 import { Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { AdminOrder } from "@/services/admin-order.service";
+import { formatPrice } from "@/lib/format-price";
 
 interface AdminOrderTableProps {
   orders: AdminOrder[];
@@ -96,10 +97,7 @@ export default function AdminOrderTable({
                 </td>
 
                 <td className="px-4 py-4 font-medium">
-                  {order.totalAmount.toLocaleString(
-                    "fr-FR"
-                  )}{" "}
-                  $
+                  {formatPrice(order.totalAmount)}
                 </td>
 
                 <td className="px-4 py-4">

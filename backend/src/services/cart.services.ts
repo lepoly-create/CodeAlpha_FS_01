@@ -33,7 +33,7 @@ export const addToCart = async (
     const product = await Product.findById(productId);
 
 
-    if (!product) {
+    if (!product || !product.isActive) {
         throw new Error("Produit introuvable");
     }
 
@@ -56,9 +56,17 @@ export const addToCart = async (
 
     if (existingItem) {
 
+        if (existingItem.quantity + quantity > product.stock) {
+            throw new Error("Stock insuffisant");
+        }
+
         existingItem.quantity += quantity;
 
     } else {
+
+        if (quantity > product.stock) {
+            throw new Error("Stock insuffisant");
+        }
 
         cart.items.push({
             product: product._id,

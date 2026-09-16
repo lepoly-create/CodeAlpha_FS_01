@@ -81,7 +81,7 @@ export default function Dashboard() {
             MarketElectro
           </p>
 
-          <h1 className="mt-2 text-4xl font-bold tracking-tight">
+          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
             Tableau de bord
           </h1>
 

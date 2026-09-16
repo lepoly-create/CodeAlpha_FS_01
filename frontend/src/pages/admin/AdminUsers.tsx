@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import { toast } from "sonner";
 
 import AdminUsersHeader from "@/components/admin/users/AdminUsersHeader";
@@ -25,9 +26,9 @@ export default function AdminUsers() {
       const data = await getAdminUsers();
 
       setUsers(data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error(
-        error?.response?.data?.message ||
+        (axios.isAxiosError(error) && error.response?.data?.message) ||
           "Unable to load customers."
       );
     } finally {
@@ -36,7 +37,9 @@ export default function AdminUsers() {
   };
 
   useEffect(() => {
-    loadUsers();
+    void (async () => {
+      await loadUsers();
+    })();
   }, []);
 
   const filteredUsers = useMemo(() => {
@@ -61,7 +64,7 @@ export default function AdminUsers() {
   }, [users, search]);
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-5 sm:space-y-6">
       <AdminUsersHeader />
 
       <AdminUserFilters

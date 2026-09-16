@@ -1,5 +1,9 @@
 import { z } from "zod";
 
+const productIdParams = z.object({
+  id: z.string().regex(/^[a-f\d]{24}$/i, "Identifiant produit invalide"),
+});
+
 export const createProductSchema = z.object({
   body: z.object({
     name: z
@@ -30,5 +34,10 @@ export const createProductSchema = z.object({
 });
 
 export const updateProductSchema = z.object({
+  params: productIdParams,
   body: createProductSchema.shape.body.partial(),
+});
+
+export const productIdSchema = z.object({
+  params: productIdParams,
 });

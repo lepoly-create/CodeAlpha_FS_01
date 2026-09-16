@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 
 import type { Product } from "@/types/product";
+import { formatPrice } from "@/lib/format-price";
 
 
 interface ProductCardProps {
@@ -103,7 +104,7 @@ export default function ProductCard({
         )}
       </div>
 
-      <CardContent className="flex space-y-0 p-3">
+      <CardContent className="flex flex-1 flex-col space-y-0 p-3">
         
         {/* Category */}
         <p className="text-[11px] font-medium uppercase tracking-wider text-neutral-500">
@@ -122,11 +123,11 @@ export default function ProductCard({
 
         {/* Price */}
         <p className="pt-1 text-lg font-bold">
-          ${product.price.toLocaleString()}
+          {formatPrice(product.price)}
         </p>
       </CardContent>
 
-      <CardFooter className="relative bottom-5 left-0 p-6 pt-0 pb-0">
+      <CardFooter className="mt-auto p-3 pt-0">
         <Button className="w-full"
           onClick={handleAddToCart}
           disabled={adding || product.stock === 0}

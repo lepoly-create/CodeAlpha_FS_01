@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 import { toast } from "sonner";
 
 import AdminOrdersHeader from "@/components/admin/orders/AdminOrdersHeader";
@@ -30,9 +31,9 @@ export default function AdminOrders() {
       const data = await getAdminOrders();
 
       setOrders(data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error(
-        error?.response?.data?.message ||
+        (axios.isAxiosError(error) && error.response?.data?.message) ||
           "Unable to load orders."
       );
     } finally {
@@ -41,7 +42,9 @@ export default function AdminOrders() {
   };
 
   useEffect(() => {
-    loadOrders();
+    void (async () => {
+      await loadOrders();
+    })();
   }, []);
 
   const filteredOrders = useMemo(() => {
@@ -99,9 +102,9 @@ export default function AdminOrders() {
           ? "Order confirmed successfully."
           : "Order cancelled successfully."
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error(
-        error?.response?.data?.message ||
+        (axios.isAxiosError(error) && error.response?.data?.message) ||
           "Unable to update the order."
       );
     } finally {
@@ -110,7 +113,7 @@ export default function AdminOrders() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-5 sm:space-y-6">
       <AdminOrdersHeader />
 
       <AdminOrderFilters

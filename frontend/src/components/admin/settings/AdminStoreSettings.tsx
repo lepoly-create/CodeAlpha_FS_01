@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 import { Save } from "lucide-react";
 import { toast } from "sonner";
 
@@ -30,9 +31,9 @@ export default function AdminStoreSettings() {
         setContactEmail(data.contactEmail);
         setPhone(data.phone || "");
         setCurrency(data.currency);
-      } catch (error: any) {
+      } catch (error: unknown) {
         toast.error(
-          error?.response?.data?.message ||
+          (axios.isAxiosError(error) && error.response?.data?.message) ||
             "Impossible de charger les paramètres de la boutique."
         );
       } finally {
@@ -72,9 +73,9 @@ export default function AdminStoreSettings() {
       });
 
       toast.success("Paramètres de la boutique mis à jour.");
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error(
-        error?.response?.data?.message ||
+        (axios.isAxiosError(error) && error.response?.data?.message) ||
           "Impossible de mettre à jour les paramètres."
       );
     } finally {

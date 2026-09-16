@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
-import User from "../models/User";
+import mongoose from "mongoose";
+import User, { type IUser } from "../models/User";
 import { generateToken } from "../utils/jwt";
 import Cart from "../models/Cart";
 
@@ -54,39 +55,47 @@ export const registerUser = async (data: RegisterData) => {
     const { fullName, email, password } = data;
 
 
-    // Vérifier si l'utilisateur existe déjà
-
-    const existingUser = await User.findOne({ email });
-
-
-    if (existingUser) {
-        throw new Error("Cet email est déjà utilisé");
-    }
-
-
     // Hachage du mot de passe
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const session = await mongoose.startSession();
 
-    // Création utilisateur
+    try {
+        let user: IUser | undefined;
 
-    const user = await User.create({
+        await session.withTransaction(async () => {
+            [user] = await User.create(
+                [{
+                    fullName,
+                    email,
+                    password: hashedPassword,
+                }],
+                { session },
+            );
 
-        fullName,
+            await Cart.create(
+                [{
+                    user: user._id,
+                    items: [],
+                }],
+                { session },
+            );
+        });
 
-        email,
+        if (!user) {
+            throw new Error("Utilisateur non créé");
+        }
 
-        password: hashedPassword
+        return user;
+    } catch (error: any) {
+        if (error?.code === 11000) {
+            throw new Error("Cet email est déjà utilisé");
+        }
 
-    });
-
-    await Cart.create({
-        user: user._id,
-        items: []
-    });
-
-
-    return user;
+        throw error;
+    } finally {
+        await session.endSession();
+    }
 
 };

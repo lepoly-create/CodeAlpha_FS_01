@@ -31,6 +31,7 @@ export default function AppRoutes() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/products" element={<Products />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
         </Route>
@@ -61,7 +62,6 @@ export default function AppRoutes() {
           />
         </Route>
       </Route>
-      <Route path="/checkout" element={<CheckoutPage />} />
     </Routes>
   );
 }

@@ -1,4 +1,4 @@
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/useAuth";
 
 import AdminSettingsHeader from "@/components/admin/settings/AdminSettingsHeader";
 import AdminAccountSettings from "@/components/admin/settings/AdminAccountSettings";
@@ -9,7 +9,7 @@ export default function AdminSettings() {
   const { updateUser } = useAuth();
 
   return (
-    <div className="space-y-8">
+    <div className="w-full space-y-6 sm:space-y-8">
       <AdminSettingsHeader />
 
       <div className="grid gap-6 xl:grid-cols-2">

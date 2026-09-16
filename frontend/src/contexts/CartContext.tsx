@@ -18,7 +18,7 @@ import {
 } from "@/services/cart.service";
 
 
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/useAuth";
 import type { Product } from "@/types/product";
 
 interface CartItem{

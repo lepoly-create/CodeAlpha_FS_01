@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { formatPrice } from "@/lib/format-price";
 
 import type { AdminOrder } from "@/services/admin-order.service";
 
@@ -167,18 +168,12 @@ export default function AdminOrderDetails({
 
                     <p className="text-sm text-muted-foreground">
                       {item.quantity} ×{" "}
-                      {item.price.toLocaleString(
-                        "fr-FR"
-                      )}{" "}
-                      $
+                      {formatPrice(item.price)}
                     </p>
                   </div>
 
                   <p className="font-semibold">
-                    {(
-                      item.price * item.quantity
-                    ).toLocaleString("fr-FR")}{" "}
-                    $
+                    {formatPrice(item.price * item.quantity)}
                   </p>
                 </div>
               ))}
@@ -190,10 +185,7 @@ export default function AdminOrderDetails({
               </span>
 
               <span className="text-lg font-bold">
-                {order.totalAmount.toLocaleString(
-                  "fr-FR"
-                )}{" "}
-                $
+                {formatPrice(order.totalAmount)}
               </span>
             </div>
           </section>

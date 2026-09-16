@@ -3,7 +3,7 @@ import { Loader2 } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/useAuth";
 
 import {
   getMyProfile,
@@ -70,7 +70,7 @@ export default function Profile() {
 
           <div className="mt-3 h-10 w-52 animate-pulse rounded bg-neutral-100" />
 
-          <div className="mt-3 h-5 w-96 animate-pulse rounded bg-neutral-100" />
+          <div className="mt-3 h-5 w-full max-w-96 animate-pulse rounded bg-neutral-100" />
         </div>
 
         <div className="h-40 animate-pulse rounded-2xl bg-neutral-100" />
@@ -93,7 +93,7 @@ export default function Profile() {
             MarketElectro
           </p>
 
-          <h1 className="mt-2 text-4xl font-bold tracking-tight">
+          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
             Profil
           </h1>
 
@@ -124,7 +124,7 @@ export default function Profile() {
           MarketElectro
         </p>
 
-        <h1 className="mt-2 text-4xl font-bold tracking-tight">
+        <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
           Profil
         </h1>
 

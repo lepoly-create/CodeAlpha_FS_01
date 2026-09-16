@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth } from "@/contexts/useAuth";
 import { Link, useNavigate } from "react-router-dom";
 import { LockKeyhole, Mail } from "lucide-react";
 import styled from "styled-components";
@@ -91,15 +91,15 @@ export default function Login() {
 
   return (
     <main
-      className="flex min-h-screen items-center justify-center bg-cover bg-center px-6"
+      className="flex min-h-screen items-center justify-center bg-cover bg-center px-4 py-6 sm:px-6"
       style={{
         backgroundImage:
           "url('/images/image.png')",
       }}
     >
-      <Card className="w-full max-w-xl rounded-xl border border-black/50 bg-black/40 p-5 text-white shadow-2xl backdrop-blur-xl">
-        <div className="mx-auto max-w-xs">
-          <h1 className="mb-16 text-center text-4xl font-bold">
+      <Card className="w-full max-w-xl rounded-xl border border-black/50 bg-black/40 p-4 text-white shadow-2xl backdrop-blur-xl sm:p-6">
+        <div className="mx-auto w-full max-w-sm">
+          <h1 className="mb-10 text-center text-3xl font-bold sm:mb-16 sm:text-4xl">
             LOGIN
           </h1>
 
@@ -140,10 +140,10 @@ export default function Login() {
                 }
               />
 
-              <div className="absolute text-right top-65 right-35">
+              <div className="mt-2 text-right">
                 <button
                   type="button"
-                  className="text-sm hover:underline"
+                  className="text-sm text-white/80 hover:text-white hover:underline"
                 >
                   Forgot Password
                 </button>
@@ -156,7 +156,7 @@ export default function Login() {
 
               <Label
                 htmlFor="remember"
-                className="text-lg font-semibold"
+                className="text-sm font-semibold sm:text-base"
               >
                 Remember Me
               </Label>
@@ -180,14 +180,14 @@ export default function Login() {
           </form>
 
           {/* Register */}
-          <div className="mt-4 mb-10 flex items-center justify-between text-mist-50 font-semibold">
-            <span>Don't have an Account?</span>
+          <div className="mt-4 mb-6 flex flex-wrap items-center justify-between gap-2 text-sm font-semibold text-white sm:mb-10">
+            <span>Vous n'avez pas encore de compte ?</span>
 
             <Link
               to="/register"
               className="hover:underline"
             >
-              Register
+              Inscription
             </Link>
           </div>
         </div>

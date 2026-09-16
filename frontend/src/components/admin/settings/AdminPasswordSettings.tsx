@@ -1,4 +1,5 @@
 import { useState } from "react";
+import axios from "axios";
 import { toast } from "sonner";
 import { Lock } from "lucide-react";
 
@@ -47,9 +48,9 @@ export default function AdminPasswordSettings() {
       toast.success(
         "Mot de passe modifié avec succès."
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error(
-        error?.response?.data?.message ||
+        (axios.isAxiosError(error) && error.response?.data?.message) ||
           "Impossible de modifier le mot de passe."
       );
     } finally {

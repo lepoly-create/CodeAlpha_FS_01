@@ -7,6 +7,8 @@ import {
 } from "../controllers/order.controllers";
 
 import { authMiddleware } from "../middleware/auth.middleware";
+import { validate } from "../middleware/validate.middleware";
+import { orderIdSchema } from "../schemas/order.schemas";
 
 const router = Router();
 
@@ -31,6 +33,7 @@ router.get(
 router.get(
     "/:id",
     authMiddleware,
+    validate(orderIdSchema),
     getOrder
 );
 

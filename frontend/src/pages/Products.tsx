@@ -141,7 +141,7 @@ export default function Products() {
   };
 
   return (
-    <section className="space-y-8">
+    <section className="mx-auto w-full max-w-[1600px] space-y-6 sm:space-y-8">
       {/* Heading */}
       <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
         <div>
@@ -149,7 +149,7 @@ export default function Products() {
             MarketElectro
           </p>
 
-          <h1 className="mt-2 text-4xl font-bold tracking-tight">
+          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
             Products
           </h1>
 
@@ -187,7 +187,7 @@ export default function Products() {
 
       {/* Loading */}
       {loading && (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3 2xl:grid-cols-4">
           {Array.from({ length: 8 }).map((_, index) => (
             <div
               key={index}

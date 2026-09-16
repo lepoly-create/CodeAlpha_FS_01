@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import User from "../models/User";
 import Product from "../models/Product";
 import Order from "../models/Order";
@@ -136,45 +137,61 @@ export const updateAdminOrderStatus = async (
   orderId: string,
   status: "pending" | "confirmed" | "cancelled"
 ) => {
-  const order = await Order.findById(orderId);
+  const session = await mongoose.startSession();
 
-  if (!order) {
-    throw new Error("Commande introuvable");
-  }
+  try {
+    let updatedOrderId: mongoose.Types.ObjectId | undefined;
 
-  if (order.status === status) {
-    return order;
-  }
+    await session.withTransaction(async () => {
+      const order = await Order.findById(orderId).session(session);
 
-  if (
-    order.status === "confirmed" ||
-    order.status === "cancelled"
-  ) {
-    throw new Error(
-      "Cette commande ne peut plus être modifiée"
-    );
-  }
+      if (!order) {
+        throw new Error("Commande introuvable");
+      }
 
-  if (status === "cancelled") {
-    for (const item of order.items) {
-      await Product.findByIdAndUpdate(
-        item.product,
-        {
-          $inc: {
-            stock: item.quantity,
-          },
+      if (order.status === status) {
+        updatedOrderId = order._id;
+        return;
+      }
+
+      if (
+        order.status === "confirmed" ||
+        order.status === "cancelled"
+      ) {
+        throw new Error(
+          "Cette commande ne peut plus être modifiée"
+        );
+      }
+
+      if (status === "cancelled") {
+        for (const item of order.items) {
+          const result = await Product.updateOne(
+            { _id: item.product },
+            { $inc: { stock: item.quantity } },
+            { session },
+          );
+
+          if (result.modifiedCount !== 1) {
+            throw new Error("Produit de commande introuvable");
+          }
         }
-      );
+      }
+
+      order.status = status;
+      await order.save({ session });
+      updatedOrderId = order._id;
+    });
+
+    if (!updatedOrderId) {
+      throw new Error("Commande introuvable");
     }
-  }
 
-  order.status = status;
-
-  await order.save();
-
-  return await Order.findById(order._id)
+    return await Order.findById(updatedOrderId)
     .populate("user", "fullName email")
     .populate("items.product", "name price image");
+  } finally {
+    await session.endSession();
+  }
 };
 
 export const getAdminUsers = async () => {

@@ -11,12 +11,16 @@ import {
 import { authMiddleware } from "../middleware/auth.middleware";
 import { authorizeRoles } from "../middleware/role.middleware";
 import { validate } from "../middleware/validate.middleware";
-import { createProductSchema, updateProductSchema } from "../schemas/product.schemas";
+import {
+    createProductSchema,
+    productIdSchema,
+    updateProductSchema,
+} from "../schemas/product.schemas";
 
 const router = Router();
 
 router.get("/", getAll);
-router.get("/:id", getOne);
+router.get("/:id", validate(productIdSchema), getOne);
 
 router.post(
     "/",
@@ -38,6 +42,7 @@ router.delete(
     "/:id",
     authMiddleware,
     authorizeRoles("admin"),
+    validate(productIdSchema),
     remove
 );
 

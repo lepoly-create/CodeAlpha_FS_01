@@ -96,15 +96,6 @@ export const updateOrderStatus = async (
   try {
     const { status } = req.body;
 
-    if (
-      !["pending", "confirmed", "cancelled"].includes(status)
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Statut de commande invalide",
-      });
-    }
-
     const order = await updateAdminOrderStatus(
       String(req.params.id),
       status
