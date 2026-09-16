@@ -54,7 +54,7 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
         <Button
             variant="ghost"
             onClick={logout}
-            className="hidden text-sm sm:inline-flex"
+            className="inline-flex text-sm"
             >
             Déconnexion
         </Button>
