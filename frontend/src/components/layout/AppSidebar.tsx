@@ -50,6 +50,7 @@ const adminNavigationItems = [
   { label: "Produits", icon: ShoppingCart, path: "/admin/products" },
   { label: "Commandes", icon: Store, path: "/admin/orders" },
   { label: "Utilisateurs", icon: UserCircle, path: "/admin/users" },
+  { label: "Settings", icon: Settings, path: "/admin/settings" },
 ];
 
 export default function AppSidebar() {

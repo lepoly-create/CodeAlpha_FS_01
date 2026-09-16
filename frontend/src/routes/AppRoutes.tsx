@@ -15,7 +15,7 @@ import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminProducts from "@/pages/admin/AdminProducts";
 import AdminOrders from "@/pages/admin/AdminOrders";
 import AdminUsers from "@/pages/admin/AdminUsers";
-
+import AdminSettings from "@/pages/admin/AdminSettings";
 
 export default function AppRoutes() {
   return (
@@ -53,6 +53,11 @@ export default function AppRoutes() {
           <Route 
             path="/admin/users" 
             element={<AdminUsers />} 
+          />
+
+          <Route 
+            path="/admin/settings" 
+            element={<AdminSettings />} 
           />
         </Route>
       </Route>
