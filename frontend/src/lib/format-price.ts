@@ -1,7 +1,7 @@
-const currencyFormatter = new Intl.NumberFormat("fr-FR", {
+const currencyFormatter = new Intl.NumberFormat("en-US", {
   style: "currency",
-  currency: "XOF",
-  maximumFractionDigits: 0,
+  currency: "USD",
+  maximumFractionDigits: 2,
 });
 
 export function formatPrice(value: number): string {

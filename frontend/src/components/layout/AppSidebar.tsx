@@ -60,12 +60,19 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
         type="button"
         aria-label="Fermer le menu"
         onClick={onClose}
-        className={`fixed inset-0 z-40 bg-black/30 transition-opacity lg:hidden ${
+        className={`
+          fixed inset-0 z-40
+           bg-black/30 transition-opacity lg:hidden ${
           open ? "opacity-100" : "pointer-events-none opacity-0"
         }`}
       />
 
-    <aside className={`fixed inset-y-0 left-0 z-50 flex w-[min(20rem,calc(100vw-2rem))] shrink-0 flex-col border-r border-neutral-200 bg-white px-4 py-5 shadow-xl transition-transform duration-200 lg:sticky lg:z-auto lg:w-64 lg:translate-x-0 lg:shadow-none ${
+    <aside className={`fixed 
+    inset-y-0 left-0 z-50 flex w-[min(20rem,calc(100vw-2rem))]
+     shrink-0 flex-col border-r border-neutral-200
+      bg-white px-4 py-5 shadow-xl transition-transform 
+      duration-200 lg:sticky lg:z-auto lg:w-64 lg:translate-x-0
+       lg:shadow-none ${
       open ? "translate-x-0" : "-translate-x-full"
     }`}>
       {/* Logo */}
@@ -89,7 +96,8 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="mt-10 flex flex-col gap-1.5" aria-label="Navigation principale">
+      <nav className="mt-10 flex flex-col 
+      gap-1.5" aria-label="Navigation principale">
         {navigationItems.map((item) => {
           const Icon = item.icon;
 
@@ -97,8 +105,10 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
             <NavLink
               key={item.label}
               to={item.path}
+              end={item.path === "/admin" || item.path === "/dashboard"}
               onClick={onClose}
-              className={({ isActive }) => `flex min-h-11 items-center gap-3 rounded-xl px-3 text-base font-medium transition-colors ${
+              className={({ isActive }) => `flex min-h-11 
+              items-center gap-3 rounded-xl px-3 text-base font-medium transition-colors ${
                 isActive
                   ? "bg-neutral-900 text-white shadow-sm"
                   : "text-neutral-600 hover:bg-neutral-100 hover:text-neutral-950"

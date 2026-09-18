@@ -10,18 +10,12 @@ import {
 } from "@/components/ui/card";
 
 import type { AdminProduct } from "@/services/admin.service";
+import { formatPrice } from "@/lib/format-price";
 
 interface AdminRecentProductsProps {
   products: AdminProduct[];
   onViewProducts: () => void;
 }
-
-const formatPrice = (price: number) =>
-  new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "XOF",
-    maximumFractionDigits: 0,
-  }).format(price);
 
 export default function AdminRecentProducts({
   products,

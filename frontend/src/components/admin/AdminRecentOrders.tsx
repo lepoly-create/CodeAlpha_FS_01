@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/card";
 
 import type { AdminOrder } from "@/services/admin.service";
+import { formatPrice } from "@/lib/format-price";
 
 interface AdminRecentOrdersProps {
   orders: AdminOrder[];
@@ -35,13 +36,6 @@ const statusConfig = {
       "bg-red-50 text-red-700 ring-1 ring-inset ring-red-200",
   },
 };
-
-const formatPrice = (price: number) =>
-  new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "XOF",
-    maximumFractionDigits: 0,
-  }).format(price);
 
 const formatDate = (date: string) =>
   new Intl.DateTimeFormat("fr-FR", {

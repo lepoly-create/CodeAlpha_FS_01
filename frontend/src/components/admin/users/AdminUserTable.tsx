@@ -89,7 +89,7 @@ export default function AdminUserTable({
                 </td>
 
                 <td className="px-6 py-4 text-right font-medium">
-                  {user.totalSpent.toLocaleString()} FCFA
+                  {user.totalSpent.toLocaleString()} $
                 </td>
 
                 <td className="px-6 py-4 text-right">

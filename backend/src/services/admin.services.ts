@@ -202,38 +202,53 @@ export const getAdminUsers = async () => {
     .sort({ createdAt: -1 })
     .lean();
 
-  const usersWithStats = await Promise.all(
-    users.map(async (user) => {
-      const [totalOrders, revenueResult] = await Promise.all([
-        Order.countDocuments({
-          user: user._id,
-        }),
+  const statsByUser = new Map<string, { totalOrders: number; totalSpent: number }>();
 
-        Order.aggregate([
-          {
-            $match: {
-              user: user._id,
-              status: "confirmed",
+  if (users.length > 0) {
+    const orderStats = await Order.aggregate([
+      {
+        $match: {
+          user: {
+            $in: users.map((user) => user._id),
+          },
+        },
+      },
+      {
+        $group: {
+          _id: "$user",
+          totalOrders: {
+            $sum: 1,
+          },
+          totalSpent: {
+            $sum: {
+              $cond: [
+                { $eq: ["$status", "confirmed"] },
+                "$totalAmount",
+                0,
+              ],
             },
           },
-          {
-            $group: {
-              _id: null,
-              total: {
-                $sum: "$totalAmount",
-              },
-            },
-          },
-        ]),
-      ]);
+        },
+      },
+    ]);
 
-      return {
-        ...user,
-        totalOrders,
-        totalSpent: revenueResult[0]?.total || 0,
-      };
-    })
-  );
+    for (const stats of orderStats) {
+      statsByUser.set(stats._id.toString(), {
+        totalOrders: stats.totalOrders,
+        totalSpent: stats.totalSpent,
+      });
+    }
+  }
+
+  const usersWithStats = users.map((user) => {
+    const stats = statsByUser.get(user._id.toString());
+
+    return {
+      ...user,
+      totalOrders: stats?.totalOrders || 0,
+      totalSpent: stats?.totalSpent || 0,
+    };
+  });
 
   return usersWithStats;
 };

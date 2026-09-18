@@ -34,7 +34,7 @@ const storeSettingsSchema = new Schema<IStoreSettings>(
     currency: {
       type: String,
       required: true,
-      default: "FCFA",
+      default: "$",
       trim: true,
       maxlength: 10,
     },
