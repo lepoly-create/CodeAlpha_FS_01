@@ -8,17 +8,11 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 
 import type { AdminStatistics } from "@/services/admin.service";
+import { formatPrice } from "@/lib/format-price";
 
 interface AdminStatsProps {
   statistics: AdminStatistics;
 }
-
-const formatPrice = (price: number) =>
-  new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "XOF",
-    maximumFractionDigits: 0,
-  }).format(price);
 
 export default function AdminStats({
   statistics,

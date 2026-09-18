@@ -8,7 +8,7 @@ export const getStoreSettings = async () => {
       storeName: "MarketElectro",
       contactEmail: "contact@marketelectro.com",
       phone: "",
-      currency: "FCFA",
+      currency: "$",
     });
   }
 
@@ -33,7 +33,7 @@ export const updateStoreSettings = async (
       contactEmail:
         data.contactEmail || "contact@marketelectro.com",
       phone: data.phone || "",
-      currency: data.currency || "FCFA",
+      currency: data.currency || "$",
     });
 
     return settings;

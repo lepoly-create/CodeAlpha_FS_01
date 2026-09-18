@@ -33,7 +33,8 @@ export default function AdminUserDetails({
             variant="ghost"
             size="icon"
             onClick={onClose}
-          >
+          
+            aria-label="Close customer details">
             <X className="h-5 w-5" />
           </Button>
         </div>
@@ -84,7 +85,7 @@ export default function AdminUserDetails({
               </div>
 
               <p className="mt-2 text-xl font-semibold">
-                {user.totalSpent.toLocaleString()} FCFA
+                {user.totalSpent.toLocaleString()} $
               </p>
             </div>
 

@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 import type { DashboardOrder } from "@/services/dashboard.service";
+import { formatPrice } from "@/lib/format-price";
 
 interface RecentOrdersProps {
   orders: DashboardOrder[];
@@ -22,14 +23,6 @@ const statusConfig = {
     label: "Annulée",
     className: "bg-red-50 text-red-700 ring-1 ring-inset ring-red-200",
   },
-};
-
-const formatPrice = (price: number) => {
-  return new Intl.NumberFormat("fr-FR", {
-    style: "currency",
-    currency: "XOF",
-    maximumFractionDigits: 0,
-  }).format(price);
 };
 
 const formatDate = (date: string) => {

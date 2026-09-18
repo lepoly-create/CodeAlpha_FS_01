@@ -24,8 +24,11 @@ export const updateStoreSettingsSchema = z.object({
 
     phone: z
       .string()
-      .min(8, "Le numéro de téléphone est invalide")
       .max(30, "Le numéro de téléphone est trop long")
+       .refine(
+         (value) => value === "" || value.length >= 8,
+         "Le numéro de téléphone est invalide"
+       )
       .trim()
       .optional(),
 

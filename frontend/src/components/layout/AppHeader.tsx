@@ -2,11 +2,10 @@ import {
   Bell,
   CircleUserRound,
   Menu,
-  Search,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 import CartButton from "@/components/cart/CartButton";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/useAuth";
 
@@ -30,13 +29,7 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
 
       {/* Search */}
       <div className="relative min-w-0 flex-1 sm:max-w-md">
-        <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 stroke-[1.5]" />
-
-        <Input
-          placeholder="Rechercher"
-          aria-label="Rechercher"
-          className="h-10 rounded-xl border-0 bg-neutral-100 pl-11 text-sm shadow-none placeholder:text-neutral-500 focus-visible:ring-1"
-        />
+        
       </div>
 
       {/* Actions */}
@@ -45,9 +38,13 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
           <Bell className="h-6 w-6 stroke-[1.5]" />
         </Button>
 
-        <Button variant="ghost" size="icon" className="hidden h-10 w-10 sm:inline-flex" aria-label="Profil">
+        <Link
+          to="/profile"
+          className="hidden h-10 w-10 items-center justify-center rounded-full text-foreground transition-colors hover:bg-neutral-100 sm:inline-flex"
+          aria-label="Profil"
+        >
           <CircleUserRound className="h-6 w-6 stroke-[1.5]" />
-        </Button>
+        </Link>
 
         {user?.role !== "admin" && <CartButton />}
 

@@ -17,7 +17,7 @@ export default function AdminStoreSettings() {
   const [storeName, setStoreName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [currency, setCurrency] = useState("FCFA");
+  const [currency, setCurrency] = useState("$");
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -147,7 +147,7 @@ export default function AdminStoreSettings() {
             id="currency"
             value={currency}
             onChange={(event) => setCurrency(event.target.value)}
-            placeholder="FCFA"
+            placeholder="$"
             disabled={saving}
           />
         </div>
