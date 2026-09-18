@@ -6,6 +6,7 @@ import {
   getAdminOrders,
   getAdminOrderById,
   updateAdminOrderStatus,
+  getAdminUsers,
 } from "../services/admin.services";
 export const getDashboard = async (
   req: Request,
@@ -95,15 +96,6 @@ export const updateOrderStatus = async (
   try {
     const { status } = req.body;
 
-    if (
-      !["pending", "confirmed", "cancelled"].includes(status)
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Statut de commande invalide",
-      });
-    }
-
     const order = await updateAdminOrderStatus(
       String(req.params.id),
       status
@@ -118,6 +110,25 @@ export const updateOrderStatus = async (
     res.status(400).json({
       success: false,
       message: error.message,
+    });
+  }
+};
+
+export const getUsers = async (req: Request, res: Response) => {
+  try {
+    const users = await getAdminUsers();
+
+    res.status(200).json({
+      success: true,
+      count: users.length,
+      data: users,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message:
+        error.message ||
+        "Erreur lors du chargement des utilisateurs",
     });
   }
 };

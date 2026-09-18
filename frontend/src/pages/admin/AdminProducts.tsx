@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import axios from "axios";
 //import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
@@ -45,9 +46,9 @@ export default function AdminProducts() {
       const data = await getAdminProducts();
 
       setProducts(data);
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error(
-        error?.response?.data?.message ||
+        (axios.isAxiosError(error) && error.response?.data?.message) ||
           "Unable to load products."
       );
     } finally {
@@ -56,7 +57,9 @@ export default function AdminProducts() {
   };
 
   useEffect(() => {
-    loadProducts();
+    void (async () => {
+      await loadProducts();
+    })();
   }, []);
 
   const categories = useMemo(() => {
@@ -131,9 +134,9 @@ export default function AdminProducts() {
 
       handleCancelForm();
       await loadProducts();
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error(
-        error?.response?.data?.message ||
+        (axios.isAxiosError(error) && error.response?.data?.message) ||
           "Unable to save product."
       );
     }
@@ -160,9 +163,9 @@ export default function AdminProducts() {
       setProductToDelete(null);
 
       await loadProducts();
-    } catch (error: any) {
+    } catch (error: unknown) {
       toast.error(
-        error?.response?.data?.message ||
+        (axios.isAxiosError(error) && error.response?.data?.message) ||
           "Unable to disable product."
       );
     } finally {
@@ -181,7 +184,7 @@ export default function AdminProducts() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="w-full space-y-5 sm:space-y-6">
       {/* Header */}
       <AdminProductsHeader
         onAddProduct={handleAddProduct}
@@ -190,6 +193,7 @@ export default function AdminProducts() {
       {/* Form */}
       {showForm && (
         <AdminProductForm
+          key={selectedProduct?._id ?? "new-product"}
           product={selectedProduct}
           onSubmit={handleSubmit}
           onCancel={handleCancelForm}

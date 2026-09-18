@@ -1,6 +1,7 @@
 import { Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { Product } from "@/types/product";
+import { formatPrice } from "@/lib/format-price";
 
 interface AdminProductTableProps {
   products: Product[];
@@ -97,7 +98,7 @@ export default function AdminProductTable({
 
                 {/* Price */}
                 <td className="px-5 py-4 font-medium">
-                  {product.price.toLocaleString()} FCFA
+                  {formatPrice(product.price)}
                 </td>
 
                 {/* Stock */}

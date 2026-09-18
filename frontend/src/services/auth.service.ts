@@ -16,6 +16,7 @@ export interface AuthUser {
   fullName: string;
   email: string;
   role: string;
+  profileImage?: string | null;
 }
 
 export interface AuthResponse {

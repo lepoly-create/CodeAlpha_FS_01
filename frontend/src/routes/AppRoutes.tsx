@@ -11,9 +11,11 @@ import Profile from "@/pages/Profile";
 import AdminRoute from "./AdminRoute";
 import CustomerRoute from "./CustomerRoute";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
-import AdminManagementPage from "@/pages/admin/AdminManagementPage";
+//import AdminManagementPage from "@/pages/admin/AdminManagementPage";
 import AdminProducts from "@/pages/admin/AdminProducts";
 import AdminOrders from "@/pages/admin/AdminOrders";
+import AdminUsers from "@/pages/admin/AdminUsers";
+import AdminSettings from "@/pages/admin/AdminSettings";
 
 export default function AppRoutes() {
   return (
@@ -29,6 +31,7 @@ export default function AppRoutes() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/products" element={<Products />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
         </Route>
@@ -48,13 +51,17 @@ export default function AppRoutes() {
             element={<AdminOrders />}
           />
           
-          <Route
-            path="/admin/users"
-            element={<AdminManagementPage section="users" />}
+          <Route 
+            path="/admin/users" 
+            element={<AdminUsers />} 
+          />
+
+          <Route 
+            path="/admin/settings" 
+            element={<AdminSettings />} 
           />
         </Route>
       </Route>
-      <Route path="/checkout" element={<CheckoutPage />} />
     </Routes>
   );
 }

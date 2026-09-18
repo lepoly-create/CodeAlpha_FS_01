@@ -1,84 +1,90 @@
+import mongoose from "mongoose";
 import Cart from "../models/Cart";
 import Order from "../models/Order";
+import Product from "../models/Product";
 
 // Créer une commande à partir du panier
 
 export const createOrder = async (
     userId: string
 ) => {
+    const session = await mongoose.startSession();
 
-    // Récupérer le panier
+    try {
+        let createdOrder;
 
-    const cart = await Cart.findOne({
-        user: userId
-    }).populate("items.product");
+        await session.withTransaction(async () => {
+            const cart = await Cart.findOne({ user: userId })
+                .session(session)
+                .populate("items.product");
 
+            if (!cart) {
+                throw new Error("Panier introuvable");
+            }
 
-    if (!cart) {
-        throw new Error("Panier introuvable");
-    }
+            if (cart.items.length === 0) {
+                throw new Error("Votre panier est vide");
+            }
 
-    if (cart.items.length === 0) {
-        throw new Error("Votre panier est vide");
-    }
+            let totalAmount = 0;
+            const orderItems = [];
 
-    let totalAmount = 0;
+            for (const item of cart.items) {
+                const product = item.product as unknown as {
+                    _id: mongoose.Types.ObjectId;
+                    name: string;
+                    price: number;
+                    stock: number;
+                    isActive: boolean;
+                };
 
-    const orderItems = [];
+                if (!product || !product.isActive) {
+                    throw new Error("Produit introuvable");
+                }
 
-    for (const item of cart.items) {
+                if (product.stock < item.quantity) {
+                    throw new Error(`Stock insuffisant pour ${product.name}`);
+                }
 
-        const product: any = item.product;
+                const stockUpdate = await Product.updateOne(
+                    {
+                        _id: product._id,
+                        isActive: true,
+                        stock: { $gte: item.quantity },
+                    },
+                    { $inc: { stock: -item.quantity } },
+                    { session },
+                );
 
-        if (!product) {
-            throw new Error("Produit introuvable");
-        }
+                if (stockUpdate.modifiedCount !== 1) {
+                    throw new Error(`Stock insuffisant pour ${product.name}`);
+                }
 
-        if (product.stock < item.quantity) {
+                totalAmount += product.price * item.quantity;
+                orderItems.push({
+                    product: product._id,
+                    quantity: item.quantity,
+                    price: product.price,
+                });
+            }
 
-            throw new Error(
-                `Stock insuffisant pour ${product.name}`
+            [createdOrder] = await Order.create(
+                [{
+                    user: userId,
+                    items: orderItems,
+                    totalAmount,
+                }],
+                { session },
             );
 
-        }
-        totalAmount += product.price * item.quantity;
-
-        orderItems.push({
-
-            product: product._id,
-
-            quantity: item.quantity,
-
-            price: product.price
-
+            cart.items = [];
+            await cart.save({ session });
         });
-        // Décrémenter le stock
 
-        product.stock -= item.quantity;
-
-        await product.save();
+        return createdOrder;
+    } finally {
+        await session.endSession();
     }
-
-    // Créer la commande
-
-    const order = await Order.create({
-
-        user: userId,
-
-        items: orderItems,
-
-        totalAmount
-
-    });
-
-    // Vider le panier
-
-    cart.items = [];
-
-    await cart.save();
-
-
-    return order;
 
 };
 

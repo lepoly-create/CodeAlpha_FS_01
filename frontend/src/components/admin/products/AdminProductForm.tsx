@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import type {
@@ -20,34 +20,16 @@ export default function AdminProductForm({
   onSubmit,
   onCancel,
 }: AdminProductFormProps) {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [price, setPrice] = useState("");
-  const [image, setImage] = useState("");
-  const [category, setCategory] = useState("");
-  const [stock, setStock] = useState("");
+  const [name, setName] = useState(product?.name ?? "");
+  const [description, setDescription] = useState(product?.description ?? "");
+  const [price, setPrice] = useState(product ? String(product.price) : "");
+  const [image, setImage] = useState(product?.image ?? "");
+  const [category, setCategory] = useState(product?.category ?? "");
+  const [stock, setStock] = useState(product ? String(product.stock) : "");
 
   const [loading, setLoading] = useState(false);
 
   const isEditing = !!product;
-
-  useEffect(() => {
-    if (product) {
-      setName(product.name);
-      setDescription(product.description);
-      setPrice(String(product.price));
-      setImage(product.image);
-      setCategory(product.category);
-      setStock(String(product.stock));
-    } else {
-      setName("");
-      setDescription("");
-      setPrice("");
-      setImage("");
-      setCategory("");
-      setStock("");
-    }
-  }, [product]);
 
   const handleSubmit = async (
     event: React.SyntheticEvent<HTMLFormElement>
@@ -123,7 +105,7 @@ export default function AdminProductForm({
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
           <label className="text-sm font-medium">
-            Price (FCFA)
+            Price (F CFA)
           </label>
 
           <Input

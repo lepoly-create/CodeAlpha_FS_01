@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
+import { formatPrice } from "@/lib/format-price";
 
 export default function CartPage() {
   const {
@@ -61,7 +62,7 @@ export default function CartPage() {
 
   if (loading) {
     return (
-      <section className="mx-auto flex min-h-[60vh] max-w-7xl items-center justify-center px-6 py-12">
+      <section className="mx-auto flex min-h-[60vh] max-w-7xl items-center justify-center px-4 py-10 sm:px-6 sm:py-12">
         <div className="text-center">
           <div className="mx-auto h-8 w-8 animate-spin rounded-full border-2 border-neutral-200 border-t-primary" />
 
@@ -92,7 +93,7 @@ export default function CartPage() {
 
   if (!cartWithProducts || cartWithProducts.items.length === 0) {
     return (
-      <section className="mx-auto flex min-h-[60vh] max-w-7xl flex-col items-center justify-center px-6 py-12 text-center">
+      <section className="mx-auto flex min-h-[60vh] max-w-7xl flex-col items-center justify-center px-4 py-10 text-center sm:px-6 sm:py-12">
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-neutral-100">
           <ShoppingBag className="h-7 w-7 text-neutral-500" />
         </div>
@@ -123,7 +124,7 @@ export default function CartPage() {
   );
 
   return (
-    <section className="mx-auto max-w-7xl px-6 py-10">
+    <section className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 sm:py-10">
       {/* Header */}
       <div>
         <div className="flex items-center gap-2 text-sm text-neutral-500">
@@ -131,7 +132,7 @@ export default function CartPage() {
           <span>Shopping cart</span>
         </div>
 
-        <h1 className="mt-1 text-4xl font-bold tracking-tight">
+        <h1 className="mt-1 text-3xl font-bold tracking-tight sm:text-4xl">
           My Cart
         </h1>
 
@@ -142,7 +143,7 @@ export default function CartPage() {
       </div>
 
       {/* Content */}
-      <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_360px]">
+      <div className="mt-6 grid gap-6 lg:mt-8 lg:grid-cols-[minmax(0,1fr)_360px] lg:gap-8">
         {/* Products */}
         <div className="space-y-4">
           {cartWithProducts.items.map((item) => {
@@ -158,10 +159,10 @@ export default function CartPage() {
             return (
               <article
                 key={item._id ?? productId}
-                className="flex gap-5 rounded-2xl border border-neutral-200 bg-white p-4"
+                className="flex gap-3 rounded-2xl border border-neutral-200 bg-white p-3 sm:gap-5 sm:p-4"
               >
                 {/* Image */}
-                <div className="h-28 w-28 shrink-0 overflow-hidden rounded-xl bg-neutral-100">
+                <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-neutral-100 sm:h-28 sm:w-28">
                   <img
                     src={product.image}
                     alt={product.name}
@@ -176,12 +177,12 @@ export default function CartPage() {
                       {product.category}
                     </p>
 
-                    <h2 className="mt-1 truncate text-lg font-semibold">
+                    <h2 className="mt-1 line-clamp-2 text-base font-semibold sm:text-lg">
                       {product.name}
                     </h2>
 
                     <p className="mt-1 text-sm text-neutral-500">
-                      ${product.price.toLocaleString()}
+                      {formatPrice(product.price)}
                     </p>
                   </div>
 
@@ -242,9 +243,7 @@ export default function CartPage() {
                 {/* Item total */}
                 <div className="hidden text-right sm:block">
                   <p className="font-semibold">
-                    ${
-                      (product.price * item.quantity).toLocaleString()
-                    }
+                    {formatPrice(product.price * item.quantity)}
                   </p>
                 </div>
               </article>
@@ -254,7 +253,7 @@ export default function CartPage() {
 
         {/* Summary */}
         <aside className="h-fit rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
-          <h2 className="text-xl font-semibold">
+          <h2 className="text-lg font-semibold sm:text-xl">
             Order Summary
           </h2>
 
@@ -265,7 +264,7 @@ export default function CartPage() {
               </span>
 
               <span className="font-medium">
-                ${subtotal.toLocaleString()}
+                {formatPrice(subtotal)}
               </span>
             </div>
 
@@ -286,7 +285,7 @@ export default function CartPage() {
                 </span>
 
                 <span className="text-xl font-bold">
-                  ${subtotal.toLocaleString()}
+                  {formatPrice(subtotal)}
                 </span>
               </div>
             </div>

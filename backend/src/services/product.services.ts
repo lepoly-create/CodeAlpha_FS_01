@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Product from "../models/Product";
 
 interface CreateProductData {
@@ -40,7 +41,14 @@ export const getProductById = async (
     id: string
 ) => {
 
-    const product = await Product.findById(id);
+    if (!mongoose.isValidObjectId(id)) {
+        throw new Error("Identifiant produit invalide");
+    }
+
+    const product = await Product.findOne({
+        _id: id,
+        isActive: true,
+    });
 
     if (!product) {
         throw new Error("Produit introuvable");
@@ -54,6 +62,10 @@ export const updateProduct = async (
     id: string,
     data: Partial<CreateProductData>
 ) => {
+
+    if (!mongoose.isValidObjectId(id)) {
+        throw new Error("Identifiant produit invalide");
+    }
 
     const product = await Product.findByIdAndUpdate(
         id,
@@ -75,6 +87,10 @@ export const updateProduct = async (
 export const deleteProduct = async (
     id: string
 ) => {
+
+    if (!mongoose.isValidObjectId(id)) {
+        throw new Error("Identifiant produit invalide");
+    }
 
     const product = await Product.findByIdAndUpdate(
         id,
