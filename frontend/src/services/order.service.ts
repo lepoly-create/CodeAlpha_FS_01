@@ -30,19 +30,6 @@ export interface Order {
 //  return response.data.data;
 //};
 
-export const getOrders = async (): Promise<Order[]> => {
-  const response = await api.get("/orders");
-
-  return response.data.data;
-};
-
-export const getOrderById = async (
-  orderId: string,
-): Promise<Order> => {
-  const response = await api.get(`/orders/${orderId}`);
-
-  return response.data.data;
-};
 
 export interface OrderResponse {
   success: boolean;
