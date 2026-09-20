@@ -28,7 +28,7 @@ export default function DashboardWelcome({
           </div>
 
           <h1 className="text-3xl font-bold tracking-tight text-neutral-950 sm:text-4xl">
-            Bonjour, {firstName}
+            Bienvenue, {firstName}
           </h1>
 
           <p className="mt-3 max-w-xl text-sm leading-6 text-neutral-500 sm:text-base">

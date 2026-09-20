@@ -52,12 +52,12 @@ export default function AdminStats({
         return (
           <Card
             key={stat.label}
-            className="rounded-2xl border-neutral-200 bg-white shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-sm"
+            className="rounded-2xl border-neutral-200 bg-white shadow-none transition-all duration-200 hover:-translate-y-1.5 hover:shadow-sm"
           >
             <CardContent className="p-5">
               <div className="flex items-start justify-between gap-4">
                 <div>
-                  <p className="text-sm font-medium text-neutral-500">
+                  <p className="text-sm font-bold text-neutral-800">
                     {stat.label}
                   </p>
 
@@ -65,7 +65,7 @@ export default function AdminStats({
                     {stat.value}
                   </p>
 
-                  <p className="mt-1 text-xs text-neutral-400">
+                  <p className="mt-1 text-xs text-neutral-500">
                     {stat.description}
                   </p>
                 </div>

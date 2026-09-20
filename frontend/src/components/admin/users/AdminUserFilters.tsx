@@ -10,7 +10,7 @@ export default function AdminUserFilters({
   onSearchChange,
 }: AdminUserFiltersProps) {
   return (
-    <div className="rounded-xl border bg-white p-4">
+    <div className="rounded-xl focus:border-0 p-4">
       <div className="relative max-w-md">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 

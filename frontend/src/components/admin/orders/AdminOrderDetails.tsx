@@ -5,6 +5,7 @@ import {
   Package,
   User,
   Mail,
+  X,
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,12 @@ const statusStyles = {
   cancelled: "bg-red-100 text-red-800",
 };
 
+const statusLabels = {
+  pending: "Pending",
+  confirmed: "Confirmed",
+  cancelled: "Cancelled",
+};
+
 export default function AdminOrderDetails({
   order,
   loading,
@@ -36,36 +43,66 @@ export default function AdminOrderDetails({
   const canChangeStatus = order.status === "pending";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-xl bg-white shadow-xl">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/55 p-3 sm:p-6"
+      role="presentation"
+      onClick={onClose}
+    >
+      <div
+        className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl border-0 bg-white shadow-2xl"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="order-details-title"
+        onClick={(event) => event.stopPropagation()}
+      >
         {/* Header */}
-        <div className="flex items-center justify-between border-b p-6">
-          <div>
-            <h2 className="text-xl font-semibold">
-              Order #{order._id.slice(-8).toUpperCase()}
+        <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b bg-white/95 p-5 backdrop-blur sm:p-6">
+          <div className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+              Order details
+            </p>
+
+            <h2 id="order-details-title" className="mt-1 truncate text-xl font-semibold text-slate-950">
+              #{order._id.slice(-8).toUpperCase()}
             </h2>
 
             <p className="mt-1 text-sm text-muted-foreground">
-              Order details and management
+              Review customer, products and status
             </p>
           </div>
 
-          <span
-            className={`rounded-full px-3 py-1 text-xs font-medium ${
-              statusStyles[order.status]
-            }`}
-          >
-            {order.status}
-          </span>
+          <div className="flex shrink-0 items-center gap-3">
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                statusStyles[order.status]
+              }`}
+            >
+              {statusLabels[order.status]}
+            </span>
+
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={onClose}
+              disabled={loading}
+              aria-label="Close order details"
+              title="Close"
+            >
+              <X className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
 
-        <div className="space-y-6 p-6">
+        <div className="space-y-5 p-4 sm:p-6">
           {/* Customer */}
-          <section className="rounded-lg border p-4">
+          <section className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 sm:p-5">
             <div className="mb-4 flex items-center gap-2">
-              <User className="h-4 w-4 text-muted-foreground" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow-sm">
+                <User className="h-4 w-4 text-slate-600" />
+              </div>
 
-              <h3 className="font-semibold">
+              <h3 className="font-semibold text-slate-900">
                 Customer
               </h3>
             </div>
@@ -76,7 +113,7 @@ export default function AdminOrderDetails({
                   Name
                 </p>
 
-                <p className="font-medium">
+                <p className="mt-1 font-medium text-slate-900">
                   {order.user.fullName}
                 </p>
               </div>
@@ -87,7 +124,7 @@ export default function AdminOrderDetails({
                   Email
                 </div>
 
-                <p className="font-medium">
+                <p className="mt-1 break-all font-medium text-slate-900">
                   {order.user.email}
                 </p>
               </div>
@@ -95,11 +132,13 @@ export default function AdminOrderDetails({
           </section>
 
           {/* Order information */}
-          <section className="rounded-lg border p-4">
+          <section className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 sm:p-5">
             <div className="mb-4 flex items-center gap-2">
-              <Clock className="h-4 w-4 text-muted-foreground" />
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow-sm">
+                <Clock className="h-4 w-4 text-slate-600" />
+              </div>
 
-              <h3 className="font-semibold">
+              <h3 className="font-semibold text-slate-900">
                 Order information
               </h3>
             </div>
@@ -110,7 +149,7 @@ export default function AdminOrderDetails({
                   Created
                 </p>
 
-                <p className="font-medium">
+                <p className="mt-1 font-medium text-slate-900">
                   {new Date(
                     order.createdAt
                   ).toLocaleString("fr-FR")}
@@ -122,7 +161,7 @@ export default function AdminOrderDetails({
                   Last update
                 </p>
 
-                <p className="font-medium">
+                <p className="mt-1 font-medium text-slate-900">
                   {new Date(
                     order.updatedAt
                   ).toLocaleString("fr-FR")}
@@ -132,11 +171,11 @@ export default function AdminOrderDetails({
           </section>
 
           {/* Products */}
-          <section className="rounded-lg border">
-            <div className="flex items-center gap-2 border-b p-4">
-              <Package className="h-4 w-4 text-muted-foreground" />
+          <section className="overflow-hidden rounded-xl border border-slate-200">
+            <div className="flex items-center gap-2 border-b bg-slate-50/60 p-4">
+              <Package className="h-4 w-4 text-slate-600" />
 
-              <h3 className="font-semibold">
+              <h3 className="font-semibold text-slate-900">
                 Ordered products
               </h3>
             </div>
@@ -145,7 +184,7 @@ export default function AdminOrderDetails({
               {order.items.map((item) => (
                 <div
                   key={item.product._id}
-                  className="flex items-center gap-4 p-4"
+                  className="flex items-center gap-3 p-4 sm:gap-4"
                 >
                   <div className="h-16 w-16 shrink-0 overflow-hidden rounded-md border bg-muted">
                     {item.product.image ? (
@@ -172,7 +211,7 @@ export default function AdminOrderDetails({
                     </p>
                   </div>
 
-                  <p className="font-semibold">
+                  <p className="shrink-0 text-right font-semibold text-slate-900">
                     {formatPrice(item.price * item.quantity)}
                   </p>
                 </div>
@@ -180,7 +219,7 @@ export default function AdminOrderDetails({
             </div>
 
             <div className="flex items-center justify-between border-t bg-muted/30 p-4">
-              <span className="font-semibold">
+              <span className="font-semibold text-slate-900">
                 Total
               </span>
 
@@ -192,8 +231,8 @@ export default function AdminOrderDetails({
 
           {/* Actions */}
           {canChangeStatus && (
-            <section className="rounded-lg border border-yellow-200 bg-yellow-50 p-4">
-              <h3 className="font-semibold">
+            <section className="rounded-xl border border-amber-200 bg-amber-50 p-4 sm:p-5">
+              <h3 className="font-semibold text-amber-950">
                 Order actions
               </h3>
 
@@ -234,7 +273,7 @@ export default function AdminOrderDetails({
         </div>
 
         {/* Footer */}
-        <div className="flex justify-end border-t p-4">
+        <div className="flex justify-end border-t bg-slate-50/60 p-4">
           <Button
             variant="outline"
             onClick={onClose}

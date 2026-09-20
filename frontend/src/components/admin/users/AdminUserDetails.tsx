@@ -16,7 +16,10 @@ export default function AdminUserDetails({
   const joinedDate = new Date(user.createdAt).toLocaleDateString();
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center
+     bg-black/40 p-4 "
+     onClick={onClose}
+     >
       <div className="w-full max-w-lg rounded-2xl bg-white shadow-xl">
         <div className="flex items-center justify-between border-b p-6">
           <div>

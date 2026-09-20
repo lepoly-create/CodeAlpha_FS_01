@@ -22,7 +22,7 @@ export default function AdminProductsHeader({
 
       <Button
         onClick={onAddProduct}
-        className="gap-2"
+        className="gap-2 cursor-pointer"
       >
         <Plus className="h-4 w-4" />
         Add product

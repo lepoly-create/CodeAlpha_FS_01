@@ -21,7 +21,7 @@ export default function AdminProductFilters({
   categories,
 }: AdminProductFiltersProps) {
   return (
-    <div className="flex flex-col gap-3 rounded-xl border bg-white p-4 md:flex-row md:items-center">
+    <div className="flex flex-col gap-3 rounded-xl  p-4 md:flex-row md:items-center">
       {/* Search */}
       <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -29,8 +29,8 @@ export default function AdminProductFilters({
         <Input
           value={search}
           onChange={(event) => onSearchChange(event.target.value)}
-          placeholder="Search products..."
-          className="pl-9"
+          placeholder="Recherche de produits..."
+          className="pl-9 focus:border-0"
         />
       </div>
 

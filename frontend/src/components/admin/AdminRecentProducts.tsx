@@ -22,14 +22,14 @@ export default function AdminRecentProducts({
   onViewProducts,
 }: AdminRecentProductsProps) {
   return (
-    <Card className="rounded-2xl border-neutral-200 bg-white shadow-none">
-      <CardHeader className="flex flex-row items-center justify-between gap-4 px-6 py-5">
+    <Card className="w-full rounded-2xl border-neutral-200 bg-white shadow-none lg:max-w-3xl">
+      <CardHeader className="flex flex-row items-center justify-between gap-3 border-b border-neutral-100 px-4 py-4 sm:px-5">
         <div>
-          <CardTitle className="text-lg font-semibold">
+          <CardTitle className="text-base font-semibold sm:text-lg">
             Produits récents
           </CardTitle>
 
-          <p className="mt-1 text-sm text-neutral-500">
+          <p className="mt-1 text-xs text-neutral-500 sm:text-sm">
             Les derniers produits ajoutés.
           </p>
         </div>
@@ -39,7 +39,7 @@ export default function AdminRecentProducts({
           onClick={onViewProducts}
           className="hidden rounded-xl sm:flex"
         >
-          Voir les produits
+          Voir toutes les produits
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </CardHeader>
@@ -54,12 +54,11 @@ export default function AdminRecentProducts({
             </p>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="max-h-80 divide-y divide-neutral-100 overflow-y-auto">
             {products.map((product) => (
               <div
                 key={product._id}
-                className="flex items-center gap-3 rounded-xl border border-neutral-100 p-3"
-              >
+                className="flex items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-neutral-50 sm:px-5"              >
                 <div className="h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-neutral-100">
                   {product.image ? (
                     <img
