@@ -40,7 +40,7 @@ export default function AdminQuickActions({
         <Button
           variant="outline"
           onClick={onProducts}
-          className="h-11 w-full justify-start rounded-xl"
+          className="h-11 w-full justify-start rounded-xl cursor-pointer"
         >
           <PackagePlus className="mr-3 h-4 w-4" />
           Gérer les produits
@@ -49,7 +49,7 @@ export default function AdminQuickActions({
         <Button
           variant="outline"
           onClick={onOrders}
-          className="h-11 w-full justify-start rounded-xl"
+          className="h-11 w-full justify-start rounded-x cursor-pointerl"
         >
           <ShoppingBag className="mr-3 h-4 w-4" />
           Gérer les commandes
@@ -58,7 +58,7 @@ export default function AdminQuickActions({
         <Button
           variant="outline"
           onClick={onUsers}
-          className="h-11 w-full justify-start rounded-xl"
+          className="h-11 w-full justify-start rounded-xl cursor-pointer"
         >
           <Users className="mr-3 h-4 w-4" />
           Gérer les utilisateurs

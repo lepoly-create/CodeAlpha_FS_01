@@ -27,7 +27,7 @@ export default function AdminProductTable({
   return (
     <div className="overflow-hidden rounded-xl border bg-white">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[850px] text-sm">
+        <table className="w-full min-w-212.5 text-sm">
           <thead className="border-b bg-slate-50">
             <tr>
               <th className="px-5 py-4 text-left font-medium">
@@ -60,7 +60,7 @@ export default function AdminProductTable({
             {products.map((product) => (
               <tr
                 key={product._id}
-                className="transition-colors hover:bg-slate-50"
+                className="transition-colors hover:bg-slate-200"
               >
                 {/* Product */}
                 <td className="px-5 py-4">
@@ -84,7 +84,7 @@ export default function AdminProductTable({
                         {product.name}
                       </p>
 
-                      <p className="max-w-[260px] truncate text-xs text-muted-foreground">
+                      <p className="max-w-65 truncate text-xs text-muted-foreground">
                         {product.description}
                       </p>
                     </div>

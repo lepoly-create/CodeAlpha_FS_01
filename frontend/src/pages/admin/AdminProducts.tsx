@@ -8,6 +8,13 @@ import AdminProductFilters from "@/components/admin/products/AdminProductFilters
 import AdminProductTable from "@/components/admin/products/AdminProductTable";
 import AdminProductForm from "@/components/admin/products/AdminProductForm";
 import AdminProductDeleteDialog from "@/components/admin/products/AdminProductDeleteDialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 import {
   createProduct,
@@ -190,15 +197,36 @@ export default function AdminProducts() {
         onAddProduct={handleAddProduct}
       />
 
-      {/* Form */}
-      {showForm && (
-        <AdminProductForm
-          key={selectedProduct?._id ?? "new-product"}
-          product={selectedProduct}
-          onSubmit={handleSubmit}
-          onCancel={handleCancelForm}
-        />
-      )}
+      {/* Product form dialog */}
+      <Dialog
+        open={showForm}
+        onOpenChange={(open) => {
+          if (!open) {
+            handleCancelForm();
+          }
+        }}
+      >
+        <DialogContent className="max-h-[95vh] w-[calc(100%-1rem)] max-w-3xl overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>
+              {selectedProduct ? "Edit product" : "Add product"}
+            </DialogTitle>
+
+            <DialogDescription>
+              {selectedProduct
+                ? "Update the product information."
+                : "Add a new product to your catalog."}
+            </DialogDescription>
+          </DialogHeader>
+
+          <AdminProductForm
+            key={selectedProduct?._id ?? "new-product"}
+            product={selectedProduct}
+            onSubmit={handleSubmit}
+            onCancel={handleCancelForm}
+          />
+        </DialogContent>
+      </Dialog>
 
       {/* Filters */}
       <AdminProductFilters

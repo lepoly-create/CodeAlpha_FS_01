@@ -57,20 +57,8 @@ export default function AdminProductForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="space-y-5 rounded-xl border bg-white p-6"
+      className="space-y-5"
     >
-      <div>
-        <h2 className="text-lg font-semibold">
-          {isEditing ? "Edit product" : "Add product"}
-        </h2>
-
-        <p className="mt-1 text-sm text-muted-foreground">
-          {isEditing
-            ? "Update the product information."
-            : "Add a new product to your catalog."}
-        </p>
-      </div>
-
       {/* Name */}
       <div className="space-y-2">
         <label className="text-sm font-medium">

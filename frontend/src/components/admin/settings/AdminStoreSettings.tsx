@@ -97,7 +97,7 @@ export default function AdminStoreSettings() {
   }
 
   return (
-    <section className="rounded-2xl border bg-card p-6 shadow-sm">
+    <section className="rounded-2xl border  bg-card p-6 shadow-sm">
       <div className="mb-6">
         <h2 className="text-lg font-semibold">Store settings</h2>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -106,53 +106,55 @@ export default function AdminStoreSettings() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-5">
-        <div className="space-y-2">
-          <Label htmlFor="storeName">Store name</Label>
-          <Input
-            id="storeName"
-            value={storeName}
-            onChange={(event) => setStoreName(event.target.value)}
-            placeholder="MarketElectro"
-            disabled={saving}
-          />
+        <div className="grid gap-5 sm:grid-cols-2">
+          <div className="space-y-2">
+            <Label htmlFor="storeName">Store name</Label>
+            <Input
+              id="storeName"
+              value={storeName}
+              onChange={(event) => setStoreName(event.target.value)}
+              placeholder="MarketElectro"
+              disabled={saving}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="contactEmail">Contact email</Label>
+            <Input
+              id="contactEmail"
+              type="email"
+              value={contactEmail}
+              onChange={(event) => setContactEmail(event.target.value)}
+              placeholder="contact@marketelectro.com"
+              disabled={saving}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="phone">Phone number</Label>
+            <Input
+              id="phone"
+              type="tel"
+              value={phone}
+              onChange={(event) => setPhone(event.target.value)}
+              placeholder="+228 XX XX XX XX"
+              disabled={saving}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="currency">Currency</Label>
+            <Input
+              id="currency"
+              value={currency}
+              onChange={(event) => setCurrency(event.target.value)}
+              placeholder="$"
+              disabled={saving}
+            />
+          </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="contactEmail">Contact email</Label>
-          <Input
-            id="contactEmail"
-            type="email"
-            value={contactEmail}
-            onChange={(event) => setContactEmail(event.target.value)}
-            placeholder="contact@marketelectro.com"
-            disabled={saving}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="phone">Phone number</Label>
-          <Input
-            id="phone"
-            type="tel"
-            value={phone}
-            onChange={(event) => setPhone(event.target.value)}
-            placeholder="+228 XX XX XX XX"
-            disabled={saving}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="currency">Currency</Label>
-          <Input
-            id="currency"
-            value={currency}
-            onChange={(event) => setCurrency(event.target.value)}
-            placeholder="$"
-            disabled={saving}
-          />
-        </div>
-
-        <div className="flex justify-end pt-2">
+        <div className="flex justify-end pt-5">
           <Button
             type="submit"
             disabled={saving}

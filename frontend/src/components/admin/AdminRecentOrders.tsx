@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import type { AdminOrder } from "@/services/admin.service";
+import type { AdminOrder } from "@/services/admin-order.service";
 import { formatPrice } from "@/lib/format-price";
 
 interface AdminRecentOrdersProps {
@@ -49,14 +49,14 @@ export default function AdminRecentOrders({
   onViewOrders,
 }: AdminRecentOrdersProps) {
   return (
-    <Card className="rounded-2xl border-neutral-200 bg-white shadow-none">
-      <CardHeader className="flex flex-row items-center justify-between gap-4 border-b border-neutral-100 px-6 py-5">
+    <Card className="w-full rounded-2xl border-neutral-200 bg-white shadow-none lg:max-w-3xl">
+      <CardHeader className="flex flex-row items-center justify-between gap-3 border-b border-neutral-100 px-4 py-4 sm:px-5">
         <div>
-          <CardTitle className="text-lg font-semibold">
+          <CardTitle className="text-base font-semibold sm:text-lg">
             Commandes récentes
           </CardTitle>
 
-          <p className="mt-1 text-sm text-neutral-500">
+          <p className="mt-1 text-xs text-neutral-500 sm:text-sm">
             Les dernières commandes de la boutique.
           </p>
         </div>
@@ -66,7 +66,7 @@ export default function AdminRecentOrders({
           onClick={onViewOrders}
           className="hidden rounded-xl sm:flex"
         >
-          Voir toutes
+          Voir toutes les comandes
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </CardHeader>
@@ -87,14 +87,14 @@ export default function AdminRecentOrders({
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-neutral-100">
+          <div className="max-h-80 divide-y divide-neutral-100 overflow-y-auto">
             {orders.map((order) => {
               const status = statusConfig[order.status];
 
               return (
                 <div
                   key={order._id}
-                  className="flex items-center justify-between gap-4 px-6 py-4 transition-colors hover:bg-neutral-50"
+                  className="flex items-center justify-between gap-3 px-4 py-3 transition-colors hover:bg-neutral-50 sm:px-5"
                 >
                   <div className="min-w-0">
                     <p className="truncate font-semibold text-neutral-950">
@@ -127,16 +127,7 @@ export default function AdminRecentOrders({
           </div>
         )}
 
-        <div className="border-t border-neutral-100 px-6 py-4 sm:hidden">
-          <Button
-            variant="ghost"
-            onClick={onViewOrders}
-            className="w-full rounded-xl"
-          >
-            Voir les commandes
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
+        
       </CardContent>
     </Card>
   );

@@ -15,7 +15,7 @@ export default function AdminOrderFilters({
   onStatusChange,
 }: AdminOrderFiltersProps) {
   return (
-    <div className="flex flex-col gap-3 rounded-xl border bg-white p-4 md:flex-row md:items-center">
+    <div className="flex flex-col gap-3 rounded-xl  p-4 md:flex-row md:items-center">
       <div className="relative flex-1">
         <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 
@@ -25,7 +25,7 @@ export default function AdminOrderFilters({
             onSearchChange(event.target.value)
           }
           placeholder="Search by customer or order ID..."
-          className="pl-9"
+          className="pl-9 focus:border-0"
         />
       </div>
 
@@ -34,7 +34,7 @@ export default function AdminOrderFilters({
         onChange={(event) =>
           onStatusChange(event.target.value)
         }
-        className="h-10 rounded-md border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+        className="h-10 rounded-md border bg-background px-3 text-sm outline-none focus:border-0 focus:ring-2 focus:ring-ring"
       >
         <option value="all">All status</option>
         <option value="pending">Pending</option>

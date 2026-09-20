@@ -134,7 +134,7 @@ export default function AdminPasswordSettings() {
           </div>
         </div>
 
-        <div className="flex justify-end border-t pt-5">
+        <div className="flex justify-end pt-5">
           <Button
             type="submit"
             disabled={saving}

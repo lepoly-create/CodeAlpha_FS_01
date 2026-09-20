@@ -166,17 +166,8 @@ export default function AdminAccountSettings({
           </div>
         </div>
 
-        <div className="flex items-center justify-between border-t pt-5">
-          <div>
-            <p className="text-sm font-medium">
-              Account role
-            </p>
-
-            <p className="text-sm text-muted-foreground">
-              Administrator
-            </p>
-          </div>
-
+        <div className="flex justify-end pt-5">
+          
           <Button
             type="submit"
             disabled={saving}
