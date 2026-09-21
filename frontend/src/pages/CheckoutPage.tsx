@@ -8,6 +8,7 @@ import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
 import { createOrder } from "@/services/order.service";
 import { formatPrice } from "@/lib/format-price";
+import OrderSummary from "@/components/cart/OrderSummary";
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -132,49 +133,13 @@ export default function CheckoutPage() {
           </div>
         </div>
 
-        <aside className="h-fit rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
-          <h2 className="text-lg font-semibold sm:text-xl">
-            Order Summary
-          </h2>
-
-          <div className="mt-6 space-y-4 text-sm">
-            <div className="flex justify-between">
-              <span className="text-neutral-500">
-                Subtotal
-              </span>
-
-              <span className="font-medium">
-                {formatPrice(subtotal)}
-              </span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="text-neutral-500">
-                Shipping
-              </span>
-
-              <span className="font-medium">
-                Free
-              </span>
-            </div>
-
-            <div className="border-t border-neutral-200 pt-4">
-              <div className="flex justify-between">
-                <span className="font-semibold">
-                  Total
-                </span>
-
-                <span className="text-xl font-bold">
-                  {formatPrice(subtotal)}
-                </span>
-              </div>
-            </div>
-          </div>
+        <aside className="space-y-2">
+          <OrderSummary subtotal={subtotal} />
 
           <Button
             onClick={handleCreateOrder}
             disabled={loading}
-            className="mt-6 h-12 w-full rounded-xl"
+            className="h-12 w-full rounded-xl"
           >
             {loading ? "Creating order..." : "Place order"}
           </Button>

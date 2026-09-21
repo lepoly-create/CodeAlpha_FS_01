@@ -1,13 +1,19 @@
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
+type StatusFilter =
+  | "all"
+  | "active"
+  | "inactive"
+  | "outOfStock";
+
 interface AdminProductFiltersProps {
   search: string;
   onSearchChange: (value: string) => void;
   category: string;
   onCategoryChange: (value: string) => void;
   status: string;
-  onStatusChange: (value: string) => void;
+  onStatusChange: (value: StatusFilter) => void;
   categories: string[];
 }
 
@@ -52,7 +58,9 @@ export default function AdminProductFilters({
       {/* Status */}
       <select
         value={status}
-        onChange={(event) => onStatusChange(event.target.value)}
+        onChange={(event) =>
+          onStatusChange(event.target.value as StatusFilter)
+        }
         className="h-10 rounded-md border bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
       >
         <option value="all">All status</option>

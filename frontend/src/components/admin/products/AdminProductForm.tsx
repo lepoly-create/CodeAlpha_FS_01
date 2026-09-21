@@ -1,11 +1,14 @@
-import { useState } from "react";
+import { useState, type  SyntheticEvent  } from "react";
+
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import type {
   CreateProductData,
   UpdateProductData,
 } from "@/services/product.service";
 import type { Product } from "@/types/product";
+
+import AdminProductFields from "./AdminProductFields";
+import type { AdminProductFormData } from "./admin-product-form.types";
 
 interface AdminProductFormProps {
   product?: Product | null;
@@ -15,34 +18,52 @@ interface AdminProductFormProps {
   onCancel: () => void;
 }
 
+const getInitialFormData = (
+  product?: Product | null
+): AdminProductFormData => ({
+  name: product?.name ?? "",
+  description: product?.description ?? "",
+  price: product ? String(product.price) : "",
+  image: product?.image ?? "",
+  category: product?.category ?? "",
+  stock: product ? String(product.stock) : "",
+});
+
 export default function AdminProductForm({
   product,
   onSubmit,
   onCancel,
 }: AdminProductFormProps) {
-  const [name, setName] = useState(product?.name ?? "");
-  const [description, setDescription] = useState(product?.description ?? "");
-  const [price, setPrice] = useState(product ? String(product.price) : "");
-  const [image, setImage] = useState(product?.image ?? "");
-  const [category, setCategory] = useState(product?.category ?? "");
-  const [stock, setStock] = useState(product ? String(product.stock) : "");
+  const [formData, setFormData] = useState<AdminProductFormData>(
+    () => getInitialFormData(product)
+  );
 
   const [loading, setLoading] = useState(false);
 
-  const isEditing = !!product;
+  const isEditing = product !== null && product !== undefined;
+
+  const handleFieldChange = (
+    field: keyof AdminProductFormData,
+    value: string
+  ) => {
+    setFormData((current) => ({
+      ...current,
+      [field]: value,
+    }));
+  };
 
   const handleSubmit = async (
-    event: React.SyntheticEvent<HTMLFormElement>
+    event: SyntheticEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
 
     const productData = {
-      name: name.trim(),
-      description: description.trim(),
-      price: Number(price),
-      image: image.trim(),
-      category: category.trim(),
-      stock: Number(stock),
+      name: formData.name.trim(),
+      description: formData.description.trim(),
+      price: Number(formData.price),
+      image: formData.image.trim(),
+      category: formData.category.trim(),
+      stock: Number(formData.stock),
     };
 
     setLoading(true);
@@ -59,105 +80,12 @@ export default function AdminProductForm({
       onSubmit={handleSubmit}
       className="space-y-5"
     >
-      {/* Name */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">
-          Product name
-        </label>
+      <AdminProductFields
+        formData={formData}
+        onFieldChange={handleFieldChange}
+        disabled={loading}
+      />
 
-        <Input
-          value={name}
-          onChange={(event) => setName(event.target.value)}
-          placeholder="MacBook Pro M4"
-          required
-        />
-      </div>
-
-      {/* Description */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">
-          Description
-        </label>
-
-        <textarea
-          value={description}
-          onChange={(event) => setDescription(event.target.value)}
-          placeholder="Product description..."
-          required
-          rows={4}
-          className="w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring"
-        />
-      </div>
-
-      {/* Price + Stock */}
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
-            Price ($)
-          </label>
-
-          <Input
-            type="number"
-            min="0"
-            step="1"
-            value={price}
-            onChange={(event) => setPrice(event.target.value)}
-            placeholder="1500000"
-            required
-          />
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium">
-            Stock
-          </label>
-
-          <Input
-            type="number"
-            min="0"
-            step="1"
-            value={stock}
-            onChange={(event) => setStock(event.target.value)}
-            placeholder="20"
-            required
-          />
-        </div>
-      </div>
-
-      {/* Category */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">
-          Category
-        </label>
-
-        <Input
-          value={category}
-          onChange={(event) => setCategory(event.target.value)}
-          placeholder="Ordinateurs"
-          required
-        />
-      </div>
-
-      {/* Image */}
-      <div className="space-y-2">
-        <label className="text-sm font-medium">
-          Image URL
-        </label>
-
-        <Input
-          type="url"
-          value={image}
-          onChange={(event) => setImage(event.target.value)}
-          placeholder="https://example.com/product.jpg"
-          required
-        />
-
-        <p className="text-xs text-muted-foreground">
-          Enter the URL of the product image.
-        </p>
-      </div>
-
-      {/* Actions */}
       <div className="flex justify-end gap-3 border-t pt-5">
         <Button
           type="button"

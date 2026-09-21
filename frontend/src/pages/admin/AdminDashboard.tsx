@@ -1,12 +1,7 @@
-import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "@/contexts/useAuth";
-
-import {
-  getAdminDashboard,
-  type AdminDashboard as AdminDashboardData,
-} from "@/services/admin.service";
+import { useAdminDashboard } from "@/hooks/useAdminDashboard";
 
 import AdminWelcome from "@/components/admin/AdminWelcome";
 import AdminStats from "@/components/admin/AdminStats";
@@ -19,47 +14,11 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const { user } = useAuth();
 
-  const [dashboard, setDashboard] =
-    useState<AdminDashboardData | null>(null);
-
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const loadDashboard = async () => {
-      try {
-        setLoading(true);
-        setError("");
-
-        const data = await getAdminDashboard();
-
-        setDashboard(data);
-      } catch (err: unknown) {
-        const message =
-          err &&
-          typeof err === "object" &&
-          "response" in err &&
-          err.response &&
-          typeof err.response === "object" &&
-          "data" in err.response &&
-          err.response.data &&
-          typeof err.response.data === "object" &&
-          "message" in err.response.data &&
-          typeof err.response.data.message === "string"
-            ? err.response.data.message
-            : null;
-
-        setError(
-          message ||
-            "Impossible de charger le dashboard administrateur.",
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadDashboard();
-  }, []);
+  const {
+    dashboard,
+    loading,
+    error,
+  } = useAdminDashboard();
 
   if (loading) {
     return (
@@ -109,16 +68,12 @@ export default function AdminDashboard() {
       <div className="grid gap-6 lg:grid-cols-2">
         <AdminRecentProducts
           products={dashboard.recentProducts}
-          onViewProducts={() =>
-            navigate("/admin/products")
-          }
+          onViewProducts={() => navigate("/admin/products")}
         />
 
         <AdminLowStock
           products={dashboard.lowStockProducts}
-          onViewProducts={() =>
-            navigate("/admin/products")
-          }
+          onViewProducts={() => navigate("/admin/products")}
         />
       </div>
     </div>

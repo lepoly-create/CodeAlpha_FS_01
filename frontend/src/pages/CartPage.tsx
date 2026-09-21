@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import { formatPrice } from "@/lib/format-price";
 
+import OrderSummary from "@/components/cart/OrderSummary";
+
 export default function CartPage() {
   const {
     cart,
@@ -252,56 +254,19 @@ export default function CartPage() {
         </div>
 
         {/* Summary */}
-        <aside className="h-fit rounded-2xl border border-neutral-200 bg-neutral-50 p-6">
-          <h2 className="text-lg font-semibold sm:text-xl">
-            Order Summary
-          </h2>
+        <aside className="space-y-2">
+          <OrderSummary subtotal={subtotal} />
 
-          <div className="mt-6 space-y-4 text-sm">
-            <div className="flex justify-between">
-              <span className="text-neutral-500">
-                Subtotal
-              </span>
-
-              <span className="font-medium">
-                {formatPrice(subtotal)}
-              </span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="text-neutral-500">
-                Shipping
-              </span>
-
-              <span className="font-medium">
-                Free
-              </span>
-            </div>
-
-            <div className="border-t border-neutral-200 pt-4">
-              <div className="flex justify-between">
-                <span className="text-base font-semibold">
-                  Total
-                </span>
-
-                <span className="text-xl font-bold">
-                  {formatPrice(subtotal)}
-                </span>
-              </div>
-            </div>
-          </div>
-          
           <Link
             to="/checkout"
-            className="mt-6 inline-flex h-12 w-full items-center justify-center rounded-xl bg-primary px-6 text-base font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
+            className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-primary px-6 text-base font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
           >
             Proceed to checkout
-          
           </Link>
 
           <Link
             to="/products"
-            className="mt-2 inline-flex h-10 w-full items-center justify-center rounded-xl border border-neutral-200 text-sm font-medium text-foreground transition-colors hover:bg-neutral-100"
+            className="inline-flex h-10 w-full items-center justify-center rounded-xl border border-neutral-200 text-sm font-medium text-foreground transition-colors hover:bg-neutral-100"
           >
             Continue shopping
           </Link>
