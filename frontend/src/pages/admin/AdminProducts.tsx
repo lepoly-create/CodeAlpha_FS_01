@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import AdminProductsHeader from "@/components/admin/products/AdminProductsHeader";
 import AdminProductFilters from "@/components/admin/products/AdminProductFilters";
 import AdminProductTable from "@/components/admin/products/AdminProductTable";
@@ -13,36 +15,108 @@ import {
 } from "@/components/ui/dialog";
 
 import useAdminProducts from "@/hooks/useAdminProducts";
+import useProductFilters, {
+  type ProductStatusFilter,
+} from "@/hooks/useProductFilters";
+
+import type { Product } from "@/types/product";
+import type {
+  CreateProductData,
+  UpdateProductData,
+} from "@/services/product.service";
+
+type FormMode = "closed" | "create" | "edit";
 
 export default function AdminProducts() {
+  const {
+    products,
+    loading,
+    deleting,
+    createAdminProduct,
+    updateAdminProduct,
+    disableAdminProduct,
+  } = useAdminProducts();
 
   const {
-    loading,
-    filteredProducts,
-    categories,
-
     search,
     category,
     status,
+    categories,
+    filteredProducts,
+    setSearch,
+    setCategory,
+    setStatus,
+  } = useProductFilters(products);
 
-    onSearchChange,
-    onCategoryChange,
-    onStatusChange,
+  const [formMode, setFormMode] =
+    useState<FormMode>("closed");
 
-    showForm,
-    selectedProduct,
+  const [selectedProduct, setSelectedProduct] =
+    useState<Product | null>(null);
 
-    handleAddProduct,
-    handleEditProduct,
-    handleCancelForm,
-    handleSubmit,
+  const [productToDelete, setProductToDelete] =
+    useState<Product | null>(null);
 
-    productToDelete,
-    deleting,
-    handleDeleteProduct,
-    handleCancelDelete,
-    handleConfirmDelete,
-  } = useAdminProducts();
+  const showForm = formMode !== "closed";
+
+  const handleAddProduct = () => {
+    setSelectedProduct(null);
+    setFormMode("create");
+  };
+
+  const handleEditProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setFormMode("edit");
+  };
+
+  const handleCancelForm = () => {
+    setFormMode("closed");
+    setSelectedProduct(null);
+  };
+
+  const handleSubmit = async (
+    data: CreateProductData | UpdateProductData
+  ) => {
+    if (
+      formMode === "edit" &&
+      selectedProduct
+    ) {
+      await updateAdminProduct(
+        selectedProduct._id,
+        data as UpdateProductData
+      );
+    } else {
+      await createAdminProduct(
+        data as CreateProductData
+      );
+    }
+
+    handleCancelForm();
+  };
+
+  const handleDeleteProduct = (
+    product: Product
+  ) => {
+    setProductToDelete(product);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!productToDelete) {
+      return;
+    }
+
+    await disableAdminProduct(
+      productToDelete._id
+    );
+
+    setProductToDelete(null);
+  };
+
+  const handleStatusChange = (
+    value: string
+  ) => {
+    setStatus(value as ProductStatusFilter);
+  };
 
   if (loading) {
     return (
@@ -97,11 +171,11 @@ export default function AdminProducts() {
 
       <AdminProductFilters
         search={search}
-        onSearchChange={onSearchChange}
+        onSearchChange={setSearch}
         category={category}
-        onCategoryChange={onCategoryChange}
+        onCategoryChange={setCategory}
         status={status}
-        onStatusChange={onStatusChange}
+        onStatusChange={handleStatusChange}
         categories={categories}
       />
 
@@ -125,7 +199,9 @@ export default function AdminProducts() {
         open={!!productToDelete}
         loading={deleting}
         onConfirm={handleConfirmDelete}
-        onCancel={handleCancelDelete}
+        onCancel={() =>
+          setProductToDelete(null)
+        }
       />
     </div>
   );

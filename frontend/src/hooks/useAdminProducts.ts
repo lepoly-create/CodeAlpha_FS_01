@@ -13,43 +13,6 @@ import {
 
 import type { Product } from "@/types/product";
 
-type StatusFilter =
-  | "all"
-  | "active"
-  | "inactive"
-  | "outOfStock";
-
-interface ProductFilters {
-  search: string;
-  category: string;
-  status: StatusFilter;
-}
-
-type ProductFormState =
-  | {
-      mode: "closed";
-      product: null;
-    }
-  | {
-      mode: "create";
-      product: null;
-    }
-  | {
-      mode: "edit";
-      product: Product;
-    };
-
-const initialFilters: ProductFilters = {
-  search: "",
-  category: "all",
-  status: "all",
-};
-
-const initialFormState: ProductFormState = {
-  mode: "closed",
-  product: null,
-};
-
 const getErrorMessage = (
   error: unknown,
   fallback: string
@@ -61,67 +24,9 @@ const getErrorMessage = (
   return fallback;
 };
 
-const getCategories = (products: Product[]): string[] => {
-  return Array.from(
-    new Set(products.map((product) => product.category))
-  ).sort();
-};
-
-const filterProducts = (
-  products: Product[],
-  filters: ProductFilters
-): Product[] => {
-  const normalizedSearch = filters.search
-    .trim()
-    .toLowerCase();
-
-  return products.filter((product) => {
-    const matchesSearch =
-      !normalizedSearch ||
-      product.name
-        .toLowerCase()
-        .includes(normalizedSearch) ||
-      product.description
-        .toLowerCase()
-        .includes(normalizedSearch);
-
-    const matchesCategory =
-      filters.category === "all" ||
-      product.category === filters.category;
-
-    const matchesStatus =
-      filters.status === "all" ||
-      (filters.status === "active" &&
-        product.isActive) ||
-      (filters.status === "inactive" &&
-        !product.isActive) ||
-      (filters.status === "outOfStock" &&
-        product.stock === 0);
-
-    return (
-      matchesSearch &&
-      matchesCategory &&
-      matchesStatus
-    );
-  });
-};
-
 export default function useAdminProducts() {
-  const [products, setProducts] = useState<Product[]>(
-    []
-  );
-
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const [filters, setFilters] =
-    useState<ProductFilters>(initialFilters);
-
-  const [formState, setFormState] =
-    useState<ProductFormState>(initialFormState);
-
-  const [productToDelete, setProductToDelete] =
-    useState<Product | null>(null);
-
   const [deleting, setDeleting] = useState(false);
 
   const loadProducts = useCallback(async () => {
@@ -144,99 +49,67 @@ export default function useAdminProducts() {
   }, []);
 
   useEffect(() => {
-    const timeoutId = window.setTimeout(() => {
-      void loadProducts();
-    }, 0);
-
-    return () => window.clearTimeout(timeoutId);
+    void loadProducts();
   }, [loadProducts]);
 
-  const handleAddProduct = () => {
-    setFormState({
-      mode: "create",
-      product: null,
-    });
-  };
-
-  const handleEditProduct = (product: Product) => {
-    setFormState({
-      mode: "edit",
-      product,
-    });
-  };
-
-  const handleCancelForm = () => {
-    setFormState({
-      mode: "closed",
-      product: null,
-    });
-  };
-
-  const handleSubmit = async (
-    data: CreateProductData | UpdateProductData
+  const createAdminProduct = async (
+    data: CreateProductData
   ) => {
     try {
-      if (
-        formState.mode === "edit" &&
-        formState.product
-      ) {
-        await updateProduct(
-          formState.product._id,
-          data
-        );
+      await createProduct(data);
 
-        toast.success(
-          "Product updated successfully."
-        );
-      } else {
-        await createProduct(
-          data as CreateProductData
-        );
+      toast.success(
+        "Product created successfully."
+      );
 
-        toast.success(
-          "Product created successfully."
-        );
-      }
-
-      handleCancelForm();
       await loadProducts();
     } catch (error: unknown) {
       toast.error(
         getErrorMessage(
           error,
-          "Unable to save product."
+          "Unable to create product."
         )
       );
+
+      throw error;
     }
   };
 
-  const handleDeleteProduct = (
-    product: Product
+  const updateAdminProduct = async (
+    id: string,
+    data: UpdateProductData
   ) => {
-    setProductToDelete(product);
-  };
+    try {
+      await updateProduct(id, data);
 
-  const handleCancelDelete = () => {
-    setProductToDelete(null);
-  };
+      toast.success(
+        "Product updated successfully."
+      );
 
-  const handleConfirmDelete = async () => {
-    if (!productToDelete) {
-      return;
+      await loadProducts();
+    } catch (error: unknown) {
+      toast.error(
+        getErrorMessage(
+          error,
+          "Unable to update product."
+        )
+      );
+
+      throw error;
     }
+  };
 
+  const disableAdminProduct = async (
+    id: string
+  ) => {
     try {
       setDeleting(true);
 
-      await deleteProduct(
-        productToDelete._id
-      );
+      await deleteProduct(id);
 
       toast.success(
         "Product disabled successfully."
       );
-
-      setProductToDelete(null);
 
       await loadProducts();
     } catch (error: unknown) {
@@ -246,62 +119,19 @@ export default function useAdminProducts() {
           "Unable to disable product."
         )
       );
+
+      throw error;
     } finally {
       setDeleting(false);
     }
   };
 
   return {
+    products,
     loading,
-
-    filteredProducts: filterProducts(
-      products,
-      filters
-    ),
-
-    categories: getCategories(products),
-
-    search: filters.search,
-    category: filters.category,
-    status: filters.status,
-
-    onSearchChange: (search: string) => {
-      setFilters((current) => ({
-        ...current,
-        search,
-      }));
-    },
-
-    onCategoryChange: (category: string) => {
-      setFilters((current) => ({
-        ...current,
-        category,
-      }));
-    },
-
-    onStatusChange: (status: StatusFilter) => {
-      setFilters((current) => ({
-        ...current,
-        status,
-      }));
-    },
-
-    showForm: formState.mode !== "closed",
-
-    selectedProduct:
-      formState.mode === "edit"
-        ? formState.product
-        : null,
-
-    handleAddProduct,
-    handleEditProduct,
-    handleCancelForm,
-    handleSubmit,
-
-    productToDelete,
     deleting,
-    handleDeleteProduct,
-    handleCancelDelete,
-    handleConfirmDelete,
+    createAdminProduct,
+    updateAdminProduct,
+    disableAdminProduct,
   };
 }
