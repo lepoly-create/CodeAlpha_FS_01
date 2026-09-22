@@ -1,7 +1,6 @@
-import { useState } from "react";
+import { useState, type ChangeEvent, type FormEvent } from "react";
+import axios from "axios";
 import {
-  Eye,
-  EyeOff,
   KeyRound,
   Loader2,
   ShieldCheck,
@@ -10,53 +9,113 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 import { changeMyPassword } from "@/services/user.service";
 
-export default function ChangePasswordForm() {
-  const [currentPassword, setCurrentPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+import PasswordField from "./PasswordField";
 
-  const [showCurrentPassword, setShowCurrentPassword] =
-    useState(false);
-  const [showNewPassword, setShowNewPassword] =
-    useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] =
-    useState(false);
+interface ChangePasswordFormData {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
+type PasswordFieldName = keyof ChangePasswordFormData;
+
+type PasswordVisibility = Record<
+  PasswordFieldName,
+  boolean
+>;
+
+const initialFormData: ChangePasswordFormData = {
+  currentPassword: "",
+  newPassword: "",
+  confirmPassword: "",
+};
+
+const initialVisibility: PasswordVisibility = {
+  currentPassword: false,
+  newPassword: false,
+  confirmPassword: false,
+};
+
+const validateChangePassword = (
+  formData: ChangePasswordFormData
+): string | null => {
+  const {
+    currentPassword,
+    newPassword,
+    confirmPassword,
+  } = formData;
+
+  if (
+    !currentPassword ||
+    !newPassword ||
+    !confirmPassword
+  ) {
+    return "Veuillez remplir tous les champs.";
+  }
+
+  if (newPassword.length < 6) {
+    return (
+      "Le nouveau mot de passe doit contenir " +
+      "au moins 6 caractères."
+    );
+  }
+
+  if (newPassword !== confirmPassword) {
+    return (
+      "Les nouveaux mots de passe ne correspondent pas."
+    );
+  }
+
+  if (currentPassword === newPassword) {
+    return (
+      "Le nouveau mot de passe doit être différent " +
+      "de l'ancien."
+    );
+  }
+
+  return null;
+};
+
+export default function ChangePasswordForm() {
+  const [formData, setFormData] =
+    useState<ChangePasswordFormData>(initialFormData);
+
+  const [visibility, setVisibility] =
+    useState<PasswordVisibility>(initialVisibility);
 
   const [isChanging, setIsChanging] = useState(false);
 
+  const handleFieldChange =
+    (field: PasswordFieldName) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+      setFormData((current) => ({
+        ...current,
+        [field]: event.target.value,
+      }));
+    };
+
+  const toggleVisibility = (
+    field: PasswordFieldName
+  ) => {
+    setVisibility((current) => ({
+      ...current,
+      [field]: !current[field],
+    }));
+  };
+
   const handleSubmit = async (
-    event: React.SyntheticEvent <HTMLFormElement>
+    event: FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
 
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      toast.error("Veuillez remplir tous les champs.");
-      return;
-    }
+    const validationError =
+      validateChangePassword(formData);
 
-    if (newPassword.length < 6) {
-      toast.error(
-        "Le nouveau mot de passe doit contenir au moins 6 caractères."
-      );
-      return;
-    }
-
-    if (newPassword !== confirmPassword) {
-      toast.error(
-        "Les nouveaux mots de passe ne correspondent pas."
-      );
-      return;
-    }
-
-    if (currentPassword === newPassword) {
-      toast.error(
-        "Le nouveau mot de passe doit être différent de l'ancien."
-      );
+    if (validationError) {
+      toast.error(validationError);
       return;
     }
 
@@ -64,25 +123,30 @@ export default function ChangePasswordForm() {
 
     try {
       await changeMyPassword({
-        currentPassword,
-        newPassword,
+        currentPassword: formData.currentPassword,
+        newPassword: formData.newPassword,
       });
 
       toast.success(
         "Mot de passe modifié avec succès."
       );
 
-      setCurrentPassword("");
-      setNewPassword("");
-      setConfirmPassword("");
-    } catch (error) {
+      setFormData(initialFormData);
+      setVisibility(initialVisibility);
+    } catch (error: unknown) {
       console.error(
         "Erreur lors du changement de mot de passe :",
         error
       );
 
+      const message =
+        axios.isAxiosError<{ message?: string }>(error)
+          ? error.response?.data?.message
+          : undefined;
+
       toast.error(
-        "Impossible de modifier le mot de passe."
+        message ||
+          "Impossible de modifier le mot de passe."
       );
     } finally {
       setIsChanging(false);
@@ -92,7 +156,6 @@ export default function ChangePasswordForm() {
   return (
     <Card className="rounded-2xl border-neutral-200 bg-white shadow-sm">
       <CardContent className="p-6">
-        {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div>
             <h2 className="text-xl font-semibold tracking-tight">
@@ -110,171 +173,64 @@ export default function ChangePasswordForm() {
           </div>
         </div>
 
-        {/* Formulaire */}
         <form
           onSubmit={handleSubmit}
           className="mt-6 space-y-5"
         >
-          {/* Mot de passe actuel */}
-          <div className="space-y-2">
-            <Label htmlFor="current-password">
-              Mot de passe actuel
-            </Label>
+          <PasswordField
+            id="current-password"
+            label="Mot de passe actuel"
+            value={formData.currentPassword}
+            placeholder="Votre mot de passe actuel"
+            autoComplete="current-password"
+            visible={visibility.currentPassword}
+            disabled={isChanging}
+            onChange={handleFieldChange(
+              "currentPassword"
+            )}
+            onToggleVisibility={() =>
+              toggleVisibility("currentPassword")
+            }
+          />
 
-            <div className="relative">
-              <Input
-                id="current-password"
-                type={
-                  showCurrentPassword
-                    ? "text"
-                    : "password"
-                }
-                value={currentPassword}
-                onChange={(event) =>
-                  setCurrentPassword(event.target.value)
-                }
-                placeholder="Votre mot de passe actuel"
-                disabled={isChanging}
-                className="h-10 rounded-xl pr-12 focus:border-0"
-              />
-
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute right-1 top-1/2 -translate-y-1/2 border-0 bg-transparent"
-                onClick={() =>
-                  setShowCurrentPassword(
-                    (current) => !current
-                  )
-                }
-                disabled={isChanging}
-                aria-label={
-                  showCurrentPassword
-                    ? "Masquer le mot de passe"
-                    : "Afficher le mot de passe"
-                }
-              >
-                {showCurrentPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
-              </Button>
-            </div>
-          </div>
-
-          {/* Nouveaux mots de passe */}
           <div className="grid gap-5 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="new-password">
-                Nouveau mot de passe
-              </Label>
+            <PasswordField
+              id="new-password"
+              label="Nouveau mot de passe"
+              value={formData.newPassword}
+              placeholder="Nouveau mot de passe"
+              autoComplete="new-password"
+              visible={visibility.newPassword}
+              disabled={isChanging}
+              description="Minimum 6 caractères."
+              onChange={handleFieldChange("newPassword")}
+              onToggleVisibility={() =>
+                toggleVisibility("newPassword")
+              }
+            />
 
-              <div className="relative">
-                <Input
-                  id="new-password"
-                  type={
-                    showNewPassword
-                      ? "text"
-                      : "password"
-                  }
-                  value={newPassword}
-                  onChange={(event) =>
-                    setNewPassword(event.target.value)
-                  }
-                  placeholder="Nouveau mot de passe"
-                  disabled={isChanging}
-                  className="h-10 rounded-xl pr-12 focus:border-0"
-                />
-
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 border-0 bg-transparent"
-                  onClick={() =>
-                    setShowNewPassword(
-                      (current) => !current
-                    )
-                  }
-                  disabled={isChanging}
-                  aria-label={
-                    showNewPassword
-                      ? "Masquer le mot de passe"
-                      : "Afficher le mot de passe"
-                  }
-                >
-                  {showNewPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
-
-              <p className="text-xs text-neutral-500">
-                Minimum 6 caractères.
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="confirm-password">
-                Confirmer le nouveau mot de passe
-              </Label>
-
-              <div className="relative">
-                <Input
-                  id="confirm-password"
-                  type={
-                    showConfirmPassword
-                      ? "text"
-                      : "password"
-                  }
-                  value={confirmPassword}
-                  onChange={(event) =>
-                    setConfirmPassword(
-                      event.target.value
-                    )
-                  }
-                  placeholder="Confirmer le mot de passe"
-                  disabled={isChanging}
-                  className="h-10 rounded-xl pr-12 focus:border-0"
-                />
-
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="icon"
-                  className="absolute right-1 top-1/2 -translate-y-1/2 border-0 bg-transparent"
-                  onClick={() =>
-                    setShowConfirmPassword(
-                      (current) => !current
-                    )
-                  }
-                  disabled={isChanging}
-                  aria-label={
-                    showConfirmPassword
-                      ? "Masquer le mot de passe"
-                      : "Afficher le mot de passe"
-                  }
-                >
-                  {showConfirmPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
-                  )}
-                </Button>
-              </div>
-            </div>
+            <PasswordField
+              id="confirm-password"
+              label="Confirmer le nouveau mot de passe"
+              value={formData.confirmPassword}
+              placeholder="Confirmer le mot de passe"
+              autoComplete="new-password"
+              visible={visibility.confirmPassword}
+              disabled={isChanging}
+              onChange={handleFieldChange(
+                "confirmPassword"
+              )}
+              onToggleVisibility={() =>
+                toggleVisibility("confirmPassword")
+              }
+            />
           </div>
 
-          {/* Bouton */}
           <div className="flex justify-end pt-2">
             <Button
               type="submit"
               disabled={isChanging}
-              className="cursor-pointer hover:bg-blue-700 hover:text-amber-50"
+              className="cursor-pointer"
             >
               {isChanging ? (
                 <>

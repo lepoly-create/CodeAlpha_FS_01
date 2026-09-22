@@ -17,18 +17,8 @@ import {
   removeFromCart,
 } from "@/services/cart.service";
 
-
 import { useAuth } from "@/contexts/useAuth";
-import type { Product } from "@/types/product";
-
-interface CartItem{
-  product: Product;
-  quantity: number;
-}
-interface Cart {
-  items: CartItem[];
-  total?: number;
-}
+import type { Cart } from "@/types/cart";
 
 interface CartContextValue {
   cart: Cart | null;
@@ -64,15 +54,15 @@ export function CartProvider({
   children,
 }: CartProviderProps) {
   const { user } = useAuth();
+  const userId = user?.id ?? null;
 
   const [cart, setCart] = useState<Cart | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(
+    Boolean(userId),
+  );
 
-  /**
-   * Récupérer le panier depuis le backend
-   */
   const refreshCart = useCallback(async () => {
-    if (!user) {
+    if (!userId) {
       setCart(null);
       setLoading(false);
       return;
@@ -92,119 +82,120 @@ export function CartProvider({
     } finally {
       setLoading(false);
     }
-  } , [user]);
+  }, [userId]);
 
-  /**
-   * Ajouter un produit
-   */
-  const addToCart = async (
-    productId: string,
-    quantity = 1,
-  ) => {
-    try {
-      const updatedCart = await addToCartRequest({
-        productId,
-        quantity,
-      });
+  const addToCart = useCallback(
+    async (
+      productId: string,
+      quantity = 1,
+    ) => {
+      try {
+        const updatedCart =
+          await addToCartRequest({
+            productId,
+            quantity,
+          });
 
-      setCart(updatedCart);
-    } catch (error) {
-      console.error(
-        "Impossible d'ajouter le produit au panier :",
-        error,
-      );
+        setCart(updatedCart);
+      } catch (error) {
+        console.error(
+          "Impossible d'ajouter le produit au panier :",
+          error,
+        );
 
-      throw error;
-    }
-  };
+        throw error;
+      }
+    },
+    [],
+  );
 
-  /**
-   * Modifier la quantité
-   */
-  const updateQuantity = async (
-    productId: string,
-    quantity: number,
-  ) => {
-    if (quantity < 1) {
-      return;
-    }
+  const updateQuantity = useCallback(
+    async (
+      productId: string,
+      quantity: number,
+    ) => {
+      if (quantity < 1) {
+        return;
+      }
 
-    try {
-      const updatedCart = await updateCartItem(
-        productId,
-        quantity,
-      );
+      try {
+        const updatedCart =
+          await updateCartItem(
+            productId,
+            quantity,
+          );
 
-      setCart(updatedCart);
-    } catch (error) {
-      console.error(
-        "Impossible de modifier la quantité :",
-        error,
-      );
+        setCart(updatedCart);
+      } catch (error) {
+        console.error(
+          "Impossible de modifier la quantité :",
+          error,
+        );
 
-      throw error;
-    }
-  };
+        throw error;
+      }
+    },
+    [],
+  );
 
-  /**
-   * Supprimer un produit
-   */
-  const removeItem = async (
-    productId: string,
-  ) => {
-    try {
-      const updatedCart = await removeFromCart(
-        productId,
-      );
+  const removeItem = useCallback(
+    async (productId: string) => {
+      try {
+        const updatedCart =
+          await removeFromCart(productId);
 
-      setCart(updatedCart);
-    } catch (error) {
-      console.error(
-        "Impossible de supprimer le produit :",
-        error,
-      );
+        setCart(updatedCart);
+      } catch (error) {
+        console.error(
+          "Impossible de supprimer le produit :",
+          error,
+        );
 
-      throw error;
-    }
-  };
+        throw error;
+      }
+    },
+    [],
+  );
 
-  /**
-   * Nombre total d'articles
-   */
-  const cartCount = useMemo(() => {
-    if (!cart) {
-      return 0;
-    }
+  const cartCount = cart
+    ? cart.items.reduce(
+        (total, item) =>
+          total + item.quantity,
+        0,
+      )
+    : 0;
 
-    return cart.items.reduce(
-      (total, item) => total + item.quantity,
-      0,
-    );
-  }, [cart]);
-
-  /**
-   * Charger le panier lorsqu'un utilisateur
-   * authentifié est disponible.
-   */
   useEffect(() => {
-    const id = setTimeout(() => {
-      void refreshCart()
-    } ,0);
-    return () => clearTimeout(id);
+    const promise = Promise.resolve().then(refreshCart);
+
+    return () => {
+      void promise.catch(() => undefined);
+    };
   }, [refreshCart]);
 
+  const value = useMemo<CartContextValue>(
+    () => ({
+      cart,
+      cartCount,
+      loading,
+      refreshCart,
+      addToCart,
+      updateQuantity,
+      removeItem,
+    }),
+    [
+      cart,
+      cartCount,
+      loading,
+      refreshCart,
+      addToCart,
+      updateQuantity,
+      removeItem,
+    ],
+  );
+
   return (
-    <CartContext.Provider
-      value={{
-        cart,
-        cartCount,
-        loading,
-        refreshCart,
-        addToCart,
-        updateQuantity,
-        removeItem,
-      }}
-    >
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );

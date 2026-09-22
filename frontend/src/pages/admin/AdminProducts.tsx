@@ -1,13 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
-//import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
+import { useState } from "react";
 
 import AdminProductsHeader from "@/components/admin/products/AdminProductsHeader";
 import AdminProductFilters from "@/components/admin/products/AdminProductFilters";
 import AdminProductTable from "@/components/admin/products/AdminProductTable";
 import AdminProductForm from "@/components/admin/products/AdminProductForm";
 import AdminProductDeleteDialog from "@/components/admin/products/AdminProductDeleteDialog";
+
 import {
   Dialog,
   DialogContent,
@@ -16,137 +14,84 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
-import {
-  createProduct,
-  deleteProduct,
-  getAdminProducts,
-  updateProduct,
-  type CreateProductData,
-  type UpdateProductData,
-} from "@/services/product.service";
+import useAdminProducts from "@/hooks/useAdminProducts";
+import useProductFilters, {
+  type ProductStatusFilter,
+} from "@/hooks/useProductFilters";
 
 import type { Product } from "@/types/product";
+import type {
+  CreateProductData,
+  UpdateProductData,
+} from "@/services/product.service";
+
+type FormMode = "closed" | "create" | "edit";
 
 export default function AdminProducts() {
-  //const navigate = useNavigate();
+  const {
+    products,
+    loading,
+    deleting,
+    createAdminProduct,
+    updateAdminProduct,
+    disableAdminProduct,
+  } = useAdminProducts();
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const {
+    search,
+    category,
+    status,
+    categories,
+    filteredProducts,
+    setSearch,
+    setCategory,
+    setStatus,
+  } = useProductFilters(products);
 
-  const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("all");
-  const [status, setStatus] = useState("all");
+  const [formMode, setFormMode] =
+    useState<FormMode>("closed");
 
-  const [showForm, setShowForm] = useState(false);
   const [selectedProduct, setSelectedProduct] =
     useState<Product | null>(null);
 
   const [productToDelete, setProductToDelete] =
     useState<Product | null>(null);
 
-  const [deleting, setDeleting] = useState(false);
-
-  const loadProducts = async () => {
-    try {
-      setLoading(true);
-
-      const data = await getAdminProducts();
-
-      setProducts(data);
-    } catch (error: unknown) {
-      toast.error(
-        (axios.isAxiosError(error) && error.response?.data?.message) ||
-          "Unable to load products."
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    void (async () => {
-      await loadProducts();
-    })();
-  }, []);
-
-  const categories = useMemo(() => {
-    return Array.from(
-      new Set(products.map((product) => product.category))
-    ).sort();
-  }, [products]);
-
-  const filteredProducts = useMemo(() => {
-    const normalizedSearch = search.trim().toLowerCase();
-
-    return products.filter((product) => {
-      const matchesSearch =
-        !normalizedSearch ||
-        product.name.toLowerCase().includes(normalizedSearch) ||
-        product.description.toLowerCase().includes(normalizedSearch);
-
-      const matchesCategory =
-        category === "all" ||
-        product.category === category;
-
-      let matchesStatus = true;
-
-      if (status === "active") {
-        matchesStatus = product.isActive;
-      }
-
-      if (status === "inactive") {
-        matchesStatus = !product.isActive;
-      }
-
-      if (status === "outOfStock") {
-        matchesStatus = product.stock === 0;
-      }
-
-      return (
-        matchesSearch &&
-        matchesCategory &&
-        matchesStatus
-      );
-    });
-  }, [products, search, category, status]);
+  const showForm = formMode !== "closed";
 
   const handleAddProduct = () => {
     setSelectedProduct(null);
-    setShowForm(true);
+    setFormMode("create");
   };
 
   const handleEditProduct = (product: Product) => {
     setSelectedProduct(product);
-    setShowForm(true);
+    setFormMode("edit");
   };
 
   const handleCancelForm = () => {
-    setShowForm(false);
+    setFormMode("closed");
     setSelectedProduct(null);
   };
 
   const handleSubmit = async (
     data: CreateProductData | UpdateProductData
   ) => {
-    try {
-      if (selectedProduct) {
-        await updateProduct(selectedProduct._id, data);
-
-        toast.success("Product updated successfully.");
-      } else {
-        await createProduct(data as CreateProductData);
-
-        toast.success("Product created successfully.");
-      }
-
-      handleCancelForm();
-      await loadProducts();
-    } catch (error: unknown) {
-      toast.error(
-        (axios.isAxiosError(error) && error.response?.data?.message) ||
-          "Unable to save product."
+    if (
+      formMode === "edit" &&
+      selectedProduct
+    ) {
+      await updateAdminProduct(
+        selectedProduct._id,
+        data as UpdateProductData
+      );
+    } else {
+      await createAdminProduct(
+        data as CreateProductData
       );
     }
+
+    handleCancelForm();
   };
 
   const handleDeleteProduct = (
@@ -160,24 +105,17 @@ export default function AdminProducts() {
       return;
     }
 
-    try {
-      setDeleting(true);
+    await disableAdminProduct(
+      productToDelete._id
+    );
 
-      await deleteProduct(productToDelete._id);
+    setProductToDelete(null);
+  };
 
-      toast.success("Product disabled successfully.");
-
-      setProductToDelete(null);
-
-      await loadProducts();
-    } catch (error: unknown) {
-      toast.error(
-        (axios.isAxiosError(error) && error.response?.data?.message) ||
-          "Unable to disable product."
-      );
-    } finally {
-      setDeleting(false);
-    }
+  const handleStatusChange = (
+    value: string
+  ) => {
+    setStatus(value as ProductStatusFilter);
   };
 
   if (loading) {
@@ -192,12 +130,10 @@ export default function AdminProducts() {
 
   return (
     <div className="w-full space-y-5 sm:space-y-6">
-      {/* Header */}
       <AdminProductsHeader
         onAddProduct={handleAddProduct}
       />
 
-      {/* Product form dialog */}
       <Dialog
         open={showForm}
         onOpenChange={(open) => {
@@ -209,7 +145,9 @@ export default function AdminProducts() {
         <DialogContent className="max-h-[95vh] w-[calc(100%-1rem)] max-w-3xl overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
-              {selectedProduct ? "Edit product" : "Add product"}
+              {selectedProduct
+                ? "Edit product"
+                : "Add product"}
             </DialogTitle>
 
             <DialogDescription>
@@ -220,7 +158,10 @@ export default function AdminProducts() {
           </DialogHeader>
 
           <AdminProductForm
-            key={selectedProduct?._id ?? "new-product"}
+            key={
+              selectedProduct?._id ??
+              "new-product"
+            }
             product={selectedProduct}
             onSubmit={handleSubmit}
             onCancel={handleCancelForm}
@@ -228,18 +169,16 @@ export default function AdminProducts() {
         </DialogContent>
       </Dialog>
 
-      {/* Filters */}
       <AdminProductFilters
         search={search}
         onSearchChange={setSearch}
         category={category}
         onCategoryChange={setCategory}
         status={status}
-        onStatusChange={setStatus}
+        onStatusChange={handleStatusChange}
         categories={categories}
       />
 
-      {/* Result count */}
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
           {filteredProducts.length}{" "}
@@ -249,20 +188,20 @@ export default function AdminProducts() {
         </p>
       </div>
 
-      {/* Table */}
       <AdminProductTable
         products={filteredProducts}
         onEdit={handleEditProduct}
         onDelete={handleDeleteProduct}
       />
 
-      {/* Delete dialog */}
       <AdminProductDeleteDialog
         product={productToDelete}
         open={!!productToDelete}
         loading={deleting}
         onConfirm={handleConfirmDelete}
-        onCancel={() => setProductToDelete(null)}
+        onCancel={() =>
+          setProductToDelete(null)
+        }
       />
     </div>
   );
