@@ -6,6 +6,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -57,11 +58,24 @@ export function CartProvider({
   const userId = user?.id ?? null;
 
   const [cart, setCart] = useState<Cart | null>(null);
-  const [loading, setLoading] = useState(
+  const [loading, setLoading] = useState<boolean>(
     Boolean(userId),
   );
 
+  /*
+   * Identifiant de requête.
+   *
+   * Il permet d'empêcher une ancienne requête GET /cart
+   * de remplacer l'état produit par une requête plus récente.
+   */
+  const requestIdRef = useRef(0);
+
+  /*
+   * Chargement / actualisation du panier
+   */
   const refreshCart = useCallback(async () => {
+    const requestId = ++requestIdRef.current;
+
     if (!userId) {
       setCart(null);
       setLoading(false);
@@ -73,17 +87,42 @@ export function CartProvider({
 
       const data = await getCart();
 
-      setCart(data);
+      /*
+       * Seule la requête la plus récente peut mettre
+       * à jour l'état du panier.
+       */
+      if (requestId === requestIdRef.current) {
+        setCart(data);
+      }
     } catch (error) {
-      console.error(
-        "Impossible de récupérer le panier :",
-        error,
-      );
+      if (requestId === requestIdRef.current) {
+        console.error(
+          "Impossible de récupérer le panier :",
+          error,
+        );
+      }
     } finally {
-      setLoading(false);
+      if (requestId === requestIdRef.current) {
+        setLoading(false);
+      }
     }
   }, [userId]);
 
+  /*
+   * Charger automatiquement le panier lorsque
+   * l'utilisateur authentifié change.
+   */
+  useEffect(() => {
+    refreshCart();
+
+    return () => {
+      requestIdRef.current += 1;
+    };
+  }, [refreshCart]);
+
+  /*
+   * Ajouter un produit
+   */
   const addToCart = useCallback(
     async (
       productId: string,
@@ -109,6 +148,9 @@ export function CartProvider({
     [],
   );
 
+  /*
+   * Modifier la quantité
+   */
   const updateQuantity = useCallback(
     async (
       productId: string,
@@ -138,6 +180,9 @@ export function CartProvider({
     [],
   );
 
+  /*
+   * Supprimer un produit
+   */
   const removeItem = useCallback(
     async (productId: string) => {
       try {
@@ -157,6 +202,9 @@ export function CartProvider({
     [],
   );
 
+  /*
+   * Nombre total d'articles
+   */
   const cartCount = cart
     ? cart.items.reduce(
         (total, item) =>
@@ -164,14 +212,6 @@ export function CartProvider({
         0,
       )
     : 0;
-
-  useEffect(() => {
-    const promise = Promise.resolve().then(refreshCart);
-
-    return () => {
-      void promise.catch(() => undefined);
-    };
-  }, [refreshCart]);
 
   const value = useMemo<CartContextValue>(
     () => ({

@@ -2,6 +2,14 @@ import User from "../models/User";
 import bcrypt from "bcryptjs";
 import cloudinary from "../config/cloudinary";
 
+const toUserProfile = (user: any) => ({
+    id: user._id.toString(),
+    fullName: user.fullName,
+    email: user.email,
+    role: user.role,
+    profileImage: user.profileImage ?? null
+});
+
 export const getMyProfile = async (userId: string) => {
     const user = await User.findById(userId)
         .select("-password");
@@ -10,7 +18,7 @@ export const getMyProfile = async (userId: string) => {
         throw new Error("Utilisateur introuvable");
     }
 
-    return user;
+    return toUserProfile(user);
 };
 
 interface UpdateProfileData {
@@ -22,7 +30,6 @@ export const updateMyProfile = async (
     userId: string,
     data: UpdateProfileData
 ) => {
-
     const user = await User.findById(userId);
 
     if (!user) {
@@ -30,7 +37,6 @@ export const updateMyProfile = async (
     }
 
     if (data.email && data.email !== user.email) {
-
         const existingUser = await User.findOne({
             email: data.email
         });
@@ -48,8 +54,14 @@ export const updateMyProfile = async (
 
     await user.save();
 
-    return await User.findById(userId)
+    const updatedUser = await User.findById(userId)
         .select("-password");
+
+    if (!updatedUser) {
+        throw new Error("Utilisateur introuvable");
+    }
+
+    return toUserProfile(updatedUser);
 };
 
 interface ChangePasswordData {
@@ -61,7 +73,6 @@ export const changeMyPassword = async (
     userId: string,
     data: ChangePasswordData
 ) => {
-
     const user = await User.findById(userId);
 
     if (!user) {
@@ -106,7 +117,6 @@ export const updateMyProfileImage = async (
     userId: string,
     file: Express.Multer.File
 ) => {
-
     const user = await User.findById(userId);
 
     if (!user) {
@@ -117,9 +127,7 @@ export const updateMyProfileImage = async (
         throw new Error("Aucune image fournie");
     }
 
-    // Supprimer l'ancienne image de Cloudinary
     if (user.profileImagePublicId) {
-
         await cloudinary.uploader.destroy(
             user.profileImagePublicId,
             {
@@ -128,21 +136,17 @@ export const updateMyProfileImage = async (
         );
     }
 
-    // Upload de la nouvelle image
     const uploadResult = await new Promise<{
         secure_url: string;
         public_id: string;
     }>((resolve, reject) => {
-
         const uploadStream =
             cloudinary.uploader.upload_stream(
                 {
                     folder: "marketelectro/profiles",
                     resource_type: "image"
                 },
-
                 (error, result) => {
-
                     if (error) {
                         reject(error);
                         return;
@@ -167,22 +171,25 @@ export const updateMyProfileImage = async (
         uploadStream.end(file.buffer);
     });
 
-    // Sauvegarder les nouvelles informations
     user.profileImage = uploadResult.secure_url;
-
     user.profileImagePublicId =
         uploadResult.public_id;
 
     await user.save();
 
-    return await User.findById(userId)
+    const updatedUser = await User.findById(userId)
         .select("-password");
+
+    if (!updatedUser) {
+        throw new Error("Utilisateur introuvable");
+    }
+
+    return toUserProfile(updatedUser);
 };
 
 export const removeMyProfileImage = async (
     userId: string
 ) => {
-
     const user = await User.findById(userId);
 
     if (!user) {
@@ -190,7 +197,6 @@ export const removeMyProfileImage = async (
     }
 
     if (user.profileImagePublicId) {
-
         await cloudinary.uploader.destroy(
             user.profileImagePublicId,
             {
@@ -200,11 +206,16 @@ export const removeMyProfileImage = async (
     }
 
     user.profileImage = null;
-
     user.profileImagePublicId = null;
 
     await user.save();
 
-    return await User.findById(userId)
+    const updatedUser = await User.findById(userId)
         .select("-password");
+
+    if (!updatedUser) {
+        throw new Error("Utilisateur introuvable");
+    }
+
+    return toUserProfile(updatedUser);
 };

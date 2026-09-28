@@ -3,6 +3,8 @@ import Product from "../models/Product";
 
 
 // Récupérer le panier d'un utilisateur
+// Retourne un panier vide si l'utilisateur n'en a pas encore,
+// plutôt que de lancer une erreur qui serait silencieusement ignorée côté frontend.
 
 export const getCart = async (
     userId: string
@@ -14,7 +16,14 @@ export const getCart = async (
     .populate("items.product");
 
     if (!cart) {
-        throw new Error("Panier introuvable");
+        return { items: [], total: 0 };
+    }
+
+    // Filtrer les articles dont le produit a été supprimé ou n'existe plus
+    const originalLength = cart.items.length;
+    cart.items = cart.items.filter(item => item.product != null) as any;
+    if (cart.items.length !== originalLength) {
+        await cart.save();
     }
 
     return cart;
@@ -37,45 +46,50 @@ export const addToCart = async (
         throw new Error("Produit introuvable");
     }
 
-    // Chercher le panier utilisateur
+    // Chercher le panier utilisateur, ou en créer un nouveau (upsert)
 
-    const cart = await Cart.findOne({
+    let cart = await Cart.findOne({
         user: userId
     });
 
 
     if (!cart) {
-        throw new Error("Panier introuvable");
-    }
-
-    // Vérifier si le produit existe déjà dans le panier
-
-    const existingItem = cart.items.find(
-        item => item.product.toString() === productId
-    );
-
-    if (existingItem) {
-
-        if (existingItem.quantity + quantity > product.stock) {
-            throw new Error("Stock insuffisant");
-        }
-
-        existingItem.quantity += quantity;
-
-    } else {
-
-        if (quantity > product.stock) {
-            throw new Error("Stock insuffisant");
-        }
-
-        cart.items.push({
-            product: product._id,
-            quantity
+        // Premier ajout au panier : créer le document Cart pour cet utilisateur
+        cart = await Cart.create({
+            user: userId,
+            items: [{ product: product._id, quantity }],
         });
+    } else {
+        // Vérifier si le produit existe déjà dans le panier
 
+        const existingItem = cart.items.find(
+            item => item.product.toString() === productId
+        );
+
+        if (existingItem) {
+
+            if (existingItem.quantity + quantity > product.stock) {
+                throw new Error("Stock insuffisant");
+            }
+
+            existingItem.quantity += quantity;
+
+        } else {
+
+            if (quantity > product.stock) {
+                throw new Error("Stock insuffisant");
+            }
+
+            cart.items.push({
+                product: product._id,
+                quantity
+            });
+
+        }
+
+        await cart.save();
     }
 
-    await cart.save();
     await cart.populate("items.product");
 
     return cart;

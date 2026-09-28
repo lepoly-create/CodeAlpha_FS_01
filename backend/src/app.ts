@@ -58,10 +58,11 @@ app.use(
     })
 );
 
-// 4. Rate Limiting pour contrer les attaques DoS et Brute-Force
+const isProd = process.env.NODE_ENV === "production";
+
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limite chaque IP à 100 requêtes par fenêtre de 15 min
+  max: isProd ? 100 : 2000, // limite souple en dev
   message: {
     success: false,
     message: "Trop de requêtes depuis cette adresse IP, veuillez réessayer plus tard."
@@ -72,7 +73,7 @@ const globalLimiter = rateLimit({
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 15, // limite chaque IP à 15 requêtes d'authentification par 15 min
+  max: isProd ? 15 : 200, // limite souple en dev
   message: {
     success: false,
     message: "Trop de tentatives de connexion ou d'inscription. Veuillez réessayer dans 15 minutes."
