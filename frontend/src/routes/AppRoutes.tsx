@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Products from "@/pages/Products";
 import AppLayout from "@/components/layout/AppLayout";
 import Dashboard from "@/pages/Dashboard";
@@ -11,7 +11,6 @@ import Profile from "@/pages/Profile";
 import AdminRoute from "./AdminRoute";
 import CustomerRoute from "./CustomerRoute";
 import AdminDashboard from "@/pages/admin/AdminDashboard";
-//import AdminManagementPage from "@/pages/admin/AdminManagementPage";
 import AdminProducts from "@/pages/admin/AdminProducts";
 import AdminOrders from "@/pages/admin/AdminOrders";
 import AdminUsers from "@/pages/admin/AdminUsers";
@@ -20,6 +19,8 @@ import AdminSettings from "@/pages/admin/AdminSettings";
 export default function AppRoutes() {
   return (
     <Routes>
+
+      <Route path="/" element={<Navigate to="/login" replace />} />
       {/* Pages publiques */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
