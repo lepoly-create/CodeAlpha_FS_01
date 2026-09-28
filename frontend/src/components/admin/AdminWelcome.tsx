@@ -16,7 +16,7 @@ export default function AdminWelcome({
   return (
     <div className="relative overflow-hidden rounded-3xl border-0 bg-white ">
       <div className="relative z-10 flex items-center justify-between p-7 sm:p-8">
-        <div>
+        <div className="max-w-2xl">
           <div className="mb-4 flex items-center gap-3">
             <div className="h-1.5 w-10 rounded-full bg-primary" />
 

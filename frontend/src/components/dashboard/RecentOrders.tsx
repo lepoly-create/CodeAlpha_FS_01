@@ -55,7 +55,7 @@ export default function RecentOrders({
           onClick={onViewAll}
           className="hidden rounded-xl cursor-pointer text-sm sm:flex"
         >
-          Voir toutes
+          Voir toutes les commandes
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </CardHeader>
@@ -91,7 +91,7 @@ export default function RecentOrders({
               return (
                 <div
                   key={order._id}
-                  className="flex flex-col gap-4 px-6 py-5 transition-colors hover:bg-neutral-50/70 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col gap-4 px-6 py-5 transition-colors hover:bg-neutral-50 sm:flex-row sm:items-center sm:px-5 sm:justify-between"
                 >
                   <div className="flex min-w-0 items-center gap-4">
                     <div className="h-14 w-14 shrink-0 overflow-hidden rounded-xl border border-neutral-200 bg-neutral-100">
@@ -158,16 +158,6 @@ export default function RecentOrders({
           </div>
         )}
 
-        <div className="border-t border-neutral-100 px-6 py-4 sm:hidden">
-          <Button
-            variant="ghost"
-            onClick={onViewAll}
-            className="w-full rounded-xl cursor-pointer"
-          >
-            Voir toutes les commandes
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Button>
-        </div>
       </CardContent>
     </Card>
   );
