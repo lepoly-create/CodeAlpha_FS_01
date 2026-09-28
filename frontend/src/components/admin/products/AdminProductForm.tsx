@@ -1,4 +1,4 @@
-import { useState, type  SyntheticEvent  } from "react";
+import { useState, type SyntheticEvent } from "react";
 
 import { Button } from "@/components/ui/button";
 import type {
@@ -20,14 +20,27 @@ interface AdminProductFormProps {
 
 const getInitialFormData = (
   product?: Product | null
-): AdminProductFormData => ({
-  name: product?.name ?? "",
-  description: product?.description ?? "",
-  price: product ? String(product.price) : "",
-  image: product?.image ?? "",
-  category: product?.category ?? "",
-  stock: product ? String(product.stock) : "",
-});
+): AdminProductFormData => {
+  if (!product) {
+    return {
+      name: "",
+      description: "",
+      price: "",
+      image: "",
+      category: "",
+      stock: "",
+    };
+  }
+
+  return {
+    name: product.name,
+    description: product.description,
+    price: String(product.price),
+    image: product.image,
+    category: product.category,
+    stock: String(product.stock),
+  };
+};
 
 export default function AdminProductForm({
   product,
