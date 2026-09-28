@@ -66,7 +66,7 @@ export default function AdminRecentOrders({
           onClick={onViewOrders}
           className="hidden rounded-xl sm:flex"
         >
-          Voir toutes les comandes
+          Voir toutes les commandes
           <ArrowRight className="ml-2 h-4 w-4" />
         </Button>
       </CardHeader>
@@ -79,7 +79,7 @@ export default function AdminRecentOrders({
             </div>
 
             <p className="mt-4 text-sm font-semibold">
-              Aucune commande
+              Aucune commande pour le moment
             </p>
 
             <p className="mt-1 text-sm text-neutral-500">
@@ -98,7 +98,7 @@ export default function AdminRecentOrders({
                 >
                   <div className="min-w-0">
                     <p className="truncate font-semibold text-neutral-950">
-                      #{order._id.slice(-6).toUpperCase()}
+                      Commande #{order._id.slice(-6).toUpperCase()}
                     </p>
 
                     <p className="mt-1 truncate text-sm text-neutral-500">
@@ -127,7 +127,6 @@ export default function AdminRecentOrders({
           </div>
         )}
 
-        
       </CardContent>
     </Card>
   );

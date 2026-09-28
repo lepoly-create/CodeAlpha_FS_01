@@ -14,7 +14,7 @@ export default function DashboardWelcome({
   const firstName = user.fullName.trim().split(" ")[0];
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border bg-white">
+    <div className="relative overflow-hidden rounded-3xl border-0 bg-white">
       <div className="relative z-10 flex flex-col gap-6 p-7 sm:p-8 lg:flex-row lg:items-center lg:justify-between">
         <div className="max-w-2xl">
           <div className="mb-4 flex items-center gap-3">
@@ -64,8 +64,15 @@ export default function DashboardWelcome({
         </div>
       </div>
 
-      <div className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-neutral-50" />
-      <div className="pointer-events-none absolute -bottom-24 right-24 h-40 w-40 rounded-full bg-neutral-50" />
+     <div className="pointer-events-none 
+                      absolute -right-16 -top-20 
+                      h-56 w-56 rounded-full 
+                      bg-neutral-300" />
+
+      <div className="pointer-events-none 
+                      absolute -bottom-24 right-24
+                      h-40 w-40 rounded-full 
+                      bg-neutral-300" />
     </div>
   );
 }
