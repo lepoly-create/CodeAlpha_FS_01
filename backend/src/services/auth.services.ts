@@ -18,19 +18,12 @@ export const loginUser = async (data: LoginData) => {
     // Vérifier que l'utilisateur existe
     const user = await User.findOne({ email });
     if (!user) {
-        console.log("❌ LOGIN DEBUG: Utilisateur non trouvé pour l'email:", email);
         throw new Error("Email ou mot de passe incorrect");
     }
-
-    console.log("✅ LOGIN DEBUG: Utilisateur trouvé !");
-    console.log("🔑 LOGIN DEBUG: Hash en BDD est-il présent ?", user.password ? "OUI" : "NON (undefined)");
-    // FIN DES LOGS DE DÉBOGAGE
 
     // Comparer le mot de passe
     const isPasswordValid = await bcrypt.compare(password, user.password);
 
-    // LOG SUPPLÉMENTAIRE
-    console.log("🔐 LOGIN DEBUG: Le mot de passe est-il valide ?", isPasswordValid);
 
     if (!isPasswordValid) {
         throw new Error("Email ou mot de passe incorrect");
