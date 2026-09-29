@@ -75,8 +75,8 @@ const globalLimiter = rateLimit({
 });
 
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: isProd ? 15 : 200, // limite souple en dev
+  windowMs: 30 * 60 * 1000, // 15 minutes
+  max: isProd ? 50 : 200, // limite souple en dev
   message: {
     success: false,
     message: "Trop de tentatives de connexion ou d'inscription. Veuillez réessayer dans 15 minutes."
@@ -86,11 +86,11 @@ const authLimiter = rateLimit({
 });
 
 // Appliquer le limiter global sur toutes les requêtes /api
-//app.use("/api", globalLimiter);
+app.use("/api", globalLimiter);
 
 // Appliquer le limiter plus restrictif sur l'auth
-//app.use("/api/auth/login", authLimiter);
-//app.use("/api/auth/register", authLimiter);
+app.use("/api/auth/login", authLimiter);
+app.use("/api/auth/register", authLimiter);
 
 // 5. Déclaration des routes
 app.use("/api/auth", authRoutes);
