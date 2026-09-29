@@ -86,11 +86,11 @@ const authLimiter = rateLimit({
 });
 
 // Appliquer le limiter global sur toutes les requêtes /api
-app.use("/api", globalLimiter);
+//app.use("/api", globalLimiter);
 
 // Appliquer le limiter plus restrictif sur l'auth
-app.use("/api/auth/login", authLimiter);
-app.use("/api/auth/register", authLimiter);
+//app.use("/api/auth/login", authLimiter);
+//app.use("/api/auth/register", authLimiter);
 
 // 5. Déclaration des routes
 app.use("/api/auth", authRoutes);
