@@ -23,8 +23,11 @@ const swaggerDocument = {
 };
 
 const app = express();
+// Indique à Express de faire confiance au premier proxy (celui de Render)
+app.set('trust proxy', 1); 
 
 // 1. Headers de sécurité HTTP avec Helmet
+
 app.use(helmet());
 
 // 2. Configuration CORS restrictive
