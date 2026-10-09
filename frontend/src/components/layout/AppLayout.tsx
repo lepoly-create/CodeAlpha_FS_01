@@ -14,7 +14,7 @@ export default function AppLayout() {
         onClose={() => setSidebarOpen(false)}
       />
 
-      <div className="flex min-h-screen min-w-0 flex-1 flex-col">
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col lg:pl-64">
         <AppHeader onMenuClick={() => setSidebarOpen(true)} />
 
         <main className="min-w-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6 lg:px-9 lg:py-6">

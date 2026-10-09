@@ -1,17 +1,39 @@
-import { createContext } from "react";
+import {
+  createContext,
+} from "react";
 
-import type { AuthUser } from "@/services/auth.service";
+import type {
+  AuthUser,
+} from "@/services/auth.service";
 
-export interface AuthContextType {
+interface AuthContextValue {
   user: AuthUser | null;
   token: string | null;
   isAuthenticated: boolean;
   loading: boolean;
-  login: (email: string, password: string) => Promise<AuthUser>;
+
+  login: (
+    email: string,
+    password: string,
+  ) => Promise<AuthUser>;
+
+  loginWithGoogle: (
+    credential: string,
+  ) => Promise<AuthUser>;
+
+  establishSession: (
+    token: string,
+    user: AuthUser,
+  ) => void;
+
   logout: () => void;
-  updateUser: (user: AuthUser) => void;
+
+  updateUser: (
+    updatedUser: AuthUser,
+  ) => void;
 }
 
-export const AuthContext = createContext<AuthContextType | undefined>(
-  undefined,
-);
+export const AuthContext =
+  createContext<
+    AuthContextValue | undefined
+  >(undefined);

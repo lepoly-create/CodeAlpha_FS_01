@@ -1,18 +1,13 @@
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useState, type ChangeEvent, type  SyntheticEvent } from "react";
 import axios from "axios";
-import {
-  KeyRound,
-  Loader2,
-  ShieldCheck,
-} from "lucide-react";
+import { KeyRound, Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-
 import { changeMyPassword } from "@/services/user.service";
-
 import PasswordField from "./PasswordField";
+import { useAuth } from "@/contexts/useAuth";
 
 interface ChangePasswordFormData {
   currentPassword: string;
@@ -21,11 +16,7 @@ interface ChangePasswordFormData {
 }
 
 type PasswordFieldName = keyof ChangePasswordFormData;
-
-type PasswordVisibility = Record<
-  PasswordFieldName,
-  boolean
->;
+type PasswordVisibility = Record<PasswordFieldName, boolean>;
 
 const initialFormData: ChangePasswordFormData = {
   currentPassword: "",
@@ -39,83 +30,68 @@ const initialVisibility: PasswordVisibility = {
   confirmPassword: false,
 };
 
-const validateChangePassword = (
-  formData: ChangePasswordFormData
-): string | null => {
-  const {
-    currentPassword,
-    newPassword,
-    confirmPassword,
-  } = formData;
-
-  if (
-    !currentPassword ||
-    !newPassword ||
-    !confirmPassword
-  ) {
-    return "Veuillez remplir tous les champs.";
-  }
-
-  if (newPassword.length < 6) {
-    return (
-      "Le nouveau mot de passe doit contenir " +
-      "au moins 6 caractères."
-    );
-  }
-
-  if (newPassword !== confirmPassword) {
-    return (
-      "Les nouveaux mots de passe ne correspondent pas."
-    );
-  }
-
-  if (currentPassword === newPassword) {
-    return (
-      "Le nouveau mot de passe doit être différent " +
-      "de l'ancien."
-    );
-  }
-
-  return null;
-};
-
 export default function ChangePasswordForm() {
-  const [formData, setFormData] =
-    useState<ChangePasswordFormData>(initialFormData);
-
-  const [visibility, setVisibility] =
-    useState<PasswordVisibility>(initialVisibility);
-
+  const { user } = useAuth();
+  const [formData, setFormData] = useState<ChangePasswordFormData>(initialFormData);
+  const [visibility, setVisibility] = useState<PasswordVisibility>(initialVisibility);
   const [isChanging, setIsChanging] = useState(false);
 
+  // SI L'UTILISATEUR S'EST CONNECTÉ AVEC GOOGLE : Afficher un bloc explicatif (UX)
+  if (user?.authProvider === "google") {
+    return (
+      <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm">
+        <CardContent className="p-6">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 border border-blue-100">
+              <p>null</p>
+            </div>
+            <div>
+              <h2 className="text-base font-semibold text-slate-900">
+                Sécurité du compte
+              </h2>
+              <p className="mt-0.5 text-xs text-slate-500">
+                Authentification déléguée à Google.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-4 rounded-xl border border-slate-200/80 bg-slate-50 p-4 text-xs text-slate-600 leading-relaxed">
+            Votre compte est associé à votre profil **Google**. Le mot de passe et l'authentification à deux facteurs sont directement gérés sur le portail de sécurité Google.
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   const handleFieldChange =
-    (field: PasswordFieldName) =>
-    (event: ChangeEvent<HTMLInputElement>) => {
-      setFormData((current) => ({
-        ...current,
-        [field]: event.target.value,
-      }));
+    (field: PasswordFieldName) => (event: ChangeEvent<HTMLInputElement>) => {
+      setFormData((prev) => ({ ...prev, [field]: event.target.value }));
     };
 
-  const toggleVisibility = (
-    field: PasswordFieldName
-  ) => {
-    setVisibility((current) => ({
-      ...current,
-      [field]: !current[field],
-    }));
+  const toggleVisibility = (field: PasswordFieldName) => {
+    setVisibility((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
-  const handleSubmit = async (
-    event: FormEvent<HTMLFormElement>
-  ) => {
+  const handleSubmit = async (event:  SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const validationError =
-      validateChangePassword(formData);
+    if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
+      toast.error("Veuillez remplir tous les champs.");
+      return;
+    }
 
-    if (validationError) {
-      toast.error(validationError);
+    if (formData.newPassword.length < 6) {
+      toast.error("Le nouveau mot de passe doit contenir au moins 6 caractères.");
+      return;
+    }
+
+    if (formData.newPassword !== formData.confirmPassword) {
+      toast.error("Les nouveaux mots de passe ne correspondent pas.");
+      return;
+    }
+
+    if (formData.currentPassword === formData.newPassword) {
+      toast.error("Le nouveau mot de passe doit être différent de l'ancien.");
       return;
     }
 
@@ -127,102 +103,75 @@ export default function ChangePasswordForm() {
         newPassword: formData.newPassword,
       });
 
-      toast.success(
-        "Mot de passe modifié avec succès."
-      );
-
+      toast.success("Mot de passe modifié avec succès.");
       setFormData(initialFormData);
       setVisibility(initialVisibility);
     } catch (error: unknown) {
-      console.error(
-        "Erreur lors du changement de mot de passe :",
-        error
-      );
+      const message = axios.isAxiosError<{ message?: string }>(error)
+        ? error.response?.data?.message
+        : undefined;
 
-      const message =
-        axios.isAxiosError<{ message?: string }>(error)
-          ? error.response?.data?.message
-          : undefined;
-
-      toast.error(
-        message ||
-          "Impossible de modifier le mot de passe."
-      );
+      toast.error(message || "Impossible de modifier le mot de passe.");
     } finally {
       setIsChanging(false);
     }
   };
 
   return (
-    <Card className="rounded-2xl border-neutral-200 bg-white shadow-sm">
+    <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm">
       <CardContent className="p-6">
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
           <div>
-            <h2 className="text-xl font-semibold tracking-tight">
-              Sécurité du compte
+            <h2 className="text-lg font-semibold tracking-tight text-slate-900">
+              Mot de passe
             </h2>
-
-            <p className="mt-1 text-sm text-neutral-500">
-              Modifiez régulièrement votre mot de passe
-              pour protéger votre compte.
+            <p className="mt-0.5 text-xs text-slate-500">
+              Mettez à jour la sécurité de votre compte local.
             </p>
           </div>
 
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-neutral-100">
-            <ShieldCheck className="h-5 w-5 text-neutral-600" />
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+            <KeyRound className="h-4 w-4" />
           </div>
         </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="mt-6 space-y-5"
-        >
+        <form onSubmit={handleSubmit} className="mt-5 space-y-4">
           <PasswordField
             id="current-password"
             label="Mot de passe actuel"
             value={formData.currentPassword}
-            placeholder="Votre mot de passe actuel"
+            placeholder="••••••••"
             autoComplete="current-password"
             visible={visibility.currentPassword}
             disabled={isChanging}
-            onChange={handleFieldChange(
-              "currentPassword"
-            )}
-            onToggleVisibility={() =>
-              toggleVisibility("currentPassword")
-            }
+            onChange={handleFieldChange("currentPassword")}
+            onToggleVisibility={() => toggleVisibility("currentPassword")}
           />
 
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2">
             <PasswordField
               id="new-password"
               label="Nouveau mot de passe"
               value={formData.newPassword}
-              placeholder="Nouveau mot de passe"
+              placeholder="••••••••"
               autoComplete="new-password"
               visible={visibility.newPassword}
               disabled={isChanging}
               description="Minimum 6 caractères."
               onChange={handleFieldChange("newPassword")}
-              onToggleVisibility={() =>
-                toggleVisibility("newPassword")
-              }
+              onToggleVisibility={() => toggleVisibility("newPassword")}
             />
 
             <PasswordField
               id="confirm-password"
-              label="Confirmer le nouveau mot de passe"
+              label="Confirmation"
               value={formData.confirmPassword}
-              placeholder="Confirmer le mot de passe"
+              placeholder="••••••••"
               autoComplete="new-password"
               visible={visibility.confirmPassword}
               disabled={isChanging}
-              onChange={handleFieldChange(
-                "confirmPassword"
-              )}
-              onToggleVisibility={() =>
-                toggleVisibility("confirmPassword")
-              }
+              onChange={handleFieldChange("confirmPassword")}
+              onToggleVisibility={() => toggleVisibility("confirmPassword")}
             />
           </div>
 
@@ -230,17 +179,17 @@ export default function ChangePasswordForm() {
             <Button
               type="submit"
               disabled={isChanging}
-              className="cursor-pointer"
+              className="rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs sm:text-sm"
             >
               {isChanging ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Modification...
+                  Mise à jour...
                 </>
               ) : (
                 <>
-                  <KeyRound className="mr-2 h-4 w-4" />
-                  Modifier le mot de passe
+                  <ShieldCheck className="mr-2 h-4 w-4" />
+                  Changer le mot de passe
                 </>
               )}
             </Button>

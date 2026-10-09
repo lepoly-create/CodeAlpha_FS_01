@@ -31,8 +31,10 @@ export default function PasswordField({
   onToggleVisibility,
 }: PasswordFieldProps) {
   return (
-    <div className="space-y-2">
-      <Label htmlFor={id}>{label}</Label>
+    <div className="space-y-1.5">
+      <Label htmlFor={id} className="text-xs font-medium text-slate-700">
+        {label}
+      </Label>
 
       <div className="relative">
         <Input
@@ -45,35 +47,24 @@ export default function PasswordField({
           autoComplete={autoComplete}
           disabled={disabled}
           required
-          className="h-10 rounded-xl pr-12 focus:border-0"
+          className="h-10 rounded-xl border-slate-200 pr-10 focus-visible:ring-slate-950 text-sm"
         />
 
         <Button
           type="button"
           variant="ghost"
           size="icon"
-          className="absolute right-1 top-1/2 -translate-y-1/2 border-0 bg-transparent"
+          className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-slate-400 hover:text-slate-600 hover:bg-transparent"
           onClick={onToggleVisibility}
           disabled={disabled}
-          aria-label={
-            visible
-              ? `Masquer ${label.toLowerCase()}`
-              : `Afficher ${label.toLowerCase()}`
-          }
-          aria-pressed={visible}
+          aria-label={visible ? `Masquer ${label}` : `Afficher ${label}`}
         >
-          {visible ? (
-            <EyeOff className="h-4 w-4" />
-          ) : (
-            <Eye className="h-4 w-4" />
-          )}
+          {visible ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
         </Button>
       </div>
 
       {description && (
-        <p className="text-xs text-neutral-500">
-          {description}
-        </p>
+        <p className="text-[11px] text-slate-500">{description}</p>
       )}
     </div>
   );

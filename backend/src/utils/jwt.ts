@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
-import type { SignOptions } from "jsonwebtoken";
+import type {
+    SignOptions
+} from "jsonwebtoken";
 
 interface JwtPayload {
     id: string;
@@ -7,15 +9,28 @@ interface JwtPayload {
     role: string;
 }
 
-export const generateToken = (payload: JwtPayload): string => {
-    const secret = process.env.JWT_SECRET;
+export const generateToken = (
+    payload: JwtPayload,
+): string => {
+    const secret =
+        process.env.JWT_SECRET;
 
     if (!secret) {
-        throw new Error("JWT_SECRET est introuvable dans le fichier .env");
+        throw new Error(
+            "JWT_SECRET est introuvable dans le fichier .env"
+        );
     }
-    const expiresIn = process.env.JWT_EXPIRES_IN as SignOptions["expiresIn"];
 
-    return jwt.sign(payload, secret, {
-        expiresIn,
-    });
+    const expiresIn =
+        process.env.JWT_EXPIRES_IN ||
+        "7d";
+
+    return jwt.sign(
+        payload,
+        secret,
+        {
+            expiresIn:
+                expiresIn as SignOptions["expiresIn"],
+        },
+    );
 };

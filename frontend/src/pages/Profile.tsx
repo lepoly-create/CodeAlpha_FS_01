@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
-
 import { useAuth } from "@/contexts/useAuth";
-
-import {
-  getMyProfile,
-  type UserProfile,
-} from "@/services/user.service";
+import { getMyProfile, type UserProfile } from "@/services/user.service";
 
 import ProfileHeader from "@/components/profile/ProfileHeader";
 import ProfileInformation from "@/components/profile/ProfileInformation";
 import ChangePasswordForm from "@/components/profile/ChangePasswordForm";
+import ChangeEmailForm from "@/components/profile/ChangeEmailForm";
+import LinkGoogleAccountButton from "@/components/auth/LinkGoogleAccountButton";
 
 export default function Profile() {
   const { updateUser } = useAuth();
@@ -21,133 +18,140 @@ export default function Profile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  /*
-   * Chargement du profil
-   */
   useEffect(() => {
+    let isMounted = true;
+
     const loadProfile = async () => {
       try {
         setLoading(true);
         setError("");
-
         const profile = await getMyProfile();
 
-        setUser(profile);
-        updateUser(profile);
-      } catch (error) {
-        console.error(
-          "Erreur lors du chargement du profil :",
-          error
-        );
-
-        setError(
-          "Impossible de charger votre profil."
-        );
+        if (isMounted) {
+          setUser(profile);
+          updateUser(profile);
+        }
+      } catch (err) {
+        console.error("Erreur chargement profil:", err);
+        if (isMounted) {
+          setError("Impossible de charger les données de votre profil.");
+        }
       } finally {
-        setLoading(false);
+        if (isMounted) setLoading(false);
       }
     };
 
     loadProfile();
+
+    return () => {
+      isMounted = false;
+    };
   }, [updateUser]);
 
-  /*
-   * Synchronisation après modification
-   */
   const handleUserUpdated = (updatedUser: UserProfile) => {
     setUser(updatedUser);
     updateUser(updatedUser);
   };
 
-  /*
-   * Chargement
-   */
+  /* Skeleton Loader Responsive */
   if (loading) {
     return (
-      <section className="space-y-8">
-        <div>
-          <div className="h-4 w-32 animate-pulse rounded bg-neutral-100" />
-
-          <div className="mt-3 h-10 w-52 animate-pulse rounded bg-neutral-100" />
-
-          <div className="mt-3 h-5 w-full max-w-96 animate-pulse rounded bg-neutral-100" />
+      <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6 animate-pulse">
+        <div className="space-y-2">
+          <div className="h-4 w-28 rounded bg-slate-200" />
+          <div className="h-8 w-48 rounded bg-slate-200" />
         </div>
-
-        <div className="h-40 animate-pulse rounded-2xl bg-neutral-100" />
-
-        <div className="h-64 animate-pulse rounded-2xl bg-neutral-100" />
-
-        <div className="h-64 animate-pulse rounded-2xl bg-neutral-100" />
-      </section>
+        <div className="h-60 rounded-2xl bg-slate-200" />
+        <div className="grid gap-6 lg:grid-cols-3">
+          <div className="lg:col-span-2 space-y-6">
+            <div className="h-52 rounded-2xl bg-slate-200" />
+            <div className="h-36 rounded-2xl bg-slate-200" />
+          </div>
+          <div className="space-y-6">
+            <div className="h-52 rounded-2xl bg-slate-200" />
+            <div className="h-52 rounded-2xl bg-slate-200" />
+          </div>
+        </div>
+      </div>
     );
   }
 
-  /*
-   * Erreur
-   */
+  /* Vue d'erreur */
   if (error || !user) {
     return (
-      <section className="space-y-8">
+      <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
         <div>
-          <p className="text-sm font-medium uppercase tracking-widest text-neutral-500">
+          <span className="text-xs font-semibold uppercase tracking-widest text-slate-400">
             MarketElectro
-          </p>
-
-          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            Profil
+          </span>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            Mon Profil
           </h1>
-
-          <p className="mt-2 text-neutral-500">
-            Gérez vos informations personnelles et
-            la sécurité de votre compte.
-          </p>
         </div>
 
-        <Card className="rounded-2xl border-red-200 bg-red-50">
+        <Card className="rounded-2xl border-red-200 bg-red-50/50">
           <CardContent className="flex items-center gap-3 p-6 text-red-600">
-            <Loader2 className="h-5 w-5" />
-
-            <p>
-              {error || "Profil introuvable."}
+            <AlertCircle className="h-5 w-5 shrink-0" />
+            <p className="text-sm font-medium">
+              {error || "Une erreur est survenue lors du chargement."}
             </p>
           </CardContent>
         </Card>
-      </section>
+      </div>
     );
   }
 
   return (
-    <section className="space-y-8">
-      {/* Page heading */}
+    <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
+      {/* En-tête de section */}
       <div>
-        <p className="text-sm font-medium uppercase tracking-widest text-neutral-500">
-          MarketElectro
-        </p>
-
-        <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-          Profil
+        <span className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+          Espace Client
+        </span>
+        <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+          Paramètres du compte
         </h1>
-
-        <p className="mt-2 text-neutral-500">
-          Gérez vos informations personnelles et
-          la sécurité de votre compte.
+        <p className="mt-1 text-xs sm:text-sm text-slate-500">
+          Gérez vos informations personnelles et la sécurité de votre accès.
         </p>
       </div>
 
-      {/* Présentation + photo */}
-      <ProfileHeader
-        user={user}
-        onUpdated={handleUserUpdated}
-      />
+      {/* Carte En-tête Profil */}
+      <ProfileHeader user={user} onUpdated={handleUserUpdated} />
 
-      {/* Informations personnelles */}
-      <ProfileInformation
-        user={user}
-        onUpdated={handleUserUpdated}
-      />
+      {/* Disposition principale en Grille : 2 Cols (Desktop) / 1 Col (Mobile) */}
+      <div className="grid gap-6 lg:grid-cols-3 items-start">
+        {/* Colonne Gauche : Informations & Liaisons de compte */}
+        <div className="space-y-6 lg:col-span-2">
+          <ProfileInformation user={user} onUpdated={handleUserUpdated} />
 
-      {/* Sécurité */}
-      <ChangePasswordForm />
-    </section>
+          {/* Integration Google */}
+          <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-4">
+                <div>
+                  <h2 className="text-base font-semibold text-slate-900">
+                    Compte Google
+                  </h2>
+                  <p className="mt-0.5 text-xs text-slate-500">
+                    Liez votre compte pour une connexion rapide en un clic.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5">
+                <LinkGoogleAccountButton />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Colonne Droite : Sécurité & Authentification */}
+        <div className="space-y-6 lg:col-span-1">
+          <ChangeEmailForm />
+          <ChangePasswordForm />
+        </div>
+      </div>
+    </div>
   );
 }

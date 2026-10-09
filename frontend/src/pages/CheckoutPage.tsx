@@ -53,7 +53,9 @@ export default function CheckoutPage() {
 
     await createOrder();
 
-    toast.success("Commande créée avec succès.");
+    toast.success(
+      "Commande créée avec succès. Votre panier a été vidé.",
+    );
 
     navigate("/dashboard");
   } catch (error: unknown) {

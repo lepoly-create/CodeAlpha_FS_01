@@ -1,4 +1,4 @@
-import { ArrowRight, Package } from "lucide-react";
+import { ArrowRight, Package, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,58 +13,60 @@ import { formatPrice } from "@/lib/format-price";
 interface RecommendedProductsProps {
   products: DashboardProduct[];
   onViewProducts: () => void;
+  onSelectProduct?: (productId: string) => void;
 }
 
 export default function RecommendedProducts({
   products,
   onViewProducts,
+  onSelectProduct,
 }: RecommendedProductsProps) {
   return (
-    <Card className="rounded-2xl border-neutral-200 bg-white shadow-none">
-      <CardHeader className="flex flex-row items-center justify-between gap-4 px-6 py-5">
+    <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm">
+      <CardHeader className="flex flex-row items-center justify-between gap-4 px-6 py-5 border-b border-slate-100">
         <div>
-          <CardTitle className="text-lg font-semibold text-neutral-950">
-            Vous pourriez aussi aimer
+          <CardTitle className="text-lg font-semibold text-slate-900">
+            Recommandé pour vous
           </CardTitle>
-
-          <p className="mt-1 text-sm text-neutral-500">
-            Découvrez quelques produits qui pourraient vous intéresser.
+          <p className="mt-0.5 text-xs text-slate-500">
+            Une sélection d'articles basée sur les nouveautés du catalogue.
           </p>
         </div>
 
         <Button
           variant="ghost"
           onClick={onViewProducts}
-          className="hidden rounded-xl sm:flex"
+          className="hidden rounded-xl text-xs sm:text-sm text-slate-600 hover:bg-slate-100 sm:flex"
         >
-          Voir les produits
-          <ArrowRight className="ml-2 h-4 w-4" />
+          Tout le catalogue
+          <ArrowRight className="ml-1.5 h-4 w-4" />
         </Button>
       </CardHeader>
 
-      <CardContent>
+      <CardContent className="p-6">
         {products.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-10 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-neutral-100">
-              <Package className="h-5 w-5 text-neutral-400" />
+          <div className="flex flex-col items-center justify-center py-8 text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
+              <Package className="h-6 w-6" />
             </div>
 
-            <p className="mt-3 text-sm font-medium text-neutral-800">
-              Aucun produit à afficher
+            <p className="mt-3 text-sm font-semibold text-slate-900">
+              Aucune recommandation disponible
             </p>
 
-            <p className="mt-1 text-sm text-neutral-500">
-              Revenez bientôt pour découvrir nos produits.
+            <p className="mt-1 text-xs text-slate-500">
+              Revenez bientôt pour découvrir de nouveaux produits.
             </p>
           </div>
         ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 grid-cols-2 lg:grid-cols-4">
             {products.slice(0, 4).map((product) => (
               <div
                 key={product._id}
-                className="group overflow-hidden rounded-2xl border border-neutral-200 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+                onClick={() => onSelectProduct?.(product._id)}
+                className="group cursor-pointer overflow-hidden rounded-xl border border-slate-200/80 bg-white transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
               >
-                <div className="aspect-square overflow-hidden bg-neutral-100">
+                <div className="aspect-square relative overflow-hidden bg-slate-100">
                   {product.image ? (
                     <img
                       src={product.image}
@@ -73,17 +75,17 @@ export default function RecommendedProducts({
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
-                      <Package className="h-8 w-8 text-neutral-400" />
+                      <ShoppingBag className="h-8 w-8 text-slate-300" />
                     </div>
                   )}
                 </div>
 
-                <div className="p-4">
-                  <h3 className="truncate text-sm font-semibold text-neutral-950">
+                <div className="p-3.5 space-y-1">
+                  <h3 className="truncate text-xs font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">
                     {product.name}
                   </h3>
 
-                  <p className="mt-2 text-sm font-bold text-neutral-950">
+                  <p className="text-sm font-bold text-slate-900">
                     {formatPrice(product.price)}
                   </p>
                 </div>
@@ -96,7 +98,7 @@ export default function RecommendedProducts({
           <Button
             variant="outline"
             onClick={onViewProducts}
-            className="w-full rounded-xl"
+            className="w-full rounded-xl border-slate-200 text-xs"
           >
             Voir tous les produits
             <ArrowRight className="ml-2 h-4 w-4" />

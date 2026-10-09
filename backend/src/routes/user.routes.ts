@@ -1,51 +1,191 @@
 import { Router } from "express";
 
 import {
-    getProfile,
-    updateProfile,
-    changePassword,
-    updateProfileImage,
-    removeProfileImage
+    register,
+    login,
+    verifyEmailController,
+    resendVerification,
+    googleLogin,
+    requestPasswordResetController,
+    resetPasswordController,
+    verifyEmailChangeController,
+} from "../controllers/auth.controllers";
+
+import {
+    getMyProfileController,
+    updateMyProfileController,
+    changeMyPasswordController,
+    uploadMyProfileImageController,
+    requestEmailChangeController,
+    linkGoogleAccountController,
 } from "../controllers/user.controllers";
 
+import {
+    authMiddleware,
+} from "../middleware/auth.middleware";
+
+import {
+    authorizeRoles,
+} from "../middleware/role.middleware";
+
+import {
+    validate,
+} from "../middleware/validate.middleware";
+
 import upload from "../middleware/upload.middleware";
-import { authMiddleware } from "../middleware/auth.middleware";
-import { validate } from "../middleware/validate.middleware";
-import { updateProfileSchema, changePasswordSchema } from "../schemas/user.schemas";
+
+import {
+    updateProfileSchema,
+    changePasswordSchema,
+    requestEmailChangeSchema,
+} from "../schemas/user.schemas";
+
+import {
+    registerSchema,
+    loginSchema,
+    verifyEmailSchema,
+    resendVerificationSchema,
+    googleLoginSchema,
+    forgotPasswordSchema,
+    resetPasswordSchema,
+    verifyEmailChangeSchema,
+} from "../schemas/auth.schemas";
 
 const router = Router();
 
 router.get(
     "/me",
     authMiddleware,
-    getProfile
+    getMyProfileController,
 );
 
 router.put(
     "/me",
     authMiddleware,
     validate(updateProfileSchema),
-    updateProfile
+    updateMyProfileController,
 );
 
 router.put(
     "/me/password",
     authMiddleware,
     validate(changePasswordSchema),
-    changePassword
+    changeMyPasswordController,
 );
 
 router.put(
     "/me/avatar",
     authMiddleware,
     upload.single("profileImage"),
-    updateProfileImage
+    uploadMyProfileImageController,
 );
 
-router.delete(
-    "/me/avatar",
+router.post(
+    "/me/email-change",
     authMiddleware,
-    removeProfileImage
+    validate(requestEmailChangeSchema),
+    requestEmailChangeController,
+);
+
+router.post(
+    "/me/google-link",
+    authMiddleware,
+    linkGoogleAccountController,
+);
+
+router.post(
+    "/register",
+    validate(registerSchema),
+    register,
+);
+
+router.post(
+    "/login",
+    validate(loginSchema),
+    login,
+);
+
+router.post(
+    "/google",
+    validate(googleLoginSchema),
+    googleLogin,
+);
+
+router.post(
+    "/verify-email",
+    validate(verifyEmailSchema),
+    verifyEmailController,
+);
+
+router.post(
+    "/resend-verification",
+    validate(
+        resendVerificationSchema,
+    ),
+    resendVerification,
+);
+
+router.post(
+    "/forgot-password",
+    validate(
+        forgotPasswordSchema,
+    ),
+    requestPasswordResetController,
+);
+
+router.post(
+    "/reset-password",
+    validate(
+        resetPasswordSchema,
+    ),
+    resetPasswordController,
+);
+
+router.post(
+    "/verify-email-change",
+    validate(
+        verifyEmailChangeSchema,
+    ),
+    verifyEmailChangeController,
+);
+
+router.get(
+    "/profile",
+    authMiddleware,
+    (req, res) => {
+        res.json({
+            success: true,
+            user: req.user,
+        });
+    },
+);
+
+router.get(
+    "/admin-test",
+    authMiddleware,
+    authorizeRoles("admin"),
+    (req, res) => {
+        res.json({
+            success: true,
+            message:
+                "Bienvenue administrateur",
+            user: req.user,
+        });
+    },
+);
+
+router.get(
+    "/customer-test",
+    authMiddleware,
+    authorizeRoles("customer"),
+    (req, res) => {
+        res.json({
+            success: true,
+            message:
+                "Bienvenue client",
+            user: req.user,
+        });
+    },
 );
 
 export default router;

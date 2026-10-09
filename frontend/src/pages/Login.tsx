@@ -1,255 +1,275 @@
-import { useState } from "react";
-import { useAuth } from "@/contexts/useAuth";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LockKeyhole, Mail } from "lucide-react";
-import styled from "styled-components";
+import {
+  Mail,
+  Loader2,
+  AlertCircle,
+  Eye,
+  EyeOff,
+  Sparkles,
+} from "lucide-react";
+import axios from "axios";
 
+import { useAuth } from "@/contexts/useAuth";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import GoogleLoginButton from "@/components/auth/GoogleLoginButton";
 
-
-type FloatingFieldProps = {
-  id: string;
-  label: string;
-  type: string;
-  value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  
-  icon: React.ReactNode;
+// Helper pour extraire proprement les messages d'erreur API
+const parseAuthError = (error: unknown): string => {
+  if (axios.isAxiosError<{ message?: string }>(error)) {
+    return (
+      error.response?.data?.message ||
+      "Une erreur serveur est survenue. Veuillez réessayer."
+    );
+  }
+  if (error instanceof Error) return error.message;
+  return "Email ou mot de passe incorrect.";
 };
-
-function FloatingField({
-  id,
-  label,
-  type,
-  value,
-  onChange,
-  
-  icon,
-}: FloatingFieldProps) {
-  return (
-    <FloatingFieldRoot>
-      <div className="form-control">
-        <input
-          id={id}
-          type={type}
-          value={value}
-          onChange={onChange}
-          
-          placeholder=" "
-          required
-        />
-        <label htmlFor={id}>
-          {label.split("").map((character, index) => (
-            <span
-              key={`${id}-${character}-${index}`}
-              style={{ transitionDelay: `${index * 50}ms` }}
-            >
-              {character}
-            </span>
-          ))}
-        </label>
-
-        <div className="field-icon">{icon}</div>
-      </div>
-    </FloatingFieldRoot>
-  );
-}
 
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
 
+  // États du formulaire
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubmit = async (
-  event: React.SyntheticEvent<HTMLFormElement>,
-) => {
-  event.preventDefault();
+  const handleSubmit = async (event: React.SyntheticEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (loading) return;
 
-  setError("");
-  setLoading(true);
+    setError("");
+    setLoading(true);
 
-  try {
-    const user = await login(email, password);
+    const cleanEmail = email.trim().toLowerCase();
 
-    navigate(user.role === "admin" ? "/admin" : "/dashboard");
-  } catch (error) {
-    console.error(error);
+    try {
+      const user = await login(cleanEmail, password);
 
-    setError("Email ou mot de passe incorrect.");
-  } finally {
-    setLoading(false);
-  }
-};
+      // Si "Se souvenir de moi" est coché, vous pouvez gérer un token local persistant ici si besoin
+      if (rememberMe) {
+        localStorage.setItem("remember_email", cleanEmail);
+      } else {
+        localStorage.removeItem("remember_email");
+      }
+
+      // Redirection selon le rôle
+      const targetPath = user?.role === "admin" ? "/admin" : "/dashboard";
+      navigate(targetPath, { replace: true });
+    } catch (err) {
+      console.error("[LoginError]:", err);
+      setError(parseAuthError(err));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
-    <main
-      className="flex min-h-screen items-center justify-center bg-cover bg-center px-4 py-6 sm:px-6"
-      style={{
-        backgroundImage:
-          "url('/images/image.png')",
-      }}
-    >
-      <Card className="w-full max-w-xl rounded-xl border border-black/50 bg-black/40 p-4 text-white shadow-2xl backdrop-blur-xl sm:p-6">
-        <div className="mx-auto w-full max-w-sm">
-          <h1 className="mb-10 text-center text-3xl font-bold sm:mb-16 sm:text-4xl">
-            LOGIN
-          </h1>
+    <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-zinc-950 px-4 py-6 sm:px-6 lg:p-8">
+      {/* 1. Image de fond principale avec superposition sombre */}
+      <div
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat transition-transform duration-1000 scale-105"
+        style={{ backgroundImage: "url('/images/image.png')" }}
+      >
+        {/* Overlay sombre dégradé pour garantir un contraste parfait (A11y) */}
+        <div className="absolute inset-0 bg-gradient-to-tr from-black/80 via-black/60 to-black/40 backdrop-blur-[2px]" />
+      </div>
 
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-3"
-          >
-            {/* Email */}
-            <div className="space-y-1">
-              <FloatingField
-                id="email"
-                type="email"
-                value={email}
-                onChange={(event) =>
-                  setEmail(event.target.value)
-                }
-                
-                label="Email"
-                icon={
-                  <Mail className="h-6 w-6" />
-                }
-              />
+      {/* 2. Container principal (Split-screen sur Desktop, Carte centrale sur Mobile) */}
+      <div className="relative z-10 flex w-full max-w-[1100px] min-h-[640px] overflow-hidden rounded-3xl border border-white/15 bg-black/40 shadow-2xl backdrop-blur-2xl transition-all">
+        
+        {/* --- PANNEAU GAUCHE : Branding & Ambiance (Masqué sur mobile, visible dès lg:) --- */}
+        <div className="relative hidden w-1/2 flex-col justify-between p-12 text-white lg:flex">
+          {/* Subtle gradient overlay interne */}
+          <div className="absolute inset-0 -z-10 bg-gradient-to-b from-cyan-500/10 via-transparent to-black/60" />
+
+          {/* Logo / Brand Header */}
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/20 border border-cyan-400/30 text-cyan-400 backdrop-blur-md">
+              <Sparkles className="h-5 w-5" />
             </div>
+            <span className="text-xl font-bold tracking-wider uppercase text-white">
+              MarketElectro
+            </span>
+          </div>
 
-            {/* Password */}
-            <div className="space-y-1">
-              <FloatingField
-                id="password"
-                type="password"
-                value={password}
-                onChange={(event) =>
-                  setPassword(event.target.value)
-                }
-                
-                label="Password"
-                icon={
-                  <LockKeyhole className="h-6 w-6" />
-                }
-              />
+          {/* Message de bienvenue inspirant */}
+          <div className="space-y-4">
+            <h2 className="text-4xl font-extrabold leading-tight tracking-tight text-white drop-shadow-md">
+              Propulsez votre expérience <br />
+              <span className="bg-gradient-to-r from-cyan-400 to-teal-200 bg-clip-text text-transparent">
+                e-commerce.
+              </span>
+            </h2>
+            <p className="max-w-md text-base text-zinc-300 leading-relaxed font-light">
+              Connectez-vous pour gérer vos commandes, découvrir nos nouveautés high-tech et profiter d'offres exclusives.
+            </p>
+          </div>
 
-              <div className="mt-2 text-right">
-                <button
-                  type="button"
-                  className="text-sm text-white/80 hover:text-white hover:underline"
-                >
-                  Forgot Password
-                </button>
-              </div>
-            </div>
-
-            {/* Remember me */}
-            <div className="flex items-center gap-3">
-              <Checkbox id="remember" />
-
-              <Label
-                htmlFor="remember"
-                className="text-sm font-semibold sm:text-base"
-              >
-                Remember Me
-              </Label>
-            </div>
-
-            {/* Error */}
-            {error && (
-              <p className="rounded-md bg-red-500/20 p-3 text-center text-sm text-red-200">
-                {error}
-              </p>
-            )}
-
-            {/* Submit */}
-            <Button
-              type="submit"
-              disabled={loading}
-              className="h-15 w-full rounded-xl bg-black text-lg font-semibold text-white hover:bg-black/80"
-            >
-              {loading ? "Connexion..." : "Login"}
-            </Button>
-          </form>
-
-          {/* Register */}
-          <div className="mt-4 mb-6 flex flex-wrap items-center justify-between gap-2 text-sm font-semibold text-white sm:mb-10">
-            <span>Vous n'avez pas encore de compte ?</span>
-
-            <Link
-              to="/register"
-              className="hover:underline"
-            >
-              Inscription
-            </Link>
+          {/* Footer Branding */}
+          <div className="text-xs text-zinc-400 font-medium">
+            © {new Date().getFullYear()} MarketElectro Inc. Tous droits réservés.
           </div>
         </div>
-      </Card>
+
+        {/* --- PANNEAU DROIT : Formulaire de Connexion --- */}
+        <div className="flex w-full flex-col justify-center p-6 sm:p-10 lg:w-1/2 lg:p-12 lg:border-l lg:border-white/10">
+          <div className="mx-auto w-full max-w-md">
+            
+            {/* Header du formulaire */}
+            <header className="mb-8 text-left">
+              <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+                Bienvenue !
+              </h1>
+              <p className="mt-2 text-sm text-zinc-300 font-normal">
+                Veuillez saisir vos identifiants pour continuer.
+              </p>
+            </header>
+
+            <form onSubmit={handleSubmit} noValidate className="space-y-5">
+              
+              {/* CHAMP EMAIL */}
+              <div className="group relative">
+                <label
+                  htmlFor="email"
+                  className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-1.5"
+                >
+                  E-mail
+                </label>
+                <div className="relative flex items-center">
+                  <input
+                    id="email"
+                    type="email"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="nom@exemple.com"
+                    autoComplete="email"
+                    className="w-full border-b-2 border-white/30 bg-white/5 px-3 py-3 pr-10 text-base text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-cyan-400 focus:bg-white/10 focus:ring-0 rounded-t-lg"
+                  />
+                  <Mail className="pointer-events-none absolute right-3 h-5 w-5 text-zinc-400 group-focus-within:text-cyan-400 transition-colors" />
+                </div>
+              </div>
+
+              {/* CHAMP MOT DE PASSE */}
+              <div className="group relative">
+                <label
+                  htmlFor="password"
+                  className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-1.5"
+                >
+                  Mot de passe
+                </label>
+                <div className="relative flex items-center">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    autoComplete="current-password"
+                    className="w-full border-b-2 border-white/30 bg-white/5 px-3 py-3 pr-10 text-base text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-cyan-400 focus:bg-white/10 focus:ring-0 rounded-t-lg"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-3 rounded-md p-1 text-zinc-400 hover:text-white focus:outline-none focus:ring-1 focus:ring-cyan-400 transition-colors"
+                    aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              {/* OPTIONS : Remember Me + Forgot Password */}
+              <div className="flex items-center justify-between pt-1">
+                <label className="flex items-center gap-2 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)}
+                    className="h-4 w-4 rounded border-white/30 bg-white/10 text-cyan-500 focus:ring-cyan-400 focus:ring-offset-0 cursor-pointer accent-cyan-500"
+                  />
+                  <span className="text-xs font-medium text-zinc-300 hover:text-white transition-colors">
+                    Se souvenir de moi
+                  </span>
+                </label>
+
+                <Link
+                  to="/forgot-password"
+                  className="text-xs font-medium text-cyan-400 transition-colors hover:text-cyan-300 hover:underline focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                >
+                  Mot de passe oublié ?
+                </Link>
+              </div>
+
+              {/* MESSAGE D'ERREUR */}
+              {error && (
+                <div
+                  role="alert"
+                  aria-live="polite"
+                  className="flex items-center gap-2.5 rounded-xl border border-red-500/30 bg-red-500/15 p-3.5 text-xs font-medium text-red-200 backdrop-blur-md"
+                >
+                  <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+                  <span>{error}</span>
+                </div>
+              )}
+
+              {/* BOUTON SE CONNECTER */}
+              <Button
+                type="submit"
+                disabled={loading}
+                className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-cyan-500 text-base font-bold text-black transition-all duration-200 hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/25 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 className="h-5 w-5 animate-spin text-black" />
+                    <span>Connexion...</span>
+                  </>
+                ) : (
+                  "Se connecter"
+                )}
+              </Button>
+
+              {/* SÉPARATEUR OU */}
+              <div className="relative my-6 text-center">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-white/10" />
+                </div>
+                <span className="relative bg-transparent px-3 text-xs uppercase tracking-widest text-zinc-400 font-semibold">
+                  ou
+                </span>
+              </div>
+
+              {/* GOOGLE SSO */}
+              <div className="flex justify-center">
+                <GoogleLoginButton text="continue_with" onError={setError} />
+              </div>
+            </form>
+
+            {/* FOOTER : Créer un compte */}
+            <footer className="mt-8 text-center text-xs font-medium text-zinc-300">
+              <span>Vous n'avez pas de compte ? </span>
+              <Link
+                to="/register"
+                className="font-bold text-cyan-400 transition-colors hover:text-cyan-300 hover:underline focus:outline-none focus:ring-1 focus:ring-cyan-400"
+              >
+                Inscrivez-vous ici
+              </Link>
+            </footer>
+
+          </div>
+        </div>
+
+      </div>
     </main>
   );
 }
-
-const FloatingFieldRoot = styled.div`
-  position: relative;
-
-  .form-control {
-    position: relative;
-    margin: 10px 0 40px;
-    width: 100%;
-  }
-
-  .form-control input {
-    background-color: transparent;
-    border: 0;
-    border-bottom: 2px rgba(255, 255, 255, 0.6) solid;
-    display: block;
-    width: 100%;
-    padding: 10px 0;
-    padding-right: 5rem;
-    font-size: 18px;
-    color: #fff;
-    outline: 0;
-  }
-
-  .form-control input:focus,
-  .form-control input:not(:placeholder-shown) {
-    border-bottom-color: lightblue;
-  }
-
-  .form-control label {
-    position: absolute;
-    top: 15px;
-    left: 0;
-    pointer-events: none;
-  }
-
-  .form-control label span {
-    display: inline-block;
-    font-size: 18px;
-    min-width: 5px;
-    color: #fff;
-    transition: 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  }
-
-  .form-control input:focus + label span,
-  .form-control input:not(:placeholder-shown) + label span {
-    color: lightblue;
-    transform: translateY(-30px);
-  }
-
-  .field-icon {
-    position: absolute;
-    right: 0.5rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #fff;
-    pointer-events: none;
-  }
-`;

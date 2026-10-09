@@ -1,5 +1,4 @@
-import { Heart, SlidersHorizontal } from "lucide-react";
-
+import { Heart} from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ProductFiltersProps {
@@ -14,59 +13,60 @@ export default function ProductFilters({
   onCategoryChange,
 }: ProductFiltersProps) {
   return (
-    <div className="flex items-center gap-3 overflow-x-auto pb-2">
+    <div className="flex items-center gap-2 overflow-x-auto pb-1 pt-1 no-scrollbar scroll-smooth">
+      {/* Bouton Tout */}
       <Button
-        variant={
+        variant={selectedCategory === "all" ? "default" : "outline"}
+        size="sm"
+        className={`shrink-0 cursor-pointer rounded-xl text-xs font-medium transition-all ${
           selectedCategory === "all"
-            ? "default"
-            : "outline"
-        }
-        className="shrink-0 cursor-pointer rounded-full"
+            ? "bg-slate-900 text-white shadow-md"
+            : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+        }`}
         onClick={() => onCategoryChange("all")}
       >
-        All
+        Tous les produits
       </Button>
 
-      {categories.map((category) => (
-        <Button
-          key={category}
-          variant={
-            selectedCategory === category
-              ? "default"
-              : "outline"
-          }
-          className="shrink-0 cursor-pointer rounded-full"
-          onClick={() => onCategoryChange(category)}
-        >
-          {category}
-        </Button>
-      ))}
+      {/* Catégories dynamiques */}
+      {categories.map((cat) => {
+        const isActive = selectedCategory === cat;
+        return (
+          <Button
+            key={cat}
+            variant={isActive ? "default" : "outline"}
+            size="sm"
+            className={`shrink-0 cursor-pointer rounded-xl text-xs font-medium capitalize transition-all ${
+              isActive
+                ? "bg-slate-900 text-white shadow-md"
+                : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+            }`}
+            onClick={() => onCategoryChange(cat)}
+          >
+            {cat}
+          </Button>
+        );
+      })}
 
+      {/* Filtre Favoris */}
       <Button
-        variant={
-          selectedCategory === "favorites" ? "default" : "outline"
-        }
-        className="shrink-0 cursor-pointer rounded-full"
+        variant={selectedCategory === "favorites" ? "default" : "outline"}
+        size="sm"
+        className={`shrink-0 cursor-pointer rounded-xl text-xs font-medium transition-all ${
+          selectedCategory === "favorites"
+            ? "bg-red-500 text-white border-red-500 shadow-md hover:bg-red-600"
+            : "bg-white text-slate-600 border-slate-200 hover:bg-slate-50"
+        }`}
         onClick={() => onCategoryChange("favorites")}
       >
         <Heart
-          className={`mr-2 h-4 w-4 ${
-            selectedCategory === "favorites"
-              ? "fill-current"
-              : ""
+          className={`mr-1.5 h-3.5 w-3.5 ${
+            selectedCategory === "favorites" ? "fill-white" : "text-red-500"
           }`}
         />
-        Favorites
-          
+        Favoris
       </Button>
 
-      <Button
-        variant="outline"
-        size="icon"
-        className="ml-auto cursor-pointer shrink-0 rounded-full"
-      >
-        <SlidersHorizontal className="h-5 w-5" />
-      </Button>
     </div>
   );
 }
