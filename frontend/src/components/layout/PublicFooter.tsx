@@ -135,8 +135,18 @@ export default function PublicFooter() {
             © {new Date().getFullYear()} MarketElectro. Tous droits réservés.
           </p>
           <div className="flex gap-6 text-xs text-slate-500">
-            <span className="hover:text-slate-300 cursor-pointer">Conditions Générales</span>
-            <span className="hover:text-slate-300 cursor-pointer">Politique de Confidentialité</span>
+            <Link
+              to="/terms"
+              className="transition-colors hover:text-slate-300"
+            >
+              Conditions Générales
+            </Link>
+            <Link
+              to="/privacy-policy"
+              className="transition-colors hover:text-slate-300"
+            >
+              Politique de Confidentialité
+            </Link>
           </div>
         </div>
 

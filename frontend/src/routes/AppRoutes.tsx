@@ -13,9 +13,11 @@ import ForgotPassword from "@/pages/ForgotPassword";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
 import Products from "@/pages/Products";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import Profile from "@/pages/Profile";
 import Register from "@/pages/Register";
 import ResetPassword from "@/pages/ResetPassword";
+import TermsOfUse from "@/pages/TermsOfUse";
 import VerifyEmail from "@/pages/VerifyEmail";
 import VerifyEmailChange from "@/pages/VerifyEmailChange";
 
@@ -45,6 +47,8 @@ export default function AppRoutes() {
           les favoris/panier déjà implémentés.
         */}
         <Route path="/products" element={<Products />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms" element={<TermsOfUse />} />
       </Route>
 
       {/* ============================================ */}
