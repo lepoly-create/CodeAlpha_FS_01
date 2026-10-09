@@ -44,7 +44,7 @@ export default function AdminStoreSettings() {
     loadSettings();
   }, []);
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
 
     if (!storeName.trim()) {

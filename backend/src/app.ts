@@ -75,15 +75,52 @@ const globalLimiter = rateLimit({
 });
 
 const authLimiter = rateLimit({
-  windowMs: 30 * 60 * 1000, // 15 minutes
-  max: isProd ? 50 : 200, // limite souple en dev
+  windowMs: 30 * 60 * 1000,
+  max: isProd ? 50 : 200,
   message: {
     success: false,
-    message: "Trop de tentatives de connexion ou d'inscription. Veuillez réessayer dans 15 minutes."
+    message:
+      "Trop de tentatives. Veuillez réessayer plus tard."
   },
   standardHeaders: true,
   legacyHeaders: false,
 });
+
+const emailActionLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: isProd ? 10 : 100,
+  message: {
+    success: false,
+    message:
+      "Trop de demandes. Veuillez réessayer plus tard."
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+const verificationLimiter =
+    rateLimit({
+        windowMs:
+            15 * 60 * 1000,
+        max: isProd ? 10 : 100,
+        message: {
+            success: false,
+            message:
+                "Trop de demandes de vérification. Veuillez réessayer plus tard.",
+        },
+        standardHeaders: true,
+        legacyHeaders: false,
+    });
+
+app.use(
+    "/api/auth/verify-email",
+    verificationLimiter,
+);
+
+app.use(
+    "/api/auth/resend-verification",
+    verificationLimiter,
+);
 
 // Appliquer le limiter global sur toutes les requêtes /api
 app.use("/api", globalLimiter);
@@ -101,6 +138,41 @@ app.use("/api/favorites", favoriteRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/admin", adminRoutes);
+
+app.use(
+  "/api/auth/google",
+  authLimiter,
+);
+
+app.use(
+  "/api/auth/verify-email",
+  emailActionLimiter,
+);
+
+app.use(
+  "/api/auth/resend-verification",
+  emailActionLimiter,
+);
+
+app.use(
+  "/api/auth/forgot-password",
+  emailActionLimiter,
+);
+
+app.use(
+  "/api/auth/reset-password",
+  emailActionLimiter,
+);
+
+app.use(
+  "/api/auth/verify-email-change",
+  emailActionLimiter,
+);
+
+app.use(
+  "/api/users/me/email-change",
+  emailActionLimiter,
+);
 
 app.use("/api/messages", messageRoutes);
 

@@ -26,15 +26,12 @@ export default function ProfileImageUpload({
     .slice(0, 2)
     .toUpperCase();
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-
     if (!file) return;
 
     if (!file.type.startsWith("image/")) {
-      toast.error("Veuillez sélectionner une image.");
+      toast.error("Veuillez sélectionner un fichier image valide.");
       return;
     }
 
@@ -45,23 +42,17 @@ export default function ProfileImageUpload({
 
     try {
       setIsUploading(true);
-
       const updatedUser = await uploadProfileImage(file);
 
       if (updatedUser.profileImage) {
         onUpdated(updatedUser.profileImage);
       }
-
       toast.success("Photo de profil mise à jour.");
     } catch (error) {
       console.error(error);
-
-      toast.error(
-          "Impossible de mettre à jour la photo."
-      );
+      toast.error("Impossible de mettre à jour la photo.");
     } finally {
       setIsUploading(false);
-
       if (fileInputRef.current) {
         fileInputRef.current.value = "";
       }
@@ -70,7 +61,7 @@ export default function ProfileImageUpload({
 
   return (
     <div className="relative shrink-0">
-      <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-neutral-100 text-3xl font-semibold text-neutral-600 ring-4 ring-white shadow-md">
+      <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-slate-100 text-2xl font-bold text-slate-700 ring-4 ring-white shadow-md sm:h-32 sm:w-32 sm:text-3xl">
         {profileImage ? (
           <img
             src={profileImage}
@@ -86,15 +77,15 @@ export default function ProfileImageUpload({
         type="button"
         size="icon"
         variant="secondary"
-        className="absolute bottom-0 right-0 h-9 w-9 rounded-full border-2 border-white shadow-md"
+        className="absolute bottom-1 right-1 h-9 w-9 rounded-full border-2 border-white shadow-md hover:bg-slate-200 transition-transform active:scale-95"
         onClick={() => fileInputRef.current?.click()}
         disabled={isUploading}
         aria-label="Modifier la photo de profil"
       >
         {isUploading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
+          <Loader2 className="h-4 w-4 animate-spin text-slate-700" />
         ) : (
-          <Camera className="h-4 w-4" />
+          <Camera className="h-4 w-4 text-slate-700" />
         )}
       </Button>
 

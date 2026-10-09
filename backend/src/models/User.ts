@@ -1,20 +1,34 @@
-import { Schema, model, Document, Types } from "mongoose";
+import {
+    Schema,
+    model,
+    Document,
+    Types
+} from "mongoose";
 
 export interface IUser extends Document {
     fullName: string;
     email: string;
-    password: string;
+    password?: string;
     role: "customer" | "admin";
-    profileImage?: string | null ;
+
+    profileImage?: string | null;
     profileImagePublicId: string | null;
+
     favoriteProducts: Types.ObjectId[];
+
+    emailVerified: boolean;
+    emailVerifiedAt: Date | null;
+
+    googleId?: string | null;
+    authProvider: "local" | "google" | "both";
 }
 
 const userSchema = new Schema<IUser>(
     {
         fullName: {
             type: String,
-            required: true
+            required: true,
+            trim: true
         },
 
         email: {
@@ -27,7 +41,8 @@ const userSchema = new Schema<IUser>(
 
         password: {
             type: String,
-            required: true
+            required: false,
+            select: false,
         },
 
         role: {
@@ -35,7 +50,13 @@ const userSchema = new Schema<IUser>(
             enum: ["customer", "admin"],
             default: "customer"
         },
+
         profileImage: {
+            type: String,
+            default: null
+        },
+
+        profileImagePublicId: {
             type: String,
             default: null
         },
@@ -49,9 +70,28 @@ const userSchema = new Schema<IUser>(
             ],
             default: []
         },
-        profileImagePublicId: {
-            type: String,
+
+        emailVerified: {
+            type: Boolean,
+            default: false
+        },
+
+        emailVerifiedAt: {
+            type: Date,
             default: null
+        },
+
+        googleId: {
+            type: String,
+            default: null,
+            unique: true,
+            sparse: true,
+        },
+
+        authProvider: {
+            type: String,
+            enum: ["local", "google", "both"],
+            default: "local"
         }
     },
     {
@@ -59,4 +99,7 @@ const userSchema = new Schema<IUser>(
     }
 );
 
-export default model<IUser>("User", userSchema);
+export default model<IUser>(
+    "User",
+    userSchema
+);

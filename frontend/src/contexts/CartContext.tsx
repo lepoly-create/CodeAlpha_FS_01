@@ -27,6 +27,7 @@ interface CartContextValue {
   loading: boolean;
 
   refreshCart: () => Promise<void>;
+  clearCart: () => void;
 
   addToCart: (
     productId: string,
@@ -148,6 +149,13 @@ export function CartProvider({
     [],
   );
 
+  const clearCart = useCallback(() => {
+    requestIdRef.current += 1;
+    setCart((currentCart) =>
+      currentCart ? { ...currentCart, items: [] } : currentCart,
+    );
+  }, []);
+
   /*
    * Modifier la quantité
    */
@@ -219,6 +227,7 @@ export function CartProvider({
       cartCount,
       loading,
       refreshCart,
+      clearCart,
       addToCart,
       updateQuantity,
       removeItem,
@@ -228,6 +237,7 @@ export function CartProvider({
       cartCount,
       loading,
       refreshCart,
+      clearCart,
       addToCart,
       updateQuantity,
       removeItem,

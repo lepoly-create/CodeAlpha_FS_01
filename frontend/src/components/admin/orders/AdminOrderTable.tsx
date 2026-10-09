@@ -80,11 +80,11 @@ export default function AdminOrderTable({
                 <td className="px-4 py-4">
                   <div>
                     <p className="font-medium">
-                      {order.user.fullName}
+                      {order.user?.fullName || "Client inconnu"}
                     </p>
 
                     <p className="text-xs text-muted-foreground">
-                      {order.user.email}
+                      {order.user?.email || "Email indisponible"}
                     </p>
                   </div>
                 </td>

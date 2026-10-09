@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import { Save } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/useAuth";
 
 import {
   getAdminProfile,
@@ -47,6 +48,7 @@ const getErrorMessage = (error: unknown, fallback: string) => {
 export default function AdminAccountSettings({
   onProfileUpdated,
 }: AdminAccountSettingsProps) {
+  const { user } = useAuth();
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -86,13 +88,16 @@ export default function AdminAccountSettings({
 
       const updatedUser = await updateAdminProfile({ fullName, email });
 
+      if (user) {
         onProfileUpdated({
-        id: updatedUser._id,
-        fullName: updatedUser.fullName,
-        email: updatedUser.email,
-        role: updatedUser.role,
-        profileImage: updatedUser.profileImage,
+          ...user,
+          id: updatedUser._id,
+          fullName: updatedUser.fullName,
+          email: updatedUser.email,
+          role: updatedUser.role,
+          profileImage: updatedUser.profileImage,
         });
+      }
 
       toast.success(
         "Administrator profile updated successfully."

@@ -34,7 +34,7 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
 
       {/* Actions */}
       <div className="flex shrink-0 items-center gap-1 sm:gap-3">
-        <Button variant="ghost" size="icon" className="hidden h-10 w-10 sm:inline-flex" aria-label="Notifications">
+        <Button variant="ghost" size="icon" className="border-0 cursor-pointer hidden h-10 w-10 sm:inline-flex" aria-label="Notifications">
           <Bell className="h-6 w-6 stroke-[1.5]" />
         </Button>
 

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Check, Mail, UserRound, X, Loader2 } from "lucide-react";
+import { Check, Mail, UserRound, X, Loader2, Lock } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -7,10 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
-import {
-  updateMyProfile,
-  type UserProfile,
-} from "@/services/user.service";
+import { updateMyProfile, type UserProfile } from "@/services/user.service";
 
 interface ProfileInformationProps {
   user: UserProfile;
@@ -22,17 +19,14 @@ export default function ProfileInformation({
   onUpdated,
 }: ProfileInformationProps) {
   const [isEditing, setIsEditing] = useState(false);
-
   const [fullName, setFullName] = useState(user.fullName);
-  const [email, setEmail] = useState(user.email);
-
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handleSubmit = async (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (!fullName.trim() || !email.trim()) {
-      toast.error("Tous les champs sont requis.");
+    if (!fullName.trim()) {
+      toast.error("Le nom complet ne peut pas être vide.");
       return;
     }
 
@@ -41,17 +35,13 @@ export default function ProfileInformation({
     try {
       const updatedUser = await updateMyProfile({
         fullName: fullName.trim(),
-        email: email.trim(),
       });
 
       onUpdated(updatedUser);
-
-      toast.success("Profil mis à jour avec succès.");
-
+      toast.success("Informations mises à jour.");
       setIsEditing(false);
     } catch (error) {
       console.error("Erreur lors de la mise à jour du profil :", error);
-
       toast.error("Impossible de mettre à jour le profil.");
     } finally {
       setIsUpdating(false);
@@ -60,139 +50,123 @@ export default function ProfileInformation({
 
   const handleCancel = () => {
     setFullName(user.fullName);
-    setEmail(user.email);
     setIsEditing(false);
   };
 
   return (
-    <Card className="rounded-2xl border-neutral-200 bg-white shadow-sm">
+    <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm">
       <CardContent className="p-6">
         {/* Header */}
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
           <div>
-            <h2 className="text-xl font-semibold tracking-tight">
+            <h2 className="text-lg font-semibold tracking-tight text-slate-900">
               Informations personnelles
             </h2>
-
-            <p className="mt-1 text-sm text-neutral-500">
-              Gérez les informations principales de votre compte.
+            <p className="mt-0.5 text-xs text-slate-500">
+              Vos coordonnées publiques et d'identification.
             </p>
           </div>
 
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-neutral-100">
-            <UserRound className="h-5 w-5 text-neutral-600" />
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+            <UserRound className="h-4 w-4" />
           </div>
         </div>
 
         {!isEditing ? (
-          <>
-            {/* Informations */}
-            <div className="mt-6 grid gap-5 sm:grid-cols-2">
-              <div>
-                <div className="mb-2 flex items-center gap-2 text-sm font-medium text-neutral-500">
-                  <UserRound className="h-4 w-4" />
-                  Nom complet
-                </div>
-
-                <div className="rounded-xl focus:border-0 border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-medium">
+          <div className="mt-5 space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2">
+              <div className="space-y-1.5">
+                <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
+                  <UserRound className="h-3.5 w-3.5" /> Nom complet
+                </span>
+                <div className="rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-900">
                   {user.fullName}
                 </div>
               </div>
 
-              <div>
-                <div className="mb-2 flex items-center gap-2 text-sm font-medium text-neutral-500">
-                  <Mail className="h-4 w-4" />
-                  Adresse email
-                </div>
-
-                <div className="rounded-xl focus:border-0 border border-neutral-200 bg-neutral-50 px-4 py-3 text-sm font-medium">
-                  {user.email}
+              <div className="space-y-1.5">
+                <span className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
+                  <Mail className="h-3.5 w-3.5" /> Adresse email
+                </span>
+                <div className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm font-medium text-slate-700">
+                  <span className="truncate">{user.email}</span>
+                  <Lock className="h-3.5 w-3.5 text-slate-400 shrink-0 ml-2" />
                 </div>
               </div>
             </div>
 
-            {/* Action */}
-            <div className="mt-6 flex justify-end">
+            <div className="flex justify-end pt-2">
               <Button
-                variant="default"
+                variant="outline"
                 onClick={() => {
                   setFullName(user.fullName);
-                  setEmail(user.email);
                   setIsEditing(true);
                 }}
-                className="cursor-pointer hover:bg-blue-700 hover:text-amber-50"
+                className="rounded-xl border-slate-200 hover:bg-slate-100 font-medium text-xs sm:text-sm"
               >
-                Modifier les informations
+                Modifier le profil
               </Button>
             </div>
-          </>
+          </div>
         ) : (
-          <form onSubmit={handleSubmit} className="mt-6 space-y-5">
-            <div className="grid gap-5 sm:grid-cols-2">
-              {/* Full name */}
+          <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+            <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="profile-fullName">
+                <Label htmlFor="profile-fullName" className="text-xs font-medium text-slate-700">
                   Nom complet
                 </Label>
-
                 <Input
                   id="profile-fullName"
                   value={fullName}
-                  onChange={(event) =>
-                    setFullName(event.target.value)
-                  }
+                  onChange={(e) => setFullName(e.target.value)}
                   disabled={isUpdating}
                   placeholder="Votre nom complet"
-                  className="h-10 rounded-xl focus:border-0"
+                  className="h-10 rounded-xl border-slate-200 focus-visible:ring-slate-950"
+                  required
                 />
               </div>
 
-              {/* Email */}
               <div className="space-y-2">
-                <Label htmlFor="profile-email">
-                  Adresse email
-                </Label>
-
+                <div className="flex items-center justify-between">
+                  <Label htmlFor="profile-email-readonly" className="text-xs font-medium text-slate-500">
+                    Adresse email
+                  </Label>
+                  <span className="text-[10px] text-slate-400">(Géré dans la section Email)</span>
+                </div>
                 <Input
-                  id="profile-email"
-                  type="email"
-                  value={email}
-                  onChange={(event) =>
-                    setEmail(event.target.value)
-                  }
-                  disabled={isUpdating}
-                  placeholder="votre@email.com"
-                  className="h-10 rounded-xl focus:border-0"
+                  id="profile-email-readonly"
+                  value={user.email}
+                  disabled
+                  className="h-10 rounded-xl border-slate-200 bg-slate-100 text-slate-500 cursor-not-allowed"
                 />
               </div>
             </div>
 
-            {/* Actions */}
-            <div className="flex justify-end gap-3">
+            <div className="flex justify-end gap-2 pt-2">
               <Button
                 type="button"
                 variant="ghost"
                 onClick={handleCancel}
                 disabled={isUpdating}
-                className="cursor-pointer hover:bg-red-700 hover:text-amber-50"
+                className="rounded-xl hover:bg-slate-100 text-slate-600 text-xs sm:text-sm"
               >
-                <X className="mr-2 h-4 w-4" />
+                <X className="mr-1.5 h-4 w-4" />
                 Annuler
               </Button>
 
               <Button
                 type="submit"
                 disabled={isUpdating}
-                className="cursor-pointer hover:bg-blue-600 hover:text-amber-50"
+                className="rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs sm:text-sm"
               >
                 {isUpdating ? (
                   <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
                     Enregistrement...
                   </>
                 ) : (
                   <>
-                    <Check className="mr-2 h-4 w-4" />
+                    <Check className="mr-1.5 h-4 w-4" />
                     Enregistrer
                   </>
                 )}

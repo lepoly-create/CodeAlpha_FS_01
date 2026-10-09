@@ -3,6 +3,7 @@ import {
   PanelLeft,
   Settings,
   ShoppingCart,
+  ClipboardList,
   Store,
   UserCircle,
 } from "lucide-react";
@@ -31,6 +32,11 @@ const customerNavigationItems = [
     label: "My Cart",
     icon: Store,
     path: "/cart",
+  },
+  {
+    label: "My Orders",
+    icon: ClipboardList,
+    path: "/orders",
   },
   {
     label: "Profile",
@@ -71,7 +77,7 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
     inset-y-0 left-0 z-50 flex w-[min(20rem,calc(100vw-2rem))]
      shrink-0 flex-col border-r border-neutral-200
       bg-white px-4 py-5 shadow-xl transition-transform 
-      duration-200 lg:sticky lg:z-auto lg:w-64 lg:translate-x-0
+      duration-200 lg:fixed lg:z-auto lg:w-64 lg:translate-x-0
        lg:shadow-none ${
       open ? "translate-x-0" : "-translate-x-full"
     }`}>

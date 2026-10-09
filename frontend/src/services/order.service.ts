@@ -46,3 +46,19 @@ export const createOrder = async (): Promise<OrderResponse["data"]> => {
 
   return response.data.data;
 };
+
+export const getMyOrders = async (): Promise<Order[]> => {
+  const response = await api.get<{ success: boolean; data: Order[] }>(
+    "/orders",
+  );
+
+  return response.data.data;
+};
+
+export const getMyOrder = async (orderId: string): Promise<Order> => {
+  const response = await api.get<{ success: boolean; data: Order }>(
+    `/orders/${orderId}`,
+  );
+
+  return response.data.data;
+};

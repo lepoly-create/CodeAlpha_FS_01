@@ -1,138 +1,143 @@
-import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { AlertCircle, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
 import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+
 import DashboardWelcome from "@/components/dashboard/DashboardWelcome";
 import DashboardStats from "@/components/dashboard/DashboardStats";
 import RecentOrders from "@/components/dashboard/RecentOrders";
 import AccountSummary from "@/components/dashboard/AccountSummary";
+import RecommendedProducts from "@/components/dashboard/RecommendedProducts";
 
 import {
   getUserDashboard,
   type UserDashboard,
 } from "@/services/dashboard.service";
-import RecommendedProducts from "@/components/dashboard/RecommendedProducts";
 
 export default function Dashboard() {
   const [dashboard, setDashboard] = useState<UserDashboard | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  useEffect(() => {
-    const loadDashboard = async () => {
-      try {
-        setLoading(true);
-        setError("");
 
-        const data = await getUserDashboard();
-
-        setDashboard(data);
-      } catch (error) {
-        console.error(
-          "Erreur lors du chargement du dashboard :",
-          error
-        );
-
-        setError(
-          "Impossible de charger votre tableau de bord."
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadDashboard();
+  const fetchDashboard = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const data = await getUserDashboard();
+      setDashboard(data);
+    } catch (err) {
+      console.error("Erreur chargement dashboard :", err);
+      setError("Impossible de charger les données de votre tableau de bord.");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
+  useEffect(() => {
+    fetchDashboard();
+  }, [fetchDashboard]);
+
+  /* Skeleton Loading */
   if (loading) {
     return (
-      <section className="space-y-8">
-        <div>
-          <div className="h-4 w-32 animate-pulse rounded bg-neutral-100" />
+      <section className="min-h-screen w-full bg-slate-50/60 p-4 sm:p-6 lg:p-8 space-y-6">
+        <div className="mx-auto max-w-7xl space-y-6">
+          {/* Welcome Banner Skeleton */}
+          <div className="h-56 w-full animate-pulse rounded-3xl bg-slate-200" />
 
-          <div className="mt-3 h-10 w-72 animate-pulse rounded bg-neutral-100" />
+          {/* Stats Skeleton */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <div
+                key={index}
+                className="h-28 animate-pulse rounded-2xl bg-slate-200"
+              />
+            ))}
+          </div>
 
-          <div className="mt-3 h-5 w-96 animate-pulse rounded bg-neutral-100" />
-        </div>
+          {/* Recent Orders + Account Summary Skeleton */}
+          <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+            <div className="h-80 animate-pulse rounded-2xl bg-slate-200" />
+            <div className="h-80 animate-pulse rounded-2xl bg-slate-200" />
+          </div>
 
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, index) => (
-            <div
-              key={index}
-              className="h-32 animate-pulse rounded-2xl bg-neutral-100"
-            />
-          ))}
-        </div>
-
-        <div className="grid gap-6 lg:grid-cols-3">
-          <div className="h-80 animate-pulse rounded-2xl bg-neutral-100 lg:col-span-2" />
-
-          <div className="h-80 animate-pulse rounded-2xl bg-neutral-100" />
+          {/* Recommended Skeleton */}
+          <div className="h-64 animate-pulse rounded-2xl bg-slate-200" />
         </div>
       </section>
     );
   }
 
+  /* Vue d'erreur */
   if (error || !dashboard) {
     return (
-      <section className="space-y-8">
-        <div>
-          <p className="text-sm font-medium uppercase tracking-widest text-neutral-500">
-            MarketElectro
-          </p>
+      <section className="min-h-screen w-full bg-slate-50/60 p-4 sm:p-6 lg:p-8 flex items-center justify-center">
+        <Card className="max-w-md w-full border-rose-200 bg-white shadow-xl rounded-2xl">
+          <CardContent className="flex flex-col items-center gap-4 p-8 text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-50 text-rose-600 border border-rose-100">
+              <AlertCircle className="h-7 w-7" />
+            </div>
 
-          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">
-            Tableau de bord
-          </h1>
+            <div className="space-y-1">
+              <h2 className="text-lg font-bold text-slate-900">
+                Oups ! Erreur de connexion
+              </h2>
+              <p className="text-xs text-slate-500">
+                {error || "Impossible de récupérer vos données pour le moment."}
+              </p>
+            </div>
 
-          <p className="mt-2 text-neutral-500">
-            Retrouvez ici un aperçu de votre activité.
-          </p>
-        </div>
-
-        <Card className="rounded-2xl border-red-200 bg-red-50">
-          <CardContent className="flex items-center gap-3 p-6 text-red-600">
-            <Loader2 className="h-5 w-5" />
-
-            <p>
-              {error || "Impossible de récupérer vos données."}
-            </p>
+            <Button
+              onClick={fetchDashboard}
+              className="mt-2 flex items-center gap-2 rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Réessayer
+            </Button>
           </CardContent>
         </Card>
       </section>
     );
   }
 
-  const { user, statistics } = dashboard;
+  const { user, statistics, recentOrders, recommendedProducts } = dashboard;
 
   return (
-    <section className="space-y-8">
-      {/* Header */}
-      <DashboardWelcome
-        user={user}
-        onExploreProducts={() => {
-            window.location.href = "/products";
-        }}
+    <section className="min-h-screen w-full bg-slate-50/60 p-4 sm:p-6 lg:p-8">
+      <div className="mx-auto max-w-7xl space-y-6">
+        {/* 1. Hero Welcome */}
+        <DashboardWelcome
+          user={user}
+          onExploreProducts={() => navigate("/products")}
         />
+
+        {/* 2. Key Stats */}
         <DashboardStats statistics={statistics} />
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
+
+        {/* 3. Orders + Account Grid */}
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px] items-stretch">
           <RecentOrders
-            orders={dashboard.recentOrders}
-            onViewAll={() => {}}
+            orders={recentOrders}
+            onViewAll={() => navigate("/orders")}
+            onViewOrderDetails={(id) => navigate(`/orders/${id}`)}
           />
 
           <AccountSummary
-            user={dashboard.user}
+            user={user}
             onViewProfile={() => navigate("/profile")}
           />
         </div>
-        <RecommendedProducts
-          products={dashboard.recommendedProducts}
-          onViewProducts={() => navigate("/products")}
-        />
-        
 
-      
+        {/* 4. Recommendations */}
+        <RecommendedProducts
+          products={recommendedProducts}
+          onViewProducts={() => navigate("/products")}
+          onSelectProduct={(id) => navigate(`/products/${id}`)}
+        />
+      </div>
     </section>
   );
 }

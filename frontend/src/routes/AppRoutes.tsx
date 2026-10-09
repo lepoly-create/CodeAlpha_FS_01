@@ -1,38 +1,91 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-import Products from "@/pages/Products";
-import AppLayout from "@/components/layout/AppLayout";
-import Dashboard from "@/pages/Dashboard";
-import Login from "@/pages/Login";
-import Register from "@/pages/Register";
-import ProtectedRoute from "./ProtectedRoute";
+import { Navigate, Route, Routes } from "react-router-dom";
+
+import AdminDashboard from "@/pages/admin/AdminDashboard";
+import AdminOrders from "@/pages/admin/AdminOrders";
+import AdminProducts from "@/pages/admin/AdminProducts";
+import AdminSettings from "@/pages/admin/AdminSettings";
+import AdminUsers from "@/pages/admin/AdminUsers";
+
 import CartPage from "@/pages/CartPage";
 import CheckoutPage from "@/pages/CheckoutPage";
+import Dashboard from "@/pages/Dashboard";
+import ForgotPassword from "@/pages/ForgotPassword";
+import Home from "@/pages/Home";
+import Login from "@/pages/Login";
+import Products from "@/pages/Products";
 import Profile from "@/pages/Profile";
+import Register from "@/pages/Register";
+import ResetPassword from "@/pages/ResetPassword";
+import VerifyEmail from "@/pages/VerifyEmail";
+import VerifyEmailChange from "@/pages/VerifyEmailChange";
+
+import AppLayout from "@/components/layout/AppLayout";
+import PublicLayout from "@/components/layout/PublicLayout";
+
 import AdminRoute from "./AdminRoute";
 import CustomerRoute from "./CustomerRoute";
-import AdminDashboard from "@/pages/admin/AdminDashboard";
-import AdminProducts from "@/pages/admin/AdminProducts";
-import AdminOrders from "@/pages/admin/AdminOrders";
-import AdminUsers from "@/pages/admin/AdminUsers";
-import AdminSettings from "@/pages/admin/AdminSettings";
+import ProtectedRoute from "./ProtectedRoute";
+
+import OrdersPage from "@/pages/OrdersPage";
 
 export default function AppRoutes() {
   return (
     <Routes>
 
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      {/* Pages publiques */}
+      {/* ============================================ */}
+      {/* ESPACE PUBLIC                               */}
+      {/* ============================================ */}
+
+      <Route element={<PublicLayout />}>
+        <Route path="/" element={<Home />} />
+
+        {/*
+          Pour l'instant, nous conservons ta page Products
+          existante telle quelle afin de ne pas casser
+          les favoris/panier déjà implémentés.
+        */}
+        <Route path="/products" element={<Products />} />
+      </Route>
+
+      {/* ============================================ */}
+      {/* AUTHENTIFICATION                            */}
+      {/* ============================================ */}
+
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
+      <Route
+        path="/verify-email"
+        element={<VerifyEmail />}
+      />
+
+      <Route
+        path="/forgot-password"
+        element={<ForgotPassword />}
+      />
+
+      <Route
+        path="/reset-password"
+        element={<ResetPassword />}
+      />
+
+      <Route
+        path="/verify-email-change"
+        element={<VerifyEmailChange />}
+      />
+
+        {/* ============================================ */}
+        {/* ESPACE CLIENT                               */}
+        {/* ============================================ */}
 
       {/* Pages protégées */}
       <Route element={<ProtectedRoute />}>
         <Route element={<CustomerRoute />}>
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/products" element={<Products />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/orders/:orderId" element={<OrdersPage />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
         </Route>
@@ -63,6 +116,15 @@ export default function AppRoutes() {
           />
         </Route>
       </Route>
+
+      {/* ============================================ */}
+      {/* FALLBACK                                    */}
+      {/* ============================================ */}
+
+      <Route
+        path="*"
+        element={<Navigate to="/" replace />}
+      />
     </Routes>
   );
 }

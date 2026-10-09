@@ -77,8 +77,20 @@ export const createOrder = async (
                 { session },
             );
 
-            cart.items = [];
+            cart.set("items", []);
             await cart.save({ session });
+
+            const persistedCart = await Cart.findOne({
+                _id: cart._id,
+                user: userId,
+            })
+                .session(session)
+                .select("items")
+                .lean();
+
+            if (!persistedCart || persistedCart.items.length !== 0) {
+                throw new Error("Impossible de vider le panier");
+            }
         });
 
         return createdOrder;

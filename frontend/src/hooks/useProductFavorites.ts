@@ -7,31 +7,60 @@ import {
   removeFavorite,
 } from "@/services/favorite.service";
 
+function getErrorStatus(error: unknown): number | undefined {
+  if (typeof error !== "object" || error === null) {
+    return undefined;
+  }
+
+  const errorRecord = error as Record<string, unknown>;
+  const response = errorRecord.response;
+
+  if (typeof response === "object" && response !== null) {
+    const responseStatus = (response as Record<string, unknown>).status;
+
+    if (typeof responseStatus === "number") {
+      return responseStatus;
+    }
+  }
+
+  return typeof errorRecord.status === "number"
+    ? errorRecord.status
+    : undefined;
+}
+
 export default function useProductFavorites() {
   const [favoriteIds, setFavoriteIds] = useState<string[]>([]);
   const [pendingFavoriteIds, setPendingFavoriteIds] = useState<string[]>([]);
 
   useEffect(() => {
+    let isMounted = true;
+
     const loadFavorites = async () => {
       try {
         const favorites = await getFavorites();
 
-        setFavoriteIds(
-          favorites.map((product) => product._id),
-        );
-      } catch (error) {
-        console.error(
-          "Erreur lors du chargement des favoris :",
-          error,
-        );
+        if (isMounted) {
+          setFavoriteIds(favorites.map((product) => product._id));
+        }
+      } catch (error: unknown) {
+        console.error("Erreur lors du chargement des favoris :", error);
 
-        toast.error(
-          "Impossible de charger vos favoris.",
-        );
+        // Détection du statut d'authentification (compatible Axios et Fetch)
+        const status = getErrorStatus(error);
+        const isUnauthorized = status === 401 || status === 403;
+
+        // Ne déclencher le toast d'erreur QUE si ce n'est PAS un problème d'authentification
+        if (!isUnauthorized && isMounted) {
+          toast.error("Impossible de charger vos favoris.");
+        }
       }
     };
 
-    loadFavorites();
+    void loadFavorites();
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   const addProductToFavorites = async (productId: string) => {
@@ -39,30 +68,25 @@ export default function useProductFavorites() {
       return;
     }
 
-    setPendingFavoriteIds((current) => [
-      ...current,
-      productId,
-    ]);
+    setPendingFavoriteIds((current) => [...current, productId]);
 
     try {
       await addFavorite(productId);
 
       setFavoriteIds((current) =>
-        current.includes(productId)
-          ? current
-          : [...current, productId],
+        current.includes(productId) ? current : [...current, productId],
       );
 
       toast.success("Produit ajouté aux favoris.");
-    } catch (error) {
-      console.error(
-        "Erreur lors de l'ajout aux favoris :",
-        error,
-      );
+    } catch (error: unknown) {
+      console.error("Erreur lors de l'ajout aux favoris :", error);
 
-      toast.error(
-        "Impossible d'ajouter ce produit aux favoris.",
-      );
+      const status = getErrorStatus(error);
+      if (status === 401 || status === 403) {
+        toast.error("Veuillez vous connecter pour ajouter des favoris.");
+      } else {
+        toast.error("Impossible d'ajouter ce produit aux favoris.");
+      }
     } finally {
       setPendingFavoriteIds((current) =>
         current.filter((id) => id !== productId),
@@ -75,10 +99,7 @@ export default function useProductFavorites() {
       return;
     }
 
-    setPendingFavoriteIds((current) => [
-      ...current,
-      productId,
-    ]);
+    setPendingFavoriteIds((current) => [...current, productId]);
 
     try {
       await removeFavorite(productId);
@@ -88,15 +109,15 @@ export default function useProductFavorites() {
       );
 
       toast.success("Produit retiré des favoris.");
-    } catch (error) {
-      console.error(
-        "Erreur lors de la suppression des favoris :",
-        error,
-      );
+    } catch (error: unknown) {
+      console.error("Erreur lors de la suppression des favoris :", error);
 
-      toast.error(
-        "Impossible de retirer ce produit des favoris.",
-      );
+      const status = getErrorStatus(error);
+      if (status === 401 || status === 403) {
+        toast.error("Veuillez vous connecter pour gérer vos favoris.");
+      } else {
+        toast.error("Impossible de retirer ce produit des favoris.");
+      }
     } finally {
       setPendingFavoriteIds((current) =>
         current.filter((id) => id !== productId),
