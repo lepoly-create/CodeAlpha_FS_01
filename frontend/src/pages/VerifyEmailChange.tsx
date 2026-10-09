@@ -103,12 +103,40 @@ export default function VerifyEmailChange() {
             "success",
           );
         } catch (
-          error: any
+          error: unknown
         ) {
+          const response =
+            typeof error === "object" &&
+            error !== null &&
+            "response" in error
+              ? (error as {
+                  response?: unknown;
+                }).response
+              : undefined;
+
+          const data =
+            typeof response === "object" &&
+            response !== null &&
+            "data" in response
+              ? (response as {
+                  data?: unknown;
+                }).data
+              : undefined;
+
+          const message =
+            typeof data === "object" &&
+            data !== null &&
+            "message" in data &&
+            typeof (data as {
+              message?: unknown;
+            }).message === "string"
+              ? (data as {
+                  message: string;
+                }).message
+              : "Lien invalide ou expiré.";
+
           setError(
-            error?.response?.data
-              ?.message ||
-              "Lien invalide ou expiré.",
+            message,
           );
 
           setStatus(

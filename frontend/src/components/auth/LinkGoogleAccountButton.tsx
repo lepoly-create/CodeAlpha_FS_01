@@ -72,12 +72,40 @@ export default function LinkGoogleAccountButton() {
           "Compte Google lié avec succès.",
         );
       } catch (
-        error: any
+        error: unknown
       ) {
+        let errorMessage =
+          "Impossible de lier Google.";
+
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        } else if (
+          typeof error === "object" &&
+          error !== null &&
+          "response" in error
+        ) {
+          const response = error.response;
+
+          if (
+            typeof response === "object" &&
+            response !== null &&
+            "data" in response
+          ) {
+            const data = response.data;
+
+            if (
+              typeof data === "object" &&
+              data !== null &&
+              "message" in data &&
+              typeof data.message === "string"
+            ) {
+              errorMessage = data.message;
+            }
+          }
+        }
+
         toast.error(
-          error?.response?.data
-            ?.message ||
-            "Impossible de lier Google.",
+          errorMessage,
         );
 
         throw error;
