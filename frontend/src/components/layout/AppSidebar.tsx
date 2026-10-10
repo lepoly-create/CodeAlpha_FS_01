@@ -26,7 +26,7 @@ const customerNavigationItems = [
   {
     label: "Product",
     icon: ShoppingCart,
-    path: "/products",
+    path: "/dashboard/products",
   },
   {
     label: "My Cart",
