@@ -7,7 +7,7 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
-  Sparkles,
+  MonitorSmartphone,
 } from "lucide-react";
 import axios from "axios";
 
@@ -25,7 +25,27 @@ const parseRegisterError = (error: unknown): string => {
   if (error instanceof Error) return error.message;
   return "Impossible de créer le compte. Veuillez réessayer.";
 };
+    // 1. Gestion ultra-rapide du clic sur le logo / liens d'ancres
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // Si on est sur la page d'accueil et qu'il s'agit d'une ancre (ex: /#about ou /)
+    if (location.pathname === "/" && (href.startsWith("/#") || href === "/")) {
+      e.preventDefault();
+      const targetId = href.replace("/#", "");
 
+      if (href === "/" || targetId === "hero") {
+        // Remontée instantanée en haut
+        window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+        window.history.pushState(null, "", "/");
+      } else {
+        const element = document.getElementById(targetId);
+        if (element) {
+          // Saut instantané vers la section sans lag
+          element.scrollIntoView({ behavior: "instant" as ScrollBehavior });
+          window.history.pushState(null, "", href);
+        }
+      }
+    }
+  };
 export default function Register() {
   const navigate = useNavigate();
 
@@ -90,10 +110,6 @@ export default function Register() {
   };
 
   return (
-    /* OPTIMISATION MOBILE : 
-       - overflow-y-auto : permet de scroller sur petit écran si le clavier s'ouvre.
-       - py-8 : laisse de la marge en haut et en bas sur mobile.
-    */
     <main className="relative flex min-h-screen w-full items-center justify-center overflow-y-auto bg-zinc-950 px-3 py-6 sm:px-6 lg:p-8">
       
       {/* Background avec overlay */}
@@ -104,11 +120,6 @@ export default function Register() {
         <div className="absolute inset-0 bg-gradient-to-tr from-black/90 via-black/75 to-black/50 backdrop-blur-[2px]" />
       </div>
 
-      {/* 
-        CONTAINER CARTE :
-        - my-auto : centre la carte verticalement s'il y a de la place.
-        - min-h-fit lg:min-h-[720px] : s'adapte au contenu sur mobile sans tout écraser.
-      */}
       <div className="relative z-10 my-auto flex w-full max-w-[1100px] min-h-fit lg:min-h-[720px] overflow-hidden rounded-2xl sm:rounded-3xl border border-white/15 bg-black/50 shadow-2xl backdrop-blur-md lg:backdrop-blur-2xl transition-all">
         
         {/* --- PANNEAU GAUCHE : Desktop uniquement (lg:flex) --- */}
@@ -116,14 +127,23 @@ export default function Register() {
           <div className="absolute inset-0 -z-10 bg-gradient-to-b from-cyan-500/10 via-transparent to-black/60" />
 
           {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/20 border border-cyan-400/30 text-cyan-400 backdrop-blur-md">
-              <Sparkles className="h-5 w-5" />
+          <Link
+            to="/"
+            onClick={(e) => handleNavClick(e, "/")}
+                      className="group flex items-center gap-3"
+
+            aria-label="MarketElectro - Accueil"
+            >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl  bg-cyan-500/20 border border-cyan-400/30 text-cyan-400 backdrop-blur-md">
+              <MonitorSmartphone className="h-5 w-5 transition-transform duration-300 group-hover:rotate-6" />
             </div>
             <span className="text-xl font-bold tracking-wider uppercase text-white">
-              MarketElectro
+              Market
+              <span className="bg-gradient-to-r from-cyan-400 to-teal-200 bg-clip-text text-transparent">
+                Electro
+              </span>
             </span>
-          </div>
+          </Link>
 
           {/* Message d'accueil */}
           <div className="space-y-4">
@@ -339,7 +359,7 @@ export default function Register() {
               </div>
 
               {/* GOOGLE LOGIN */}
-              <div className="flex justify-center">
+              <div className="flex justify-center sm:w-115">
                 <GoogleLoginButton text="signup_with" onError={setError} />
               </div>
             </form>

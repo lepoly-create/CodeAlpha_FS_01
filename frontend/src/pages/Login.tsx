@@ -6,7 +6,7 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
-  Sparkles,
+  MonitorSmartphone,
 } from "lucide-react";
 import axios from "axios";
 
@@ -37,6 +37,28 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+    // 1. Gestion ultra-rapide du clic sur le logo / liens d'ancres
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // Si on est sur la page d'accueil et qu'il s'agit d'une ancre (ex: /#about ou /)
+    if (location.pathname === "/" && (href.startsWith("/#") || href === "/")) {
+      e.preventDefault();
+      const targetId = href.replace("/#", "");
+
+      if (href === "/" || targetId === "hero") {
+        // Remontée instantanée en haut
+        window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
+        window.history.pushState(null, "", "/");
+      } else {
+        const element = document.getElementById(targetId);
+        if (element) {
+          // Saut instantané vers la section sans lag
+          element.scrollIntoView({ behavior: "instant" as ScrollBehavior });
+          window.history.pushState(null, "", href);
+        }
+      }
+    }
+  };
 
   const handleSubmit = async (event: React.SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -86,16 +108,23 @@ export default function Login() {
         <div className="relative hidden w-1/2 flex-col justify-between p-12 text-white lg:flex">
           {/* Subtle gradient overlay interne */}
           <div className="absolute inset-0 -z-10 bg-gradient-to-b from-cyan-500/10 via-transparent to-black/60" />
+          <Link
+            to="/"
+            onClick={(e) => handleNavClick(e, "/")}
+                      className="group flex items-center gap-3"
 
-          {/* Logo / Brand Header */}
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-500/20 border border-cyan-400/30 text-cyan-400 backdrop-blur-md">
-              <Sparkles className="h-5 w-5" />
+            aria-label="MarketElectro - Accueil"
+            >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl  bg-cyan-500/20 border border-cyan-400/30 text-cyan-400 backdrop-blur-md">
+              <MonitorSmartphone className="h-5 w-5 transition-transform duration-300 group-hover:rotate-6" />
             </div>
             <span className="text-xl font-bold tracking-wider uppercase text-white">
-              MarketElectro
+              Market
+              <span className="bg-gradient-to-r from-cyan-400 to-teal-200 bg-clip-text text-transparent">
+                Electro
+              </span>
             </span>
-          </div>
+          </Link>
 
           {/* Message de bienvenue inspirant */}
           <div className="space-y-4">
