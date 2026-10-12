@@ -1,52 +1,20 @@
-import nodemailer, { type Transporter } from "nodemailer";
+import { Resend } from "resend";
 
-let transporter:
-    Transporter | null = null;
+let resendClient: Resend | null = null;
 
-const getTransporter = () => {
-    if (transporter) {
-        return transporter;
+const getResendClient = () => {
+    if (resendClient) {
+        return resendClient;
     }
 
-    const host =
-        process.env.SMTP_HOST;
+    const apiKey = process.env.RESEND_API_KEY;
 
-    const port =
-        Number(
-            process.env.SMTP_PORT || 465
-        );
-
-    const secure =
-        process.env.SMTP_SECURE === "true";
-
-    const user =
-        process.env.SMTP_USER;
-
-    const pass =
-        process.env.SMTP_PASS;
-
-    if (
-        !host ||
-        !user ||
-        !pass
-    ) {
-        throw new Error(
-            "Configuration SMTP incomplète"
-        );
+    if (!apiKey) {
+        throw new Error("RESEND_API_KEY est introuvable");
     }
 
-    transporter =
-        nodemailer.createTransport({
-            host,
-            port,
-            secure,
-            auth: {
-                user,
-                pass,
-            },
-        });
-
-    return transporter;
+    resendClient = new Resend(apiKey);
+    return resendClient;
 };
 
 const escapeHtml = (
@@ -74,19 +42,40 @@ const getFrontendUrl = () => {
 
 const getFrom = () => {
     const email =
-        process.env.SMTP_FROM_EMAIL;
+        process.env.RESEND_FROM_EMAIL;
 
     if (!email) {
         throw new Error(
-            "SMTP_FROM_EMAIL est introuvable"
+            "RESEND_FROM_EMAIL est introuvable"
         );
     }
 
     const name =
-        process.env.SMTP_FROM_NAME ||
+        process.env.RESEND_FROM_NAME ||
         "MarketElectro";
 
     return `"${name}" <${email}>`;
+};
+
+interface EmailMessage {
+    from: string;
+    to: string;
+    subject: string;
+    text: string;
+    html?: string;
+}
+
+const sendEmail = async (message: EmailMessage) => {
+    const { data, error } =
+        await getResendClient().emails.send(message);
+
+    if (error) {
+        throw new Error(`Resend : ${error.message}`);
+    }
+
+    if (!data?.id) {
+        throw new Error("Resend n'a pas confirmé l'envoi de l'e-mail");
+    }
 };
 
 const buildUrl = (
@@ -122,8 +111,7 @@ export const sendVerificationEmail =
         const safeName =
             escapeHtml(fullName);
 
-        await getTransporter()
-            .sendMail({
+        await sendEmail({
                 from: getFrom(),
                 to: email,
 
@@ -224,8 +212,7 @@ export const sendPasswordResetEmail =
                 token,
             );
 
-        await getTransporter()
-            .sendMail({
+        await sendEmail({
                 from: getFrom(),
                 to: email,
 
@@ -285,8 +272,7 @@ export const sendEmailChangeEmail =
                 token,
             );
 
-        await getTransporter()
-            .sendMail({
+        await sendEmail({
                 from: getFrom(),
                 to: email,
 
@@ -335,8 +321,7 @@ export const sendEmailChangeNotification =
         fullName: string,
         newEmail: string,
     ) => {
-        await getTransporter()
-            .sendMail({
+        await sendEmail({
                 from: getFrom(),
                 to: oldEmail,
 
