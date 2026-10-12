@@ -19,7 +19,7 @@ export const registerSchema = z.object({
 
         password: z
             .string({ error: "Le mot de passe est requis" })
-            .min(6, "Le mot de passe doit contenir au moins 6 caractères")
+            .min(8, "Le mot de passe doit contenir au moins 8 caractères")
             .max(100, "Le mot de passe est trop long"),
     }),
 });
@@ -72,7 +72,7 @@ export const resetPasswordSchema = z.object({
 
         newPassword: z
             .string({ error: "Le nouveau mot de passe est requis" })
-            .min(6, "Le mot de passe doit contenir au moins 6 caractères")
+            .min(8, "Le mot de passe doit contenir au moins 8 caractères")
             .max(100, "Le mot de passe est trop long"),
     }),
 });

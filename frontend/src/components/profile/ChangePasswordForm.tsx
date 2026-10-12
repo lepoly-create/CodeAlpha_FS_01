@@ -80,8 +80,8 @@ export default function ChangePasswordForm() {
       return;
     }
 
-    if (formData.newPassword.length < 6) {
-      toast.error("Le nouveau mot de passe doit contenir au moins 6 caractères.");
+    if (formData.newPassword.length < 8) {
+      toast.error("Le nouveau mot de passe doit contenir au moins 8 caractères.");
       return;
     }
 
@@ -157,7 +157,7 @@ export default function ChangePasswordForm() {
               autoComplete="new-password"
               visible={visibility.newPassword}
               disabled={isChanging}
-              description="Minimum 6 caractères."
+              description="Minimum 8 caractères."
               onChange={handleFieldChange("newPassword")}
               onToggleVisibility={() => toggleVisibility("newPassword")}
             />

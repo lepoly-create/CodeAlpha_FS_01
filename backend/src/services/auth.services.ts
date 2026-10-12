@@ -193,11 +193,27 @@ export const registerUser = async (
                 rawToken,
         };
     } catch (error: any) {
-        if (
-            error?.code === 11000
-        ) {
+        if (error?.code === 11000) {
+            const duplicateField =
+                Object.keys(error.keyPattern ?? {})[0] ??
+                Object.keys(error.keyValue ?? {})[0];
+
+            if (duplicateField === "email") {
+                const duplicateEmailError = new Error(
+                    "Cet email est déjà utilisé",
+                );
+                (duplicateEmailError as any).code =
+                    "DUPLICATE_EMAIL";
+                throw duplicateEmailError;
+            }
+
+            console.error(
+                "Erreur d'index unique lors de l'inscription :",
+                error,
+            );
+
             throw new Error(
-                "Cet email est déjà utilisé"
+                "Impossible de créer le compte en raison d'un conflit de données. Veuillez réessayer.",
             );
         }
 

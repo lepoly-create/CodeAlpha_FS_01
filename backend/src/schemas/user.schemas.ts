@@ -38,8 +38,8 @@ export const changePasswordSchema =
             newPassword: z
                 .string()
                 .min(
-                    6,
-                    "Le nouveau mot de passe doit contenir au moins 6 caractères"
+                    8,
+                    "Le nouveau mot de passe doit contenir au moins 8 caractères"
                 )
                 .max(
                     100,

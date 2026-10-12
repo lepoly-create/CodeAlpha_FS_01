@@ -19,7 +19,7 @@ export interface IUser extends Document {
     emailVerified: boolean;
     emailVerifiedAt: Date | null;
 
-    googleId?: string | null;
+    googleId?: string;
     authProvider: "local" | "google" | "both";
 }
 
@@ -83,7 +83,6 @@ const userSchema = new Schema<IUser>(
 
         googleId: {
             type: String,
-            default: null,
             unique: true,
             sparse: true,
         },
