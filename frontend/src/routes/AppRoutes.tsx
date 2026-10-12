@@ -12,7 +12,6 @@ import Dashboard from "@/pages/Dashboard";
 import ForgotPassword from "@/pages/ForgotPassword";
 import Home from "@/pages/Home";
 import Login from "@/pages/Login";
-import Products from "@/pages/Products";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import Profile from "@/pages/Profile";
 import Register from "@/pages/Register";
@@ -27,6 +26,7 @@ import PublicLayout from "@/components/layout/PublicLayout";
 import AdminRoute from "./AdminRoute";
 import CustomerRoute from "./CustomerRoute";
 import ProtectedRoute from "./ProtectedRoute";
+import ProductsRoute from "./ProductsRoute";
 
 import OrdersPage from "@/pages/OrdersPage";
 
@@ -46,10 +46,11 @@ export default function AppRoutes() {
           existante telle quelle afin de ne pas casser
           les favoris/panier déjà implémentés.
         */}
-        <Route path="/products" element={<Products />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfUse />} />
       </Route>
+
+      <Route path="/products" element={<ProductsRoute />} />
 
       {/* ============================================ */}
       {/* AUTHENTIFICATION                            */}
@@ -86,7 +87,10 @@ export default function AppRoutes() {
         <Route element={<CustomerRoute />}>
         <Route element={<AppLayout />}>
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/dashboard/products" element={<Products />} />
+          <Route
+            path="/dashboard/products"
+            element={<Navigate to="/products" replace />}
+          />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/orders" element={<OrdersPage />} />
