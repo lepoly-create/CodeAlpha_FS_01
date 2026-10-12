@@ -1,6 +1,6 @@
 import { Menu, MonitorSmartphone,  X } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 export type NavSection = "hero" | "about" | "products" | "why-us" | "contact";
@@ -14,7 +14,7 @@ interface NavLink {
 const navLinks: NavLink[] = [
   { label: "Accueil", href: "/#hero", id: "hero" },
   { label: "À propos", href: "/#about", id: "about" },
-  { label: "Catalogue", href: "/products", id: "products" },
+  { label: "Catalogue", href: "/#products", id: "products" },
   { label: "Pourquoi nous", href: "/#why-us", id: "why-us" },
   { label: "Contact", href: "/#contact", id: "contact" },
 ];
@@ -23,30 +23,29 @@ export default function PublicNavbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [activeScrollSection, setActiveScrollSection] = useState<NavSection>("hero");
   const location = useLocation();
+  const navigate = useNavigate();
 
   const closeMenu = () => setMobileMenuOpen(false);
 
 
-  // 1. Gestion ultra-rapide du clic sur le logo / liens d'ancres
+  // Navigation fluide vers une section de la landing page.
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     closeMenu();
 
-    // Si on est sur la page d'accueil et qu'il s'agit d'une ancre (ex: /#about ou /)
-    if (location.pathname === "/" && (href.startsWith("/#") || href === "/")) {
+    if (href.startsWith("/#")) {
       e.preventDefault();
-      const targetId = href.replace("/#", "");
 
-      if (href === "/" || targetId === "hero") {
-        // Remontée instantanée en haut
-        window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior });
-        window.history.pushState(null, "", "/");
-      } else {
-        const element = document.getElementById(targetId);
-        if (element) {
-          // Saut instantané vers la section sans lag
-          element.scrollIntoView({ behavior: "instant" as ScrollBehavior });
-          window.history.pushState(null, "", href);
-        }
+      if (location.pathname !== "/") {
+        void navigate(href);
+        return;
+      }
+
+      const targetId = href.replace("/#", "");
+      const element = document.getElementById(targetId);
+
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
+        window.history.replaceState(null, "", href);
       }
     }
   };
@@ -58,6 +57,17 @@ export default function PublicNavbar() {
   // 2. L'effet s'occupe UNIQUEMENT de la synchronisation avec le DOM (IntersectionObserver)
   useEffect(() => {
     if (location.pathname !== "/") return;
+
+    const targetId = location.hash.replace(/^#/, "");
+
+    if (targetId) {
+      requestAnimationFrame(() => {
+        document.getElementById(targetId)?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      });
+    }
 
     const sections = document.querySelectorAll<HTMLElement>("section[id]");
 
@@ -79,7 +89,7 @@ export default function PublicNavbar() {
     sections.forEach((section) => observer.observe(section));
 
     return () => observer.disconnect();
-  }, [location.pathname]);
+  }, [location.pathname, location.hash, navigate]);
 
   return (
     <header className="sticky top-0 z-50 border-0 shadow-2xl border-slate-200/80 bg-white/80 backdrop-blur-xl transition-all duration-300">
