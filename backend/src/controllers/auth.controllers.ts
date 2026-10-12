@@ -113,7 +113,11 @@ export const register = async (
             },
         });
     } catch (error: any) {
-        res.status(400).json({
+        res.status(
+            error?.code === "DUPLICATE_EMAIL"
+                ? 409
+                : 400,
+        ).json({
             success: false,
             message:
                 error.message,

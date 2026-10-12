@@ -8,6 +8,7 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "seed:products": "ts-node-dev --transpile-only script/seed-products.ts",
     "seed:admin": "ts-node script/create-admin.ts",
+    "repair:user-indexes": "ts-node script/repair-user-indexes.ts",
     "test:user": "ts-node-dev script/test-User.ts",
     "build": "tsc",
     "start": "node dist/server.js",
