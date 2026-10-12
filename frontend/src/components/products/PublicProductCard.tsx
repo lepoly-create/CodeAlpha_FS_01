@@ -1,4 +1,4 @@
-import { Eye, ShoppingCart, Star } from "lucide-react";
+import { ShoppingCart, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Product } from "@/types/product";
 import { formatPrice } from "@/lib/format-price";
@@ -25,16 +25,6 @@ export default function PublicProductCard({ product }: PublicProductCardProps) {
           loading="lazy"
         />
 
-        {/* Bouton Aperçu Rapide au survol */}
-        <div className="absolute inset-0 flex items-center justify-center bg-slate-950/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-          <Link
-            to="/products"
-            className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-xs font-bold text-slate-900 shadow-xl transition-transform hover:scale-105 active:scale-95"
-          >
-            <Eye className="h-4 w-4 text-indigo-600" />
-            Aperçu rapide
-          </Link>
-        </div>
       </div>
 
       {/* Contenu Produit */}
