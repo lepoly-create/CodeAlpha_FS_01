@@ -117,11 +117,20 @@ export const updateCartItem = async (
     }
 
     const item = cart.items.find(
-        item => item.product.toString() === productId
+        (it) => it.product.toString() === productId
     );
 
     if (!item) {
         throw new Error("Produit absent du panier");
+    }
+
+    const product = await Product.findById(productId);
+    if (!product || !product.isActive) {
+        throw new Error("Produit introuvable ou indisponible");
+    }
+
+    if (quantity > product.stock) {
+        throw new Error("Stock insuffisant");
     }
 
     item.quantity = quantity;

@@ -25,3 +25,9 @@ export const updateCartItemSchema = z.object({
     quantity,
   }),
 });
+
+export const removeCartItemSchema = z.object({
+  params: z.object({
+    productId: objectId,
+  }),
+});

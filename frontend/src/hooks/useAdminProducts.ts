@@ -49,8 +49,31 @@ export default function useAdminProducts() {
   }, []);
 
   useEffect(() => {
-    void loadProducts();
-  }, [loadProducts]);
+    let isCancelled = false;
+
+    getAdminProducts()
+      .then((data) => {
+        if (!isCancelled) {
+          setProducts(data);
+          setLoading(false);
+        }
+      })
+      .catch((error: unknown) => {
+        if (!isCancelled) {
+          toast.error(
+            getErrorMessage(
+              error,
+              "Unable to load products."
+            )
+          );
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
 
   const createAdminProduct = async (
     data: CreateProductData

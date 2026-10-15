@@ -174,6 +174,11 @@ export const resetPassword = async (
         user.authProvider = "both";
     }
 
+    /*
+     * Invalider toutes les sessions existantes (JWT)
+     */
+    user.tokenVersion = (user.tokenVersion ?? 0) + 1;
+
     await user.save();
 
     /*

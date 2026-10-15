@@ -81,27 +81,7 @@ export default function CartPage() {
           </div>
 
           {/* Résumé de Commande */}
-          {/*<OrderSummary subtotal={subtotal} /> */}
-
-          <aside className="space-y-2">
-            <OrderSummary
-              subtotal={subtotal}
-            />
-
-            <Link
-              to="/checkout"
-              className="inline-flex h-12 w-full items-center justify-center rounded-xl bg-primary px-6 text-base font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
-            >
-              Proceed to checkout
-            </Link>
-
-            <Link
-              to="/products"
-              className="inline-flex h-10 w-full items-center justify-center rounded-xl border border-neutral-200 text-sm font-medium text-foreground transition-colors hover:bg-neutral-100"
-            >
-              Continue shopping
-            </Link>
-          </aside>
+          <OrderSummary subtotal={subtotal} />
         </div>
       </div>
     </section>

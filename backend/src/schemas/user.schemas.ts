@@ -61,3 +61,15 @@ export const requestEmailChangeSchema =
                 ),
         }),
     });
+
+export const linkGoogleAccountSchema =
+    z.object({
+        body: z.object({
+            credential: z
+                .string({
+                    message: "Le jeton Google (credential) est requis",
+                })
+                .min(1, "Le jeton Google ne peut pas être vide")
+                .trim(),
+        }),
+    });

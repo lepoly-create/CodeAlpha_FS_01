@@ -6,6 +6,7 @@ import {
   ClipboardList,
   Store,
   UserCircle,
+  Headphones,
 } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
@@ -42,6 +43,11 @@ const customerNavigationItems = [
     label: "Profile",
     icon: UserCircle,
     path: "/profile",
+  },
+  {
+    label: "Support",
+    icon: Headphones,
+    path: "/contact",
   },
 ];
 

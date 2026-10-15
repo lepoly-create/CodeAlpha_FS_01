@@ -89,6 +89,7 @@ export const changeMyPassword = async (
 
     // Note : Retirez bcrypt.hash si vous avez un hook pre('save') dans votre User schema
     user.password = await bcrypt.hash(data.newPassword, 10);
+    user.tokenVersion = (user.tokenVersion ?? 0) + 1;
 
     await user.save();
 };
@@ -269,6 +270,7 @@ export const verifyEmailChange = async (rawToken: string) => {
     user.email = newEmail;
     user.emailVerified = true;
     user.emailVerifiedAt = new Date();
+    user.tokenVersion = (user.tokenVersion ?? 0) + 1;
 
     await user.save();
 

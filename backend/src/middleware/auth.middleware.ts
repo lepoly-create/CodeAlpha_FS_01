@@ -11,6 +11,7 @@ interface AuthUser {
     id: string;
     email: string;
     role: string;
+    tokenVersion?: number;
 }
 
 export const authMiddleware = async (
@@ -61,6 +62,9 @@ export const authMiddleware = async (
             jwt.verify(
                 token,
                 secret,
+                {
+                    algorithms: ["HS256"],
+                },
             ) as AuthUser;
 
         if (
@@ -85,6 +89,18 @@ export const authMiddleware = async (
                 success: false,
                 message:
                     "Utilisateur introuvable",
+            });
+        }
+
+        const userTokenVersion = user.tokenVersion ?? 0;
+        if (
+            typeof decoded.tokenVersion !== "number" ||
+            decoded.tokenVersion !== userTokenVersion
+        ) {
+            return res.status(401).json({
+                success: false,
+                message:
+                    "Session expirée ou mot de passe modifié. Veuillez vous reconnecter.",
             });
         }
 

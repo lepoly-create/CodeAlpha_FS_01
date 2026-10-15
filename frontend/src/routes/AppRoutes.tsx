@@ -29,6 +29,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import ProductsRoute from "./ProductsRoute";
 
 import OrdersPage from "@/pages/OrdersPage";
+import ContactPage from "@/pages/ContactPage";
 
 export default function AppRoutes() {
   return (
@@ -41,13 +42,9 @@ export default function AppRoutes() {
       <Route element={<PublicLayout />}>
         <Route path="/" element={<Home />} />
 
-        {/*
-          Pour l'instant, nous conservons ta page Products
-          existante telle quelle afin de ne pas casser
-          les favoris/panier déjà implémentés.
-        */}
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<TermsOfUse />} />
+        <Route path="/contact" element={<ContactPage />} />
       </Route>
 
       <Route path="/products" element={<ProductsRoute />} />

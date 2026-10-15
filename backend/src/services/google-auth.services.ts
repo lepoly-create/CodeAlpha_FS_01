@@ -46,6 +46,7 @@ const buildAuthResult = (user: IUser) => {
         id: user._id.toString(),
         email: user.email,
         role: user.role,
+        tokenVersion: user.tokenVersion ?? 0,
     });
 
     return {

@@ -28,16 +28,14 @@ const escapeHtml = (
         .replaceAll("'", "&#039;");
 
 const getFrontendUrl = () => {
-    const frontendUrl =
-        process.env.FRONTEND_URL;
+    const frontendUrl = process.env.FRONTEND_URL;
 
     if (!frontendUrl) {
-        throw new Error(
-            "FRONTEND_URL est introuvable"
-        );
+        return "https://marketelectro.polydev.live";
     }
 
-    return frontendUrl;
+    const primaryUrl = frontendUrl.split(",")[0].trim();
+    return primaryUrl || "https://marketelectro.polydev.live";
 };
 
 const getFrom = () => {
@@ -342,3 +340,40 @@ contactez immédiatement le support.
                 `.trim(),
             });
     };
+
+
+export const sendContactEmailToAdmin = async (
+    userEmail: string,
+    fullName: string,
+    messageContent: string,
+) => {
+    const resend = getResendClient();
+    const adminEmail = process.env.ADMIN_EMAIL || process.env.RESEND_FROM_EMAIL;
+
+    await resend.emails.send({
+        from: getFrom(), // ex: support@marketelectro.polydev.live
+        to: adminEmail!,
+        replyTo: userEmail, // 👈 Permet à l'admin de répondre directement au client en 1 clic
+        subject: `[Support MarketElectro] Nouveau message de ${fullName}`,
+        text: `
+Nouveau message de contact reçu sur MarketElectro :
+
+Nom : ${fullName}
+Email : ${userEmail}
+
+Message :
+${messageContent}
+        `.trim(),
+        html: `
+<div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; background: #ffffff; border-radius: 12px; border: 1px solid #e5e7eb;">
+  <h2 style="color: #111111; border-bottom: 2px solid #f3f4f6; padding-bottom: 10px;">Nouveau message de contact</h2>
+  <p><strong>Nom :</strong> ${escapeHtml(fullName)}</p>
+  <p><strong>Email :</strong> <a href="mailto:${userEmail}">${userEmail}</a></p>
+  <div style="margin-top: 20px; background: #f9fafb; padding: 16px; border-radius: 8px;">
+    <p style="margin: 0; color: #374151; white-space: pre-wrap;">${escapeHtml(messageContent)}</p>
+  </div>
+  <p style="margin-top: 20px; font-size: 12px; color: #9ca3af;">Cliquez simplement sur "Répondre" dans votre boîte mail pour écrire directement au client.</p>
+</div>
+        `,
+    });
+};

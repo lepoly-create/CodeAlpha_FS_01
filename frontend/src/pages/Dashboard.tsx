@@ -37,8 +37,27 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    fetchDashboard();
-  }, [fetchDashboard]);
+    let isCancelled = false;
+
+    getUserDashboard()
+      .then((data) => {
+        if (!isCancelled) {
+          setDashboard(data);
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        if (!isCancelled) {
+          console.error("Erreur chargement dashboard :", err);
+          setError("Impossible de charger les données de votre tableau de bord.");
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
 
   /* Skeleton Loading */
   if (loading) {
