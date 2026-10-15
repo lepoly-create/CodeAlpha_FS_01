@@ -7,9 +7,10 @@ import { formatPrice } from "@/lib/format-price";
 
 interface OrderSummaryProps {
   subtotal: number;
+  showActions?: boolean;
 }
 
-export default function OrderSummary({ subtotal }: OrderSummaryProps) {
+export default function OrderSummary({ subtotal, showActions = true }: OrderSummaryProps) {
   const shippingCost = 0; // Offert
   const total = subtotal + shippingCost;
 
@@ -71,30 +72,30 @@ export default function OrderSummary({ subtotal }: OrderSummaryProps) {
         </div>
       </div>
 
-      {/* Actions */}
-      <div className="space-y-2.5 pt-2">
-        <Link
-          to="/checkout"
-          className="w-full h-11 rounded-xl bg-slate-900 text-xs sm:text-sm font-semibold text-white shadow-md hover:bg-slate-800 transition-all"
-        >
-          <span className="flex items-center justify-center gap-2">
+      {/* Actions conditionnelles */}
+      {showActions && (
+        <div className="space-y-2.5 pt-2">
+          <Link
+            to="/checkout"
+            className="w-full h-11 rounded-xl bg-slate-900 text-xs sm:text-sm font-semibold text-white shadow-md hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
+          >
             Passer la commande
             <ArrowRight className="h-4 w-4" />
-          </span>
-        </Link>
+          </Link>
 
-        <Link
-          to="/products"
-          className="w-full h-9 rounded-xl text-xs text-slate-600 hover:bg-slate-100"
-        >
-          Poursuivre mes achats
-        </Link>
-      </div>
+          <Link
+            to="/products"
+            className="w-full h-9 rounded-xl text-xs text-slate-600 hover:bg-slate-100 flex items-center justify-center"
+          >
+            Poursuivre mes achats
+          </Link>
+        </div>
+      )}
 
       {/* Reassurance */}
       <div className="rounded-xl bg-slate-50 p-3 border border-slate-100 flex items-center gap-2.5 text-[11px] text-slate-500">
         <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
-        <span>Paiement 100% sécurisé et données chiffrées</span>
+        <span>Commande sécurisée et données chiffrées</span>
       </div>
     </aside>
   );

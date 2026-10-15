@@ -114,12 +114,31 @@ export function CartProvider({
    * l'utilisateur authentifié change.
    */
   useEffect(() => {
-    refreshCart();
+    if (!userId) {
+      return;
+    }
+
+    let isCancelled = false;
+
+    getCart()
+      .then((data) => {
+        if (!isCancelled) {
+          setCart(data);
+          setLoading(false);
+        }
+      })
+      .catch((error) => {
+        if (!isCancelled) {
+          console.error("Impossible de récupérer le panier :", error);
+          setLoading(false);
+        }
+      });
 
     return () => {
+      isCancelled = true;
       requestIdRef.current += 1;
     };
-  }, [refreshCart]);
+  }, [userId]);
 
   /*
    * Ajouter un produit
@@ -211,21 +230,25 @@ export function CartProvider({
   );
 
   /*
-   * Nombre total d'articles
+   * Panier effectif (nul si déconnecté) et total d'articles
    */
-  const cartCount = cart
-    ? cart.items.reduce(
+  const effectiveCart = userId ? cart : null;
+
+  const cartCount = effectiveCart
+    ? effectiveCart.items.reduce(
         (total, item) =>
           total + item.quantity,
         0,
       )
     : 0;
 
+  const effectiveLoading = userId ? loading : false;
+
   const value = useMemo<CartContextValue>(
     () => ({
-      cart,
+      cart: effectiveCart,
       cartCount,
-      loading,
+      loading: effectiveLoading,
       refreshCart,
       clearCart,
       addToCart,
@@ -233,9 +256,9 @@ export function CartProvider({
       removeItem,
     }),
     [
-      cart,
+      effectiveCart,
       cartCount,
-      loading,
+      effectiveLoading,
       refreshCart,
       clearCart,
       addToCart,

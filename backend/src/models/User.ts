@@ -21,6 +21,7 @@ export interface IUser extends Document {
 
     googleId?: string;
     authProvider: "local" | "google" | "both";
+    tokenVersion: number;
 }
 
 const userSchema = new Schema<IUser>(
@@ -91,6 +92,11 @@ const userSchema = new Schema<IUser>(
             type: String,
             enum: ["local", "google", "both"],
             default: "local"
+        },
+
+        tokenVersion: {
+            type: Number,
+            default: 0
         }
     },
     {

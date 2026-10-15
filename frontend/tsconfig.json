@@ -9,11 +9,9 @@
    "compilerOptions": {
     "target": "esnext",
     "module": "nodenext",
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "ignoreDeprecations": "6.0",
     "rewriteRelativeImportExtensions": true,
     "erasableSyntaxOnly": true,
     "verbatimModuleSyntax": true,

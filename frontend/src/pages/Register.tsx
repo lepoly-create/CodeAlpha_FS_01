@@ -98,9 +98,9 @@ export default function Register() {
         password,
       });
 
-      navigate(
-        `/verify-email?email=${encodeURIComponent(response.data.email)}`
-      );
+      navigate("/verify-email", {
+        state: { email: response.data.email },
+      });
     } catch (err: unknown) {
       console.error("[RegisterError]:", err);
       setError(parseRegisterError(err));

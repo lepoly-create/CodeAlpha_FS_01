@@ -7,6 +7,7 @@ interface JwtPayload {
     id: string;
     email: string;
     role: string;
+    tokenVersion?: number;
 }
 
 export const generateToken = (
@@ -31,6 +32,7 @@ export const generateToken = (
         {
             expiresIn:
                 expiresIn as SignOptions["expiresIn"],
+            algorithm: "HS256",
         },
     );
 };

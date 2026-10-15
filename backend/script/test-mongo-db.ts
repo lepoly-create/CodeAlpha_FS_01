@@ -1,6 +1,14 @@
 
+import dotenv from "dotenv";
+dotenv.config();
+
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb://amegadjinkomlanjosue_db_user:K15l0ANN1SX1AWC3@ac-xfurtzt-shard-00-00.u6kqbn9.mongodb.net:27017,ac-xfurtzt-shard-00-01.u6kqbn9.mongodb.net:27017,ac-xfurtzt-shard-00-02.u6kqbn9.mongodb.net:27017/?ssl=true&replicaSet=atlas-tg7g26-shard-0&authSource=admin&appName=marketElectro";
+const uri = process.env.MONGO_URI;
+
+if (!uri) {
+  console.error("MONGO_URI est manquant dans l'environnement");
+  process.exit(1);
+}
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {

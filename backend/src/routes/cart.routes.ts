@@ -12,6 +12,7 @@ import { validate } from "../middleware/validate.middleware";
 import {
     addCartItemSchema,
     updateCartItemSchema,
+    removeCartItemSchema,
 } from "../schemas/cart.schemas";
 
 
@@ -48,6 +49,7 @@ router.put(
 router.delete(
     "/:productId",
     authMiddleware,
+    validate(removeCartItemSchema),
     removeProductFromCart
 );
 
