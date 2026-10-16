@@ -40,7 +40,7 @@ export interface AdminOrderItem {
 
 export interface AdminOrder {
   _id: string;
-  user: AdminOrderUser;
+  user: AdminOrderUser | null;
   items: AdminOrderItem[];
   totalAmount: number;
   status: "pending" | "confirmed" | "cancelled";

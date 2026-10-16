@@ -38,7 +38,7 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-    // 1. Gestion ultra-rapide du clic sur le logo / liens d'ancres
+  // 1. Gestion ultra-rapide du clic sur le logo / liens d'ancres
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     // Si on est sur la page d'accueil et qu'il s'agit d'une ancre (ex: /#about ou /)
     if (location.pathname === "/" && (href.startsWith("/#") || href === "/")) {
@@ -102,27 +102,23 @@ export default function Login() {
       </div>
 
       {/* 2. Container principal (Split-screen sur Desktop, Carte centrale sur Mobile) */}
-      <div className="relative z-10 flex w-full max-w-[1100px] min-h-[640px] overflow-hidden rounded-3xl border border-white/15 bg-black/40 shadow-2xl backdrop-blur-2xl transition-all">
-        
+      <div className="relative z-10 flex w-full max-w-[1100px] min-h-fit lg:min-h-[640px] overflow-hidden rounded-lg border border-[#293040] bg-[#121316]/95 shadow-2xl backdrop-blur-2xl transition-all">
+
         {/* --- PANNEAU GAUCHE : Branding & Ambiance (Masqué sur mobile, visible dès lg:) --- */}
         <div className="relative hidden w-1/2 flex-col justify-between p-12 text-white lg:flex">
           {/* Subtle gradient overlay interne */}
-          <div className="absolute inset-0 -z-10 bg-gradient-to-b from-cyan-500/10 via-transparent to-black/60" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#835500]/15 via-transparent to-black/60" />
           <Link
             to="/"
             onClick={(e) => handleNavClick(e, "/")}
-                      className="group flex items-center gap-3"
-
+            className="group flex items-center gap-3"
             aria-label="MarketElectro - Accueil"
-            >
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl  bg-cyan-500/20 border border-cyan-400/30 text-cyan-400 backdrop-blur-md">
+          >
+            <div className="flex h-10 w-10 items-center justify-center rounded-[0.25rem] bg-[#1a1c20] border border-[#293040] text-[#e59b22] shadow-sm">
               <MonitorSmartphone className="h-5 w-5 transition-transform duration-300 group-hover:rotate-6" />
             </div>
-            <span className="text-xl font-bold tracking-wider uppercase text-white">
-              Market
-              <span className="bg-gradient-to-r from-cyan-400 to-teal-200 bg-clip-text text-transparent">
-                Electro
-              </span>
+            <span className="text-xl font-bold tracking-tight text-white">
+              Market<span className="text-[#e59b22]">Electro</span>
             </span>
           </Link>
 
@@ -130,42 +126,66 @@ export default function Login() {
           <div className="space-y-4">
             <h2 className="text-4xl font-extrabold leading-tight tracking-tight text-white drop-shadow-md">
               Propulsez votre expérience <br />
-              <span className="bg-gradient-to-r from-cyan-400 to-teal-200 bg-clip-text text-transparent">
+              <span className="text-[#e59b22]">
                 e-commerce.
               </span>
             </h2>
-            <p className="max-w-md text-base text-zinc-300 leading-relaxed font-light">
+            <p className="max-w-md text-base text-[#dce2f7]/80 leading-relaxed font-light">
               Connectez-vous pour gérer vos commandes, découvrir nos nouveautés high-tech et profiter d'offres exclusives.
             </p>
           </div>
 
           {/* Footer Branding */}
-          <div className="text-xs text-zinc-400 font-medium">
+          <div className="text-xs text-[#dce2f7]/50 font-medium">
             © {new Date().getFullYear()} MarketElectro Inc. Tous droits réservés.
           </div>
         </div>
 
         {/* --- PANNEAU DROIT : Formulaire de Connexion --- */}
-        <div className="flex w-full flex-col justify-center p-6 sm:p-10 lg:w-1/2 lg:p-12 lg:border-l lg:border-white/10">
+        <div className="flex w-full flex-col justify-center p-6 sm:p-10 lg:w-1/2 lg:p-12 lg:border-l lg:border-[#293040]">
           <div className="mx-auto w-full max-w-md">
-            
+
+            {/* Header Mobile avec Logo */}
+            <div className="mb-6 flex items-center justify-between lg:hidden">
+              <Link
+                to="/"
+                onClick={(e) => handleNavClick(e, "/")}
+                className="group flex items-center gap-2.5"
+                aria-label="MarketElectro - Accueil"
+              >
+                <div className="flex h-9 w-9 items-center justify-center rounded-[0.25rem] bg-[#1a1c20] border border-[#293040] text-[#e59b22] shadow-xs">
+                  <MonitorSmartphone className="h-4 w-4" />
+                </div>
+                <span className="text-lg font-bold tracking-tight text-white">
+                  Market<span className="text-[#e59b22]">Electro</span>
+                </span>
+              </Link>
+
+              <Link
+                to="/"
+                className="text-xs font-semibold text-[#e59b22] hover:underline"
+              >
+                Accueil
+              </Link>
+            </div>
+
             {/* Header du formulaire */}
-            <header className="mb-8 text-left">
-              <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">
+            <header className="mb-7 sm:mb-8 text-left">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-white">
                 Bienvenue !
               </h1>
-              <p className="mt-2 text-sm text-zinc-300 font-normal">
+              <p className="mt-1.5 text-xs sm:text-sm text-[#dce2f7]/80 font-normal">
                 Veuillez saisir vos identifiants pour continuer.
               </p>
             </header>
 
             <form onSubmit={handleSubmit} noValidate className="space-y-5">
-              
+
               {/* CHAMP EMAIL */}
               <div className="group relative">
                 <label
                   htmlFor="email"
-                  className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-1.5"
+                  className="block text-xs font-semibold uppercase tracking-wider text-[#dce2f7] mb-1.5"
                 >
                   E-mail
                 </label>
@@ -178,9 +198,9 @@ export default function Login() {
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="nom@exemple.com"
                     autoComplete="email"
-                    className="w-full border-b-2 border-white/30 bg-white/5 px-3 py-3 pr-10 text-base text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-cyan-400 focus:bg-white/10 focus:ring-0 rounded-t-lg"
+                    className="w-full border-b-2 border-white/20 bg-white/5 px-3 py-3 pr-10 text-base text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-[#e59b22] focus:bg-white/10 rounded-t-[0.25rem]"
                   />
-                  <Mail className="pointer-events-none absolute right-3 h-5 w-5 text-zinc-400 group-focus-within:text-cyan-400 transition-colors" />
+                  <Mail className="pointer-events-none absolute right-3 h-5 w-5 text-zinc-400 group-focus-within:text-[#e59b22] transition-colors" />
                 </div>
               </div>
 
@@ -188,7 +208,7 @@ export default function Login() {
               <div className="group relative">
                 <label
                   htmlFor="password"
-                  className="block text-xs font-semibold uppercase tracking-wider text-zinc-300 mb-1.5"
+                  className="block text-xs font-semibold uppercase tracking-wider text-[#dce2f7] mb-1.5"
                 >
                   Mot de passe
                 </label>
@@ -201,12 +221,12 @@ export default function Login() {
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
                     autoComplete="current-password"
-                    className="w-full border-b-2 border-white/30 bg-white/5 px-3 py-3 pr-10 text-base text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-cyan-400 focus:bg-white/10 focus:ring-0 rounded-t-lg"
+                    className="w-full border-b-2 border-white/20 bg-white/5 px-3 py-3 pr-10 text-base text-white placeholder-zinc-500 outline-none transition-all duration-200 focus:border-[#e59b22] focus:bg-white/10 rounded-t-[0.25rem]"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword((prev) => !prev)}
-                    className="absolute right-3 rounded-md p-1 text-zinc-400 hover:text-white focus:outline-none focus:ring-1 focus:ring-cyan-400 transition-colors"
+                    className="absolute right-3 rounded-[0.25rem] p-1 text-zinc-400 hover:text-white focus:outline-none focus:ring-1 focus:ring-[#e59b22] transition-colors"
                     aria-label={showPassword ? "Masquer le mot de passe" : "Afficher le mot de passe"}
                   >
                     {showPassword ? (
@@ -225,16 +245,16 @@ export default function Login() {
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="h-4 w-4 rounded border-white/30 bg-white/10 text-cyan-500 focus:ring-cyan-400 focus:ring-offset-0 cursor-pointer accent-cyan-500"
+                    className="h-4 w-4 rounded-[0.25rem] border-white/30 bg-white/10 text-[#e59b22] focus:ring-[#e59b22] focus:ring-offset-0 cursor-pointer accent-[#e59b22]"
                   />
-                  <span className="text-xs font-medium text-zinc-300 hover:text-white transition-colors">
+                  <span className="text-xs font-medium text-[#dce2f7]/80 hover:text-white transition-colors">
                     Se souvenir de moi
                   </span>
                 </label>
 
                 <Link
                   to="/forgot-password"
-                  className="text-xs font-medium text-cyan-400 transition-colors hover:text-cyan-300 hover:underline focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                  className="text-xs font-medium text-[#e59b22] transition-colors hover:text-[#ffb955] hover:underline focus:outline-none focus:ring-1 focus:ring-[#e59b22]"
                 >
                   Mot de passe oublié ?
                 </Link>
@@ -245,7 +265,7 @@ export default function Login() {
                 <div
                   role="alert"
                   aria-live="polite"
-                  className="flex items-center gap-2.5 rounded-xl border border-red-500/30 bg-red-500/15 p-3.5 text-xs font-medium text-red-200 backdrop-blur-md"
+                  className="flex items-center gap-2.5 rounded-[0.25rem] border border-red-500/30 bg-red-500/15 p-3.5 text-xs font-medium text-red-200 backdrop-blur-md"
                 >
                   <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
                   <span>{error}</span>
@@ -256,11 +276,11 @@ export default function Login() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-cyan-500 text-base font-bold text-black transition-all duration-200 hover:bg-cyan-400 hover:shadow-lg hover:shadow-cyan-500/25 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                className="mt-4 flex h-11 w-full items-center justify-center gap-2 rounded-[0.25rem] bg-[#e59b22] text-sm font-semibold text-white shadow-[0_4px_14px_0_rgba(229,155,34,0.35)] transition-all duration-200 hover:bg-[#d97706] hover:shadow-[0_6px_20px_0_rgba(229,155,34,0.45)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {loading ? (
                   <>
-                    <Loader2 className="h-5 w-5 animate-spin text-black" />
+                    <Loader2 className="h-4 w-4 animate-spin text-white" />
                     <span>Connexion...</span>
                   </>
                 ) : (
@@ -271,9 +291,9 @@ export default function Login() {
               {/* SÉPARATEUR OU */}
               <div className="relative my-6 text-center">
                 <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-white/10" />
+                  <div className="w-full border-t border-[#293040]" />
                 </div>
-                <span className="relative bg-transparent px-3 text-xs uppercase tracking-widest text-zinc-400 font-semibold">
+                <span className="relative bg-[#121316] px-3 text-xs uppercase tracking-widest text-[#dce2f7]/50 font-semibold">
                   ou
                 </span>
               </div>
@@ -285,11 +305,11 @@ export default function Login() {
             </form>
 
             {/* FOOTER : Créer un compte */}
-            <footer className="mt-8 text-center text-xs font-medium text-zinc-300">
+            <footer className="mt-8 text-center text-xs font-medium text-[#dce2f7]/80">
               <span>Vous n'avez pas de compte ? </span>
               <Link
                 to="/register"
-                className="font-bold text-cyan-400 transition-colors hover:text-cyan-300 hover:underline focus:outline-none focus:ring-1 focus:ring-cyan-400"
+                className="font-bold text-[#e59b22] transition-colors hover:text-[#ffb955] hover:underline focus:outline-none focus:ring-1 focus:ring-[#e59b22]"
               >
                 Inscrivez-vous ici
               </Link>

@@ -2,6 +2,11 @@ import mongoose from "mongoose";
 import User from "../models/User";
 import Product from "../models/Product";
 import Order from "../models/Order";
+import Cart from "../models/Cart";
+import EmailVerificationToken from "../models/EmailVerificationToken";
+import PasswordResetToken from "../models/PasswordResetToken";
+import EmailChangeToken from "../models/EmailChangeToken";
+import cloudinary from "../config/cloudinary";
 
 export const getAdminDashboard = async () => {
   const [
@@ -251,4 +256,78 @@ export const getAdminUsers = async () => {
   });
 
   return usersWithStats;
+};
+
+export const deleteAdminUser = async (
+  adminUserId: string,
+  targetUserId: string
+) => {
+  if (adminUserId === targetUserId) {
+    throw new Error(
+      "Vous ne pouvez pas supprimer votre propre compte administrateur."
+    );
+  }
+
+  const user = await User.findById(targetUserId);
+  if (!user) {
+    throw new Error("Utilisateur introuvable");
+  }
+
+  if (user.role === "admin") {
+    throw new Error("Impossible de supprimer un compte administrateur.");
+  }
+
+  if (user.profileImagePublicId) {
+    try {
+      await cloudinary.uploader.destroy(user.profileImagePublicId, {
+        resource_type: "image",
+      });
+    } catch (cloudinaryError) {
+      console.error(
+        "Erreur suppression image Cloudinary :",
+        cloudinaryError
+      );
+    }
+  }
+
+  await Promise.all([
+    Cart.deleteMany({ user: user._id }),
+    EmailChangeToken.deleteMany({ user: user._id }),
+    EmailVerificationToken.deleteMany({ user: user._id }),
+    PasswordResetToken.deleteMany({ user: user._id }),
+  ]);
+
+  await User.findByIdAndDelete(user._id);
+
+  return { success: true };
+};
+
+export const deleteAdminOrder = async (orderId: string) => {
+  const session = await mongoose.startSession();
+
+  try {
+    await session.withTransaction(async () => {
+      const order = await Order.findById(orderId).session(session);
+      if (!order) {
+        throw new Error("Commande introuvable");
+      }
+
+      // Si la commande était en attente, restitution automatique des stocks
+      if (order.status === "pending") {
+        for (const item of order.items) {
+          await Product.updateOne(
+            { _id: item.product },
+            { $inc: { stock: item.quantity } },
+            { session }
+          );
+        }
+      }
+
+      await Order.findByIdAndDelete(orderId).session(session);
+    });
+
+    return { success: true };
+  } finally {
+    await session.endSession();
+  }
 };

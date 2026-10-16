@@ -1,20 +1,20 @@
 export default function TermsOfUse() {
   return (
-    <main className="bg-slate-50 px-4 py-16 sm:px-6 lg:px-8">
-      <article className="mx-auto max-w-4xl rounded-2xl bg-white p-6 shadow-sm sm:p-10">
-        <header className="border-b border-slate-200 pb-8">
-          <p className="text-sm font-semibold uppercase tracking-wide text-indigo-600">
+    <main className="bg-[#f9f9ff] px-4 py-16 sm:px-6 lg:px-8">
+      <article className="mx-auto max-w-4xl rounded-lg bg-white p-6 shadow-xs border border-[#e5e7eb] sm:p-10">
+        <header className="border-b border-[#e5e7eb] pb-8">
+          <p className="text-sm font-semibold uppercase tracking-wider text-[#835500]">
             MarketElectro
           </p>
-          <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+          <h1 className="mt-2 text-3xl font-bold tracking-tight text-[#141b2b] sm:text-4xl">
             Conditions Générales d&apos;Utilisation
           </h1>
-          <p className="mt-4 text-sm text-slate-500">
+          <p className="mt-4 text-sm text-[#524535]">
             Dernière mise à jour : 9 octobre 2026
           </p>
         </header>
 
-        <div className="mt-8 space-y-10 text-sm leading-7 text-slate-600">
+        <div className="mt-8 space-y-10 text-sm leading-7 text-[#524535]">
           <p>
             Les présentes Conditions Générales d&apos;Utilisation définissent
             les règles d&apos;accès et d&apos;utilisation du site MarketElectro,
@@ -23,7 +23,7 @@ export default function TermsOfUse() {
               href="https://code-alpha-fs-01.vercel.app"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-medium text-indigo-600 underline decoration-indigo-200 underline-offset-2 hover:text-indigo-800"
+              className="font-medium text-[#0053db] underline decoration-[#0053db]/30 underline-offset-2 hover:text-[#2563eb]"
             >
               https://code-alpha-fs-01.vercel.app
             </a>

@@ -19,16 +19,15 @@ interface RecommendedProductsProps {
 export default function RecommendedProducts({
   products,
   onViewProducts,
-  onSelectProduct,
 }: RecommendedProductsProps) {
   return (
-    <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between gap-4 px-6 py-5 border-b border-slate-100">
+    <Card className="rounded-lg border border-[#e5e7eb] bg-white shadow-xs">
+      <CardHeader className="flex flex-row items-center justify-between gap-4 px-6 py-5 border-b border-[#f1f3ff]">
         <div>
-          <CardTitle className="text-lg font-semibold text-slate-900">
+          <CardTitle className="text-base sm:text-lg font-bold text-[#141b2b]">
             Recommandé pour vous
           </CardTitle>
-          <p className="mt-0.5 text-xs text-slate-500">
+          <p className="mt-0.5 text-xs text-[#524535]">
             Une sélection d'articles basée sur les nouveautés du catalogue.
           </p>
         </div>
@@ -36,7 +35,7 @@ export default function RecommendedProducts({
         <Button
           variant="ghost"
           onClick={onViewProducts}
-          className="hidden rounded-xl text-xs sm:text-sm text-slate-600 hover:bg-slate-100 sm:flex"
+          className="hidden rounded-[0.25rem] text-xs sm:text-sm text-[#835500] hover:text-[#e59b22] hover:bg-[#e9edff] sm:flex font-semibold"
         >
           Tout le catalogue
           <ArrowRight className="ml-1.5 h-4 w-4" />
@@ -46,15 +45,15 @@ export default function RecommendedProducts({
       <CardContent className="p-6">
         {products.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-8 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
+            <div className="flex h-12 w-12 items-center justify-center rounded-[0.25rem] bg-[#f1f3ff] text-[#524535]">
               <Package className="h-6 w-6" />
             </div>
 
-            <p className="mt-3 text-sm font-semibold text-slate-900">
+            <p className="mt-3 text-sm font-semibold text-[#141b2b]">
               Aucune recommandation disponible
             </p>
 
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs text-[#524535]">
               Revenez bientôt pour découvrir de nouveaux produits.
             </p>
           </div>
@@ -63,29 +62,28 @@ export default function RecommendedProducts({
             {products.slice(0, 4).map((product) => (
               <div
                 key={product._id}
-                onClick={() => onSelectProduct?.(product._id)}
-                className="group cursor-pointer overflow-hidden rounded-xl border border-slate-200/80 bg-white transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+                className="group cursor-pointer overflow-hidden rounded-lg border border-[#e5e7eb] bg-white transition-all duration-200 hover:-translate-y-0.5 hover:border-[#e59b22]/50 hover:shadow-md"
               >
-                <div className="aspect-square relative overflow-hidden bg-slate-100">
+                <div className="aspect-square relative overflow-hidden bg-[#f9f9ff] border-b border-[#f1f3ff] p-3 flex items-center justify-center">
                   {product.image ? (
                     <img
                       src={product.image}
                       alt={product.name}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                      className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center">
-                      <ShoppingBag className="h-8 w-8 text-slate-300" />
+                      <ShoppingBag className="h-8 w-8 text-[#524535]/40" />
                     </div>
                   )}
                 </div>
 
                 <div className="p-3.5 space-y-1">
-                  <h3 className="truncate text-xs font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                  <h3 className="truncate text-xs font-semibold text-[#141b2b] group-hover:text-[#835500] transition-colors">
                     {product.name}
                   </h3>
 
-                  <p className="text-sm font-bold text-slate-900">
+                  <p className="text-sm font-bold text-[#141b2b]">
                     {formatPrice(product.price)}
                   </p>
                 </div>
@@ -98,10 +96,10 @@ export default function RecommendedProducts({
           <Button
             variant="outline"
             onClick={onViewProducts}
-            className="w-full rounded-xl border-slate-200 text-xs"
+            className="w-full rounded-[0.25rem] border-[#e5e7eb] text-xs font-semibold"
           >
-            Voir tous les produits
-            <ArrowRight className="ml-2 h-4 w-4" />
+            Voir tout le catalogue
+            <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
           </Button>
         </div>
       </CardContent>

@@ -1,4 +1,4 @@
-import { Menu, MonitorSmartphone,  X } from "lucide-react";
+import { Menu, MonitorSmartphone, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -92,7 +92,7 @@ export default function PublicNavbar() {
   }, [location.pathname, location.hash, navigate]);
 
   return (
-    <header className="sticky top-0 z-50 border-0 shadow-2xl border-slate-200/80 bg-white/80 backdrop-blur-xl transition-all duration-300">
+    <header className="sticky top-0 z-50 border-b border-[#e5e7eb] bg-white/90 backdrop-blur-md shadow-xs transition-all duration-300">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         <Link
           to="/"
@@ -100,14 +100,11 @@ export default function PublicNavbar() {
           className="group flex items-center gap-3 transition-transform duration-200 hover:scale-[1.02]"
           aria-label="MarketElectro - Accueil"
         >
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-600 via-indigo-500 to-violet-500 text-white shadow-md shadow-indigo-500/20 group-hover:shadow-lg group-hover:shadow-indigo-500/30">
-            <MonitorSmartphone className="h-5 w-5 transition-transform duration-300 group-hover:rotate-6" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-[0.25rem] bg-[#1a1c20] text-[#e59b22] shadow-sm transition-transform duration-300 group-hover:rotate-6">
+            <MonitorSmartphone className="h-5 w-5" />
           </div>
-          <span className="text-xl font-bold tracking-tight text-slate-900">
-            Market
-            <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
-              Electro
-            </span>
+          <span className="text-xl font-bold tracking-tight text-[#141b2b]">
+            Market<span className="text-[#e59b22]">Electro</span>
           </span>
         </Link>
 
@@ -121,11 +118,10 @@ export default function PublicNavbar() {
                 key={link.id}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className={`text-sm transition-colors ${
-                  isActive
-                    ? "font-semibold text-indigo-600"
-                    : "font-medium text-slate-600 hover:text-indigo-600"
-                }`}
+                className={`text-sm transition-colors relative py-1 ${isActive
+                  ? "font-semibold text-[#141b2b] after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-[#e59b22]"
+                  : "font-medium text-[#524535] hover:text-[#e59b22]"
+                  }`}
               >
                 {link.label}
               </a>
@@ -133,11 +129,10 @@ export default function PublicNavbar() {
               <Link
                 key={link.id}
                 to={link.href}
-                className={`text-sm transition-colors ${
-                  isActive
-                    ? "font-semibold text-indigo-600"
-                    : "font-medium text-slate-600 hover:text-indigo-600"
-                }`}
+                className={`text-sm transition-colors relative py-1 ${isActive
+                  ? "font-semibold text-[#141b2b] after:absolute after:-bottom-1 after:left-0 after:right-0 after:h-[2px] after:bg-[#e59b22]"
+                  : "font-medium text-[#524535] hover:text-[#e59b22]"
+                  }`}
               >
                 {link.label}
               </Link>
@@ -149,13 +144,13 @@ export default function PublicNavbar() {
         <div className="hidden items-center gap-3 md:flex">
           <Link
             to="/login"
-            className="inline-flex h-10 items-center justify-center rounded-xl px-4 text-sm font-semibold text-slate-700 transition-all hover:bg-slate-100 hover:text-slate-900 active:scale-[0.98]"
+            className="inline-flex h-9 items-center justify-center rounded-[0.25rem] px-4 text-sm font-semibold text-[#141b2b] transition-all hover:bg-[#f1f3ff] hover:text-[#835500] active:scale-[0.98]"
           >
             Se connecter
           </Link>
           <Link
             to="/register"
-            className="group relative inline-flex h-10 items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-5 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 transition-all hover:shadow-lg hover:shadow-indigo-500/30 active:scale-[0.98]"
+            className="group relative inline-flex h-9 items-center justify-center gap-2 overflow-hidden rounded-[0.25rem] bg-[#e59b22] px-5 text-sm font-semibold text-white shadow-[0_4px_14px_0_rgba(229,155,34,0.35)] transition-all hover:bg-[#d97706] hover:shadow-[0_6px_20px_0_rgba(229,155,34,0.45)] active:scale-[0.98]"
           >
             <span>Créer un compte</span>
           </Link>
@@ -166,7 +161,7 @@ export default function PublicNavbar() {
           type="button"
           variant="ghost"
           size="icon"
-          className="rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-100 md:hidden"
+          className="rounded-[0.25rem] border border-[#e5e7eb] text-[#141b2b] hover:bg-[#f1f3ff] md:hidden"
           onClick={() => setMobileMenuOpen((prev) => !prev)}
           aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
         >
@@ -176,7 +171,7 @@ export default function PublicNavbar() {
 
       {/* Menu Mobile */}
       {mobileMenuOpen && (
-        <div className="animate-in slide-in-from-top-2 border-b border-slate-200 bg-white/95 px-4 pb-6 pt-3 backdrop-blur-2xl md:hidden">
+        <div className="animate-in slide-in-from-top-2 border-b border-[#e5e7eb] bg-white/95 px-4 pb-6 pt-3 backdrop-blur-2xl md:hidden">
           <nav className="flex flex-col gap-1.5" aria-label="Navigation mobile">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id;
@@ -186,11 +181,10 @@ export default function PublicNavbar() {
                   key={link.id}
                   href={link.href}
                   onClick={(e) => handleNavClick(e, link.href)}
-                  className={`rounded-xl px-4 py-3 text-sm transition-all ${
-                    isActive
-                      ? "bg-indigo-50/80 font-semibold text-indigo-600"
-                      : "font-medium text-slate-600 hover:bg-slate-100/80 hover:text-slate-900"
-                  }`}
+                  className={`rounded-[0.25rem] px-4 py-3 text-sm transition-all ${isActive
+                    ? "bg-[#e9edff] font-semibold text-[#835500] border-l-2 border-[#e59b22]"
+                    : "font-medium text-[#524535] hover:bg-[#f1f3ff] hover:text-[#141b2b]"
+                    }`}
                 >
                   {link.label}
                 </a>
@@ -199,29 +193,28 @@ export default function PublicNavbar() {
                   key={link.id}
                   to={link.href}
                   onClick={closeMenu}
-                  className={`rounded-xl px-4 py-3 text-sm transition-all ${
-                    isActive
-                      ? "bg-indigo-50/80 font-semibold text-indigo-600"
-                      : "font-medium text-slate-600 hover:bg-slate-100/80 hover:text-slate-900"
-                  }`}
+                  className={`rounded-[0.25rem] px-4 py-3 text-sm transition-all ${isActive
+                    ? "bg-[#e9edff] font-semibold text-[#835500] border-l-2 border-[#e59b22]"
+                    : "font-medium text-[#524535] hover:bg-[#f1f3ff] hover:text-[#141b2b]"
+                    }`}
                 >
                   {link.label}
                 </Link>
               );
             })}
 
-            <div className="mt-4 grid grid-cols-2 gap-3 border-t border-slate-200 pt-4">
+            <div className="mt-4 grid grid-cols-2 gap-3 border-t border-[#e5e7eb] pt-4">
               <Link
                 to="/login"
                 onClick={closeMenu}
-                className="inline-flex h-11 items-center justify-center rounded-xl border border-slate-200 bg-white text-sm font-semibold text-slate-800 shadow-sm transition-all active:scale-[0.98]"
+                className="inline-flex h-11 min-h-[44px] items-center justify-center rounded-[0.25rem] border border-[#e5e7eb] bg-white text-sm font-semibold text-[#141b2b] shadow-xs transition-all active:scale-[0.98]"
               >
                 Se connecter
               </Link>
               <Link
                 to="/register"
                 onClick={closeMenu}
-                className="inline-flex h-11 items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-sm font-semibold text-white shadow-md shadow-indigo-500/20 active:scale-[0.98]"
+                className="inline-flex h-11 min-h-[44px] items-center justify-center rounded-[0.25rem] bg-[#e59b22] text-sm font-semibold text-white shadow-[0_4px_14px_0_rgba(229,155,34,0.35)] active:scale-[0.98]"
               >
                 S'inscrire
               </Link>

@@ -7,6 +7,7 @@ import {
     uploadMyProfileImageController,
     requestEmailChangeController,
     linkGoogleAccountController,
+    deleteMyAccountController,
 } from "../controllers/user.controllers";
 
 import {
@@ -67,6 +68,12 @@ router.post(
     authMiddleware,
     validate(linkGoogleAccountSchema),
     linkGoogleAccountController,
+);
+
+router.delete(
+    "/me",
+    authMiddleware,
+    deleteMyAccountController,
 );
 
 export default router;

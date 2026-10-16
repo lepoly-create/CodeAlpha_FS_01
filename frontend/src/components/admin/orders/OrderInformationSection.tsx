@@ -14,34 +14,34 @@ export default function OrderInformationSection({
   order,
 }: OrderInformationSectionProps) {
   return (
-    <section className="rounded-xl border border-slate-200 bg-slate-50/60 p-4 sm:p-5">
-      <div className="mb-4 flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white shadow-sm">
-          <Clock className="h-4 w-4 text-slate-600" />
+    <section className="rounded-lg border border-[#e5e7eb] bg-[#f9f9ff] p-4 sm:p-5">
+      <div className="mb-3.5 flex items-center gap-2">
+        <div className="flex h-7 w-7 items-center justify-center rounded-[0.25rem] bg-white border border-[#e5e7eb] shadow-2xs">
+          <Clock className="h-3.5 w-3.5 text-[#835500]" />
         </div>
 
-        <h3 className="font-semibold text-slate-900">
-          Order information
+        <h3 className="text-xs sm:text-sm font-bold text-[#141b2b]">
+          Historique de la commande
         </h3>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
-          <p className="text-xs text-muted-foreground">
-            Created
+          <p className="text-[11px] font-semibold text-[#524535]">
+            Date de création
           </p>
 
-          <p className="mt-1 font-medium text-slate-900">
+          <p className="mt-0.5 text-xs sm:text-sm font-bold text-[#141b2b]">
             {formatOrderDate(order.createdAt)}
           </p>
         </div>
 
         <div>
-          <p className="text-xs text-muted-foreground">
-            Last update
+          <p className="text-[11px] font-semibold text-[#524535]">
+            Dernière mise à jour
           </p>
 
-          <p className="mt-1 font-medium text-slate-900">
+          <p className="mt-0.5 text-xs sm:text-sm font-bold text-[#141b2b]">
             {formatOrderDate(order.updatedAt)}
           </p>
         </div>

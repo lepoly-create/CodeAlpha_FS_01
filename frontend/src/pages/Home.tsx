@@ -10,37 +10,28 @@ import WhyMarketElectroSection from "@/components/home/WhyMarketElectroSection";
 export default function Home() {
   return (
     <>
-      {/* Présentation principale */}
-      <section id="hero">
-        <HeroSection />
-      </section>
-     
+      {/* 1. Présentation principale (Hero) */}
+      <HeroSection />
 
-      {/* Présentation de MarketElectro */}
-      <section id="about">
-        <AboutSection />
-      </section>
+      {/* 2. Présentation de la boutique & valeurs */}
+      <AboutSection />
 
-      {/* Catégories */}
+      {/* 3. Catégories de matériel */}
       <CategoriesSection />
 
-      {/* Produits */}
+      {/* 4. Sélection des produits vedettes */}
       <FeaturedProductsSection />
 
-      {/* Arguments de confiance */}
-      <section id="why-us">
-        <WhyMarketElectroSection />
-      </section>
+      {/* 5. Pourquoi choisir MarketElectro ? (Arguments comparatifs & garanties) */}
+      <WhyMarketElectroSection />
 
-      {/* Parcours utilisateur */}
+      {/* 6. Comment commander & utiliser l'app (Parcours guidé 4 étapes) */}
       <HowItWorksSection />
 
-      {/* Contact */}
-      <section id="contact">
-        <ContactSection />
-      </section>
+      {/* 7. Centre d'Assistance & FAQ interactive avec réponses dépliables */}
+      <ContactSection />
 
-      {/* CTA final */}
+      {/* 8. Appel à l'action final */}
       <FinalCtaSection />
     </>
   );

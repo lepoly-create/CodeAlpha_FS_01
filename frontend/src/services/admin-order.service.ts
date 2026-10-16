@@ -37,3 +37,7 @@ export const updateAdminOrderStatus = async (
 
   return response.data.data;
 };
+
+export const deleteAdminOrder = async (id: string): Promise<void> => {
+  await api.delete(`/admin/orders/${id}`);
+};

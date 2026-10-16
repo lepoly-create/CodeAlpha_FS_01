@@ -12,7 +12,7 @@ export default function AppLayout({ children }: AppLayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex min-h-screen overflow-hidden bg-neutral-50">
+    <div className="flex min-h-screen overflow-hidden bg-[#f9f9ff]">
       <AppSidebar
         open={sidebarOpen}
         onClose={() => setSidebarOpen(false)}

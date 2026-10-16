@@ -10,6 +10,7 @@ import ProfileInformation from "@/components/profile/ProfileInformation";
 import ChangePasswordForm from "@/components/profile/ChangePasswordForm";
 import ChangeEmailForm from "@/components/profile/ChangeEmailForm";
 import LinkGoogleAccountButton from "@/components/auth/LinkGoogleAccountButton";
+import DeleteAccountSection from "@/components/profile/DeleteAccountSection";
 
 export default function Profile() {
   const { updateUser } = useAuth();
@@ -58,18 +59,18 @@ export default function Profile() {
     return (
       <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6 animate-pulse">
         <div className="space-y-2">
-          <div className="h-4 w-28 rounded bg-slate-200" />
-          <div className="h-8 w-48 rounded bg-slate-200" />
+          <div className="h-4 w-28 rounded bg-[#f1f3ff]" />
+          <div className="h-8 w-48 rounded bg-[#f1f3ff]" />
         </div>
-        <div className="h-60 rounded-2xl bg-slate-200" />
+        <div className="h-60 rounded-lg bg-[#f1f3ff]" />
         <div className="grid gap-6 lg:grid-cols-3">
           <div className="lg:col-span-2 space-y-6">
-            <div className="h-52 rounded-2xl bg-slate-200" />
-            <div className="h-36 rounded-2xl bg-slate-200" />
+            <div className="h-52 rounded-lg bg-[#f1f3ff]" />
+            <div className="h-36 rounded-lg bg-[#f1f3ff]" />
           </div>
           <div className="space-y-6">
-            <div className="h-52 rounded-2xl bg-slate-200" />
-            <div className="h-52 rounded-2xl bg-slate-200" />
+            <div className="h-52 rounded-lg bg-[#f1f3ff]" />
+            <div className="h-52 rounded-lg bg-[#f1f3ff]" />
           </div>
         </div>
       </div>
@@ -81,16 +82,16 @@ export default function Profile() {
     return (
       <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
         <div>
-          <span className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+          <span className="text-xs font-bold uppercase tracking-[0.08em] text-[#835500]">
             MarketElectro
           </span>
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+          <h1 className="text-2xl font-bold tracking-tight text-[#141b2b] sm:text-3xl">
             Mon Profil
           </h1>
         </div>
 
-        <Card className="rounded-2xl border-red-200 bg-red-50/50">
-          <CardContent className="flex items-center gap-3 p-6 text-red-600">
+        <Card className="rounded-lg border border-[#ba1a1a]/20 bg-[#ffdad6]/40">
+          <CardContent className="flex items-center gap-3 p-6 text-[#ba1a1a]">
             <AlertCircle className="h-5 w-5 shrink-0" />
             <p className="text-sm font-medium">
               {error || "Une erreur est survenue lors du chargement."}
@@ -105,13 +106,13 @@ export default function Profile() {
     <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
       {/* En-tête de section */}
       <div>
-        <span className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+        <span className="text-xs font-bold uppercase tracking-[0.08em] text-[#835500]">
           Espace Client
         </span>
-        <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+        <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-[#141b2b] sm:text-3xl">
           Paramètres du compte
         </h1>
-        <p className="mt-1 text-xs sm:text-sm text-slate-500">
+        <p className="mt-1 text-xs sm:text-sm text-[#524535]">
           Gérez vos informations personnelles et la sécurité de votre accès.
         </p>
       </div>
@@ -126,14 +127,14 @@ export default function Profile() {
           <ProfileInformation user={user} onUpdated={handleUserUpdated} />
 
           {/* Integration Google */}
-          <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between gap-4 border-b border-slate-100 pb-4">
+          <Card className="rounded-lg border border-[#e5e7eb] bg-white shadow-xs">
+            <CardContent className="p-5 sm:p-6">
+              <div className="flex items-center justify-between gap-4 border-b border-[#f1f3ff] pb-4">
                 <div>
-                  <h2 className="text-base font-semibold text-slate-900">
+                  <h2 className="text-sm sm:text-base font-bold text-[#141b2b]">
                     Compte Google
                   </h2>
-                  <p className="mt-0.5 text-xs text-slate-500">
+                  <p className="mt-0.5 text-xs text-[#524535]">
                     Liez votre compte pour une connexion rapide en un clic.
                   </p>
                 </div>
@@ -152,6 +153,13 @@ export default function Profile() {
           <ChangePasswordForm />
         </div>
       </div>
+
+      {/* Zone de danger (réservée aux utilisateurs clients) */}
+      {user.role === "customer" && (
+        <div className="pt-4 border-t border-[#e5e7eb]">
+          <DeleteAccountSection />
+        </div>
+      )}
     </div>
   );
 }

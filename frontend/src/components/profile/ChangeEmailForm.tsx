@@ -40,9 +40,9 @@ export default function ChangeEmailForm() {
     } catch (error: unknown) {
       const responseMessage =
         typeof error === "object" &&
-        error !== null &&
-        "response" in error &&
-        typeof (error as { response: { data?: { message?: string } } }).response?.data?.message === "string"
+          error !== null &&
+          "response" in error &&
+          typeof (error as { response: { data?: { message?: string } } }).response?.data?.message === "string"
           ? (error as { response: { data: { message: string } } }).response.data.message
           : undefined;
 
@@ -55,26 +55,26 @@ export default function ChangeEmailForm() {
   };
 
   return (
-    <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm">
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
+    <Card className="rounded-lg border border-[#e5e7eb] bg-white shadow-xs">
+      <CardContent className="p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-4 border-b border-[#f1f3ff] pb-4">
           <div>
-            <h2 className="text-lg font-semibold tracking-tight text-slate-900">
+            <h2 className="text-base sm:text-lg font-bold text-[#141b2b]">
               Modifier l'adresse email
             </h2>
-            <p className="mt-0.5 text-xs text-slate-500">
+            <p className="mt-0.5 text-xs text-[#524535]">
               Un lien de vérification sera envoyé à la nouvelle adresse.
             </p>
           </div>
 
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[0.25rem] bg-[#f1f3ff] text-[#835500]">
             <Mail className="h-4 w-4" />
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="mt-5 space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="new-email" className="text-xs font-medium text-slate-700">
+            <Label htmlFor="new-email" className="text-xs font-semibold uppercase tracking-wider text-[#524535]">
               Nouvelle adresse email
             </Label>
             <Input
@@ -84,13 +84,13 @@ export default function ChangeEmailForm() {
               onChange={(e) => setNewEmail(e.target.value)}
               placeholder="nouveau@domaine.com"
               disabled={loading}
-              className="h-10 rounded-xl border-slate-200 focus-visible:ring-slate-950 text-sm"
+              className="h-10 rounded-[0.25rem] border-[#e5e7eb] bg-[#f9f9ff] text-[#141b2b] focus:bg-white focus:border-[#e59b22] focus:ring-1 focus:ring-[#e59b22] text-sm"
               required
             />
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="email-confirm-pass" className="text-xs font-medium text-slate-700">
+            <Label htmlFor="email-confirm-pass" className="text-xs font-semibold uppercase tracking-wider text-[#524535]">
               Mot de passe actuel (pour validation)
             </Label>
             <Input
@@ -100,7 +100,7 @@ export default function ChangeEmailForm() {
               onChange={(e) => setCurrentPassword(e.target.value)}
               placeholder="••••••••"
               disabled={loading}
-              className="h-10 rounded-xl border-slate-200 focus-visible:ring-slate-950 text-sm"
+              className="h-10 rounded-[0.25rem] border-[#e5e7eb] bg-[#f9f9ff] text-[#141b2b] focus:bg-white focus:border-[#e59b22] focus:ring-1 focus:ring-[#e59b22] text-sm"
               required
             />
           </div>
@@ -109,7 +109,7 @@ export default function ChangeEmailForm() {
             <Button
               type="submit"
               disabled={loading}
-              className="rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs sm:text-sm"
+              className="w-full sm:w-auto rounded-[0.25rem] bg-[#1a1c20] text-white hover:bg-[#e59b22] text-xs sm:text-sm font-semibold shadow-xs cursor-pointer transition-colors"
             >
               {loading ? (
                 <>

@@ -60,8 +60,8 @@ export default function ProfileImageUpload({
   };
 
   return (
-    <div className="relative shrink-0">
-      <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-slate-100 text-2xl font-bold text-slate-700 ring-4 ring-white shadow-md sm:h-32 sm:w-32 sm:text-3xl">
+    <div className="relative shrink-0 mx-auto w-fit">
+      <div className="flex h-28 w-28 items-center justify-center overflow-hidden rounded-full bg-[#ffddb5]/60 text-2xl font-bold text-[#835500] ring-4 ring-white shadow-xl sm:h-32 sm:w-32 sm:text-3xl border border-[#835500]/20">
         {profileImage ? (
           <img
             src={profileImage}
@@ -76,16 +76,15 @@ export default function ProfileImageUpload({
       <Button
         type="button"
         size="icon"
-        variant="secondary"
-        className="absolute bottom-1 right-1 h-9 w-9 rounded-full border-2 border-white shadow-md hover:bg-slate-200 transition-transform active:scale-95"
+        className="absolute bottom-1 right-1 h-9 w-9 rounded-full bg-[#1a1c20] text-white hover:bg-[#e59b22] border-2 border-white shadow-md transition-all active:scale-95 cursor-pointer"
         onClick={() => fileInputRef.current?.click()}
         disabled={isUploading}
         aria-label="Modifier la photo de profil"
       >
         {isUploading ? (
-          <Loader2 className="h-4 w-4 animate-spin text-slate-700" />
+          <Loader2 className="h-4 w-4 animate-spin text-white" />
         ) : (
-          <Camera className="h-4 w-4 text-slate-700" />
+          <Camera className="h-4 w-4 text-white" />
         )}
       </Button>
 

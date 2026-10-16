@@ -76,17 +76,19 @@ export default function ForgotPassword() {
     };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-neutral-100 px-4">
-      <Card className="w-full max-w-md rounded-2xl p-8">
+    <main className="flex min-h-screen items-center justify-center bg-[#f9f9ff] px-4">
+      <Card className="w-full max-w-md rounded-lg border border-[#e5e7eb] bg-white p-8 shadow-xs">
 
         <div className="text-center">
-          <Mail className="mx-auto h-12 w-12" />
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-[0.25rem] bg-[#ffddb5]/50 text-[#835500] border border-[#835500]/20">
+            <Mail className="h-7 w-7 text-[#e59b22]" />
+          </div>
 
-          <h1 className="mt-5 text-2xl font-bold">
+          <h1 className="mt-5 text-2xl font-bold text-[#141b2b]">
             Mot de passe oublié
           </h1>
 
-          <p className="mt-3 text-sm text-neutral-500">
+          <p className="mt-2 text-sm text-[#524535]">
             Entrez votre adresse email pour
             recevoir un lien de récupération.
           </p>
@@ -105,17 +107,18 @@ export default function ForgotPassword() {
               )
             }
             placeholder="Votre adresse email"
+            className="h-10 rounded-[0.25rem] border-[#e5e7eb] focus-visible:border-[#e59b22] focus-visible:ring-1 focus-visible:ring-[#e59b22]"
             required
           />
 
           {success && (
-            <p className="rounded-lg bg-green-50 p-3 text-sm text-green-700">
+            <p className="rounded-[0.25rem] bg-emerald-50 border border-emerald-200 p-3 text-xs font-medium text-emerald-800">
               {success}
             </p>
           )}
 
           {error && (
-            <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+            <p className="rounded-[0.25rem] bg-[#ffdad6]/60 border border-[#ba1a1a]/20 p-3 text-xs font-medium text-[#93000a]">
               {error}
             </p>
           )}
@@ -123,7 +126,7 @@ export default function ForgotPassword() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full"
+            className="w-full h-10 rounded-[0.25rem] bg-[#e59b22] text-sm font-semibold text-white shadow-[0_4px_14px_0_rgba(229,155,34,0.35)] hover:bg-[#d97706]"
           >
             {loading
               ? "Envoi..."
@@ -133,7 +136,7 @@ export default function ForgotPassword() {
 
         <Link
           to="/login"
-          className="mt-6 block text-center text-sm font-semibold hover:underline"
+          className="mt-6 block text-center text-sm font-semibold text-[#835500] hover:text-[#e59b22] hover:underline"
         >
           Retour à la connexion
         </Link>

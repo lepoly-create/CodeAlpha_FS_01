@@ -114,3 +114,7 @@ export const linkGoogleAccount =
 
     return response.data.data;
   };
+
+export const deleteMyAccount = async (): Promise<void> => {
+  await api.delete("/users/me");
+};

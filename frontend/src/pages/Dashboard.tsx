@@ -62,29 +62,29 @@ export default function Dashboard() {
   /* Skeleton Loading */
   if (loading) {
     return (
-      <section className="min-h-screen w-full bg-slate-50/60 p-4 sm:p-6 lg:p-8 space-y-6">
+      <section className="min-h-screen w-full bg-[#f9f9ff] p-4 sm:p-6 lg:p-8 space-y-6">
         <div className="mx-auto max-w-7xl space-y-6">
           {/* Welcome Banner Skeleton */}
-          <div className="h-56 w-full animate-pulse rounded-3xl bg-slate-200" />
+          <div className="h-52 w-full animate-pulse rounded-lg bg-[#f1f3ff]" />
 
           {/* Stats Skeleton */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {Array.from({ length: 4 }).map((_, index) => (
               <div
                 key={index}
-                className="h-28 animate-pulse rounded-2xl bg-slate-200"
+                className="h-24 animate-pulse rounded-lg bg-[#f1f3ff]"
               />
             ))}
           </div>
 
           {/* Recent Orders + Account Summary Skeleton */}
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_360px]">
-            <div className="h-80 animate-pulse rounded-2xl bg-slate-200" />
-            <div className="h-80 animate-pulse rounded-2xl bg-slate-200" />
+            <div className="h-80 animate-pulse rounded-lg bg-[#f1f3ff]" />
+            <div className="h-80 animate-pulse rounded-lg bg-[#f1f3ff]" />
           </div>
 
           {/* Recommended Skeleton */}
-          <div className="h-64 animate-pulse rounded-2xl bg-slate-200" />
+          <div className="h-64 animate-pulse rounded-lg bg-[#f1f3ff]" />
         </div>
       </section>
     );
@@ -93,25 +93,25 @@ export default function Dashboard() {
   /* Vue d'erreur */
   if (error || !dashboard) {
     return (
-      <section className="min-h-screen w-full bg-slate-50/60 p-4 sm:p-6 lg:p-8 flex items-center justify-center">
-        <Card className="max-w-md w-full border-rose-200 bg-white shadow-xl rounded-2xl">
+      <section className="min-h-screen w-full bg-[#f9f9ff] p-4 sm:p-6 lg:p-8 flex items-center justify-center">
+        <Card className="max-w-md w-full border border-[#ba1a1a]/20 bg-white shadow-xs rounded-lg">
           <CardContent className="flex flex-col items-center gap-4 p-8 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-rose-50 text-rose-600 border border-rose-100">
-              <AlertCircle className="h-7 w-7" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-[0.25rem] bg-[#ffdad6]/60 text-[#ba1a1a] border border-[#ba1a1a]/20">
+              <AlertCircle className="h-6 w-6" />
             </div>
 
             <div className="space-y-1">
-              <h2 className="text-lg font-bold text-slate-900">
+              <h2 className="text-base font-bold text-[#141b2b]">
                 Oups ! Erreur de connexion
               </h2>
-              <p className="text-xs text-slate-500">
+              <p className="text-xs text-[#524535]">
                 {error || "Impossible de récupérer vos données pour le moment."}
               </p>
             </div>
 
             <Button
               onClick={fetchDashboard}
-              className="mt-2 flex items-center gap-2 rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs"
+              className="mt-2 flex items-center gap-2 rounded-[0.25rem] bg-[#1a1c20] text-white hover:bg-[#22252a] text-xs font-semibold px-4 h-9"
             >
               <RefreshCw className="h-4 w-4" />
               Réessayer
@@ -125,7 +125,7 @@ export default function Dashboard() {
   const { user, statistics, recentOrders, recommendedProducts } = dashboard;
 
   return (
-    <section className="min-h-screen w-full bg-slate-50/60 p-4 sm:p-6 lg:p-8">
+    <section className="min-h-screen w-full bg-[#f9f9ff] p-4 sm:p-6 lg:p-8">
       <div className="mx-auto max-w-7xl space-y-6">
         {/* 1. Hero Welcome */}
         <DashboardWelcome

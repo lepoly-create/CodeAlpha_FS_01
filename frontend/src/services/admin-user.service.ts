@@ -24,3 +24,7 @@ export const getAdminUsers = async (): Promise<AdminUser[]> => {
 
   return response.data.data;
 };
+
+export const deleteAdminUser = async (userId: string): Promise<void> => {
+  await api.delete(`/admin/users/${userId}`);
+};

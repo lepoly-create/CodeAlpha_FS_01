@@ -20,18 +20,18 @@ export default function AdminProductFields({
 }: AdminProductFieldsProps) {
   const handleInputChange =
     (field: keyof AdminProductFormData) =>
-    (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      onFieldChange(field, event.target.value);
-    };
+      (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        onFieldChange(field, event.target.value);
+      };
 
   return (
     <>
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <label
           htmlFor="product-name"
-          className="text-sm font-medium"
+          className="text-xs font-semibold uppercase tracking-wider text-[#524535]"
         >
-          Product name
+          Nom du produit
         </label>
 
         <Input
@@ -39,16 +39,17 @@ export default function AdminProductFields({
           name="name"
           value={formData.name}
           onChange={handleInputChange("name")}
-          placeholder="MacBook Pro M4"
+          placeholder="Ex: MacBook Pro M4 Max 16''"
           disabled={disabled}
+          className="h-10 rounded-[0.25rem] border-[#e5e7eb] bg-[#f9f9ff] text-sm text-[#141b2b] placeholder:text-[#524535]/50 focus-visible:bg-white focus-visible:border-[#e59b22] focus-visible:ring-1 focus-visible:ring-[#e59b22]"
           required
         />
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <label
           htmlFor="product-description"
-          className="text-sm font-medium"
+          className="text-xs font-semibold uppercase tracking-wider text-[#524535]"
         >
           Description
         </label>
@@ -58,21 +59,21 @@ export default function AdminProductFields({
           name="description"
           value={formData.description}
           onChange={handleInputChange("description")}
-          placeholder="Product description..."
+          placeholder="Spécifications techniques, autonomie, connectique, garantie..."
           disabled={disabled}
           required
-          rows={4}
-          className="w-full rounded-md border bg-background px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+          rows={3}
+          className="w-full rounded-[0.25rem] border border-[#e5e7eb] bg-[#f9f9ff] p-3 text-sm text-[#141b2b] placeholder:text-[#524535]/50 outline-none focus:border-[#e59b22] focus:bg-white focus:ring-1 focus:ring-[#e59b22] disabled:cursor-not-allowed disabled:opacity-50 resize-none transition-all"
         />
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="space-y-2">
+      <div className="grid gap-3 sm:grid-cols-2">
+        <div className="space-y-1.5">
           <label
             htmlFor="product-price"
-            className="text-sm font-medium"
+            className="text-xs font-semibold uppercase tracking-wider text-[#524535]"
           >
-            Price ($)
+            Prix (FCFA)
           </label>
 
           <Input
@@ -85,16 +86,17 @@ export default function AdminProductFields({
             onChange={handleInputChange("price")}
             placeholder="1500000"
             disabled={disabled}
+            className="h-10 rounded-[0.25rem] border-[#e5e7eb] bg-[#f9f9ff] text-sm text-[#141b2b] placeholder:text-[#524535]/50 focus-visible:bg-white focus-visible:border-[#e59b22] focus-visible:ring-1 focus-visible:ring-[#e59b22]"
             required
           />
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           <label
             htmlFor="product-stock"
-            className="text-sm font-medium"
+            className="text-xs font-semibold uppercase tracking-wider text-[#524535]"
           >
-            Stock
+            Quantité en Stock
           </label>
 
           <Input
@@ -105,19 +107,20 @@ export default function AdminProductFields({
             step="1"
             value={formData.stock}
             onChange={handleInputChange("stock")}
-            placeholder="20"
+            placeholder="25"
             disabled={disabled}
+            className="h-10 rounded-[0.25rem] border-[#e5e7eb] bg-[#f9f9ff] text-sm text-[#141b2b] placeholder:text-[#524535]/50 focus-visible:bg-white focus-visible:border-[#e59b22] focus-visible:ring-1 focus-visible:ring-[#e59b22]"
             required
           />
         </div>
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <label
           htmlFor="product-category"
-          className="text-sm font-medium"
+          className="text-xs font-semibold uppercase tracking-wider text-[#524535]"
         >
-          Category
+          Catégorie
         </label>
 
         <Input
@@ -125,18 +128,19 @@ export default function AdminProductFields({
           name="category"
           value={formData.category}
           onChange={handleInputChange("category")}
-          placeholder="Ordinateurs"
+          placeholder="Ordinateurs, Smartphones, Audio, Accessoires..."
           disabled={disabled}
+          className="h-10 rounded-[0.25rem] border-[#e5e7eb] bg-[#f9f9ff] text-sm text-[#141b2b] placeholder:text-[#524535]/50 focus-visible:bg-white focus-visible:border-[#e59b22] focus-visible:ring-1 focus-visible:ring-[#e59b22]"
           required
         />
       </div>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5">
         <label
           htmlFor="product-image"
-          className="text-sm font-medium"
+          className="text-xs font-semibold uppercase tracking-wider text-[#524535]"
         >
-          Image URL
+          URL de l'image
         </label>
 
         <Input
@@ -145,17 +149,18 @@ export default function AdminProductFields({
           type="url"
           value={formData.image}
           onChange={handleInputChange("image")}
-          placeholder="https://example.com/product.jpg"
+          placeholder="https://images.unsplash.com/photo-..."
           disabled={disabled}
+          className="h-10 rounded-[0.25rem] border-[#e5e7eb] bg-[#f9f9ff] text-sm text-[#141b2b] placeholder:text-[#524535]/50 focus-visible:bg-white focus-visible:border-[#e59b22] focus-visible:ring-1 focus-visible:ring-[#e59b22]"
           required
           aria-describedby="product-image-help"
         />
 
         <p
           id="product-image-help"
-          className="text-xs text-muted-foreground"
+          className="text-[11px] text-[#524535]/70"
         >
-          Enter the URL of the product image.
+          Renseignez l'URL publique de l'image haute définition du produit.
         </p>
       </div>
     </>

@@ -6,6 +6,7 @@ import {
     changeMyPassword,
     updateMyProfileImage,
     requestEmailChange,
+    deleteMyAccount,
 } from "../services/user.services";
 
 import { sendEmailChangeEmail } from "../services/email.services";
@@ -138,6 +139,25 @@ export const uploadMyProfileImageController = async (
         res.status(200).json({
             success: true,
             data: profile,
+        });
+    } catch (error: any) {
+        res.status(400).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
+
+export const deleteMyAccountController = async (
+    req: Request,
+    res: Response,
+) => {
+    try {
+        await deleteMyAccount(req.user!.id);
+
+        res.status(200).json({
+            success: true,
+            message: "Votre compte a été supprimé avec succès.",
         });
     } catch (error: any) {
         res.status(400).json({
