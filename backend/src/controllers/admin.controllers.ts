@@ -7,6 +7,8 @@ import {
   getAdminOrderById,
   updateAdminOrderStatus,
   getAdminUsers,
+  deleteAdminUser,
+  deleteAdminOrder,
 } from "../services/admin.services";
 export const getDashboard = async (
   req: Request,
@@ -129,6 +131,38 @@ export const getUsers = async (req: Request, res: Response) => {
       message:
         error.message ||
         "Erreur lors du chargement des utilisateurs",
+    });
+  }
+};
+
+export const deleteUser = async (req: Request, res: Response) => {
+  try {
+    await deleteAdminUser(req.user!.id, String(req.params.id));
+
+    res.status(200).json({
+      success: true,
+      message: "Utilisateur supprimé avec succès",
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Erreur lors de la suppression de l'utilisateur",
+    });
+  }
+};
+
+export const deleteOrder = async (req: Request, res: Response) => {
+  try {
+    await deleteAdminOrder(String(req.params.id));
+
+    res.status(200).json({
+      success: true,
+      message: "Commande supprimée avec succès",
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || "Erreur lors de la suppression de la commande",
     });
   }
 };

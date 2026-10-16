@@ -19,18 +19,18 @@ export default function DashboardStats({ statistics }: DashboardStatsProps) {
       value: statistics.totalOrders,
       description: "Commandes effectuées",
       icon: ShoppingBag,
-      color: "text-blue-600",
-      bgColor: "bg-blue-50",
-      borderColor: "border-blue-100",
+      color: "text-[#0053db]",
+      bgColor: "bg-[#e9edff]",
+      borderColor: "border-[#0053db]/20",
     },
     {
       label: "En traitement",
       value: statistics.pendingOrders,
       description: "Commandes en attente",
       icon: Clock3,
-      color: "text-amber-600",
-      bgColor: "bg-amber-50",
-      borderColor: "border-amber-100",
+      color: "text-[#835500]",
+      bgColor: "bg-[#ffddb5]/60",
+      borderColor: "border-[#835500]/20",
     },
     {
       label: "Mes favoris",
@@ -46,9 +46,9 @@ export default function DashboardStats({ statistics }: DashboardStatsProps) {
       value: statistics.cartItemsCount,
       description: "Articles sélectionnés",
       icon: ShoppingCart,
-      color: "text-indigo-600",
-      bgColor: "bg-indigo-50",
-      borderColor: "border-indigo-100",
+      color: "text-[#835500]",
+      bgColor: "bg-[#ffddb5]/60",
+      borderColor: "border-[#e59b22]/30",
     },
   ];
 
@@ -60,26 +60,26 @@ export default function DashboardStats({ statistics }: DashboardStatsProps) {
         return (
           <Card
             key={stat.label}
-            className="rounded-2xl border-slate-200/80 bg-white shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+            className="rounded-lg border border-[#e5e7eb] bg-white shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
           >
             <CardContent className="p-5">
               <div className="flex items-start justify-between gap-4">
-                <div className="space-y-1 space-x-1">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                <div className="space-y-1">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-[#524535]">
                     {stat.label}
                   </p>
-                  <p className="text-2xl font-bold tracking-tight text-slate-900">
+                  <p className="text-2xl font-bold tracking-tight text-[#141b2b]">
                     {stat.value}
                   </p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-[#524535]/80">
                     {stat.description}
                   </p>
                 </div>
 
                 <div
-                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border-0 ${stat.bgColor} ${stat.borderColor}`}
+                  className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-[0.25rem] border ${stat.bgColor} ${stat.borderColor} ${stat.color}`}
                 >
-                  <Icon className={`h-5 w-5 ${stat.color}`} />
+                  <Icon className="h-5 w-5" />
                 </div>
               </div>
             </CardContent>

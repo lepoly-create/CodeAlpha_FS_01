@@ -105,25 +105,25 @@ export default function ResetPassword() {
           "/login",
         );
       } catch (
-        error: unknown
+      error: unknown
       ) {
         const responseMessage =
           typeof error === "object" &&
-          error !== null &&
-          "response" in error &&
-          typeof error.response === "object" &&
-          error.response !== null &&
-          "data" in error.response &&
-          typeof error.response.data === "object" &&
-          error.response.data !== null &&
-          "message" in error.response.data &&
-          typeof error.response.data.message === "string"
+            error !== null &&
+            "response" in error &&
+            typeof error.response === "object" &&
+            error.response !== null &&
+            "data" in error.response &&
+            typeof error.response.data === "object" &&
+            error.response.data !== null &&
+            "message" in error.response.data &&
+            typeof error.response.data.message === "string"
             ? error.response.data.message
             : undefined;
 
         setError(
           responseMessage ||
-            "Impossible de réinitialiser le mot de passe.",
+          "Impossible de réinitialiser le mot de passe.",
         );
       } finally {
         setLoading(false);
@@ -131,14 +131,14 @@ export default function ResetPassword() {
     };
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-neutral-100 px-4">
-      <Card className="w-full max-w-md rounded-2xl p-8">
+    <main className="flex min-h-screen items-center justify-center bg-[#f9f9ff] px-4">
+      <Card className="w-full max-w-md rounded-lg border border-[#e5e7eb] bg-white p-8 shadow-xs">
 
-        <h1 className="text-2xl font-bold">
+        <h1 className="text-2xl font-bold text-[#141b2b]">
           Nouveau mot de passe
         </h1>
 
-        <p className="mt-3 text-sm text-neutral-500">
+        <p className="mt-2 text-sm text-[#524535]">
           Choisissez un nouveau mot de passe
           pour votre compte.
         </p>
@@ -156,6 +156,7 @@ export default function ResetPassword() {
               )
             }
             placeholder="Nouveau mot de passe"
+            className="h-10 rounded-[0.25rem] border-[#e5e7eb] focus-visible:border-[#e59b22] focus-visible:ring-1 focus-visible:ring-[#e59b22]"
             required
           />
 
@@ -168,11 +169,12 @@ export default function ResetPassword() {
               )
             }
             placeholder="Confirmer le mot de passe"
+            className="h-10 rounded-[0.25rem] border-[#e5e7eb] focus-visible:border-[#e59b22] focus-visible:ring-1 focus-visible:ring-[#e59b22]"
             required
           />
 
           {error && (
-            <p className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+            <p className="rounded-[0.25rem] bg-[#ffdad6]/60 border border-[#ba1a1a]/20 p-3 text-xs font-medium text-[#93000a]">
               {error}
             </p>
           )}
@@ -180,7 +182,7 @@ export default function ResetPassword() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full"
+            className="w-full h-10 rounded-[0.25rem] bg-[#e59b22] text-sm font-semibold text-white shadow-[0_4px_14px_0_rgba(229,155,34,0.35)] hover:bg-[#d97706]"
           >
             {loading
               ? "Modification..."

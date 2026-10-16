@@ -15,25 +15,25 @@ export default function OrderSummary({ subtotal, showActions = true }: OrderSumm
   const total = subtotal + shippingCost;
 
   return (
-    <aside className="sticky top-24 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm space-y-5">
-      <h2 className="text-base font-extrabold text-slate-900">
+    <aside className="sticky top-24 rounded-lg border border-[#e5e7eb] bg-white p-5 shadow-xs space-y-5">
+      <h2 className="text-base font-bold text-[#141b2b]">
         Résumé de la commande
       </h2>
 
       {/* Code Promo */}
       <div className="space-y-2">
-        <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+        <label className="text-[11px] font-bold uppercase tracking-wider text-[#524535]/80">
           Code Promo / Coupon
         </label>
         <div className="flex gap-2">
           <Input
-            placeholder="Ex: ELECTRO10"
-            className="h-9 rounded-xl border-slate-200 text-xs uppercase"
+            placeholder="Ex: TECH10"
+            className="h-9 rounded-[0.25rem] border-[#e5e7eb] text-xs uppercase focus-visible:border-[#e59b22] focus-visible:ring-1 focus-visible:ring-[#e59b22]"
           />
           <Button
             variant="outline"
             size="sm"
-            className="h-9 rounded-xl text-xs font-semibold shrink-0"
+            className="h-9 rounded-[0.25rem] text-xs font-semibold shrink-0 border-[#e5e7eb]"
           >
             Appliquer
           </Button>
@@ -41,33 +41,33 @@ export default function OrderSummary({ subtotal, showActions = true }: OrderSumm
       </div>
 
       {/* Détails Financiers */}
-      <div className="space-y-3 pt-2 text-xs sm:text-sm border-t border-slate-100">
-        <div className="flex justify-between text-slate-600">
+      <div className="space-y-3 pt-2 text-xs sm:text-sm border-t border-[#f1f3ff]">
+        <div className="flex justify-between text-[#524535]">
           <span>Sous-total</span>
-          <span className="font-semibold text-slate-900">
+          <span className="font-semibold text-[#141b2b]">
             {formatPrice(subtotal)}
           </span>
         </div>
 
-        <div className="flex justify-between text-slate-600 items-center">
+        <div className="flex justify-between text-[#524535] items-center">
           <span className="inline-flex items-center gap-1.5">
             <Truck className="h-3.5 w-3.5 text-emerald-600" />
             Frais de livraison
           </span>
-          <span className="font-bold text-emerald-600 uppercase text-[11px] bg-emerald-50 px-2 py-0.5 rounded-md">
+          <span className="font-bold text-emerald-700 uppercase text-[11px] bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
             Gratuit
           </span>
         </div>
 
-        <div className="border-t border-slate-200 pt-3">
+        <div className="border-t border-[#e5e7eb] pt-3">
           <div className="flex justify-between items-baseline">
-            <span className="text-sm font-bold text-slate-900">Total TTC</span>
-            <span className="text-xl font-black text-slate-900 tracking-tight">
+            <span className="text-sm font-bold text-[#141b2b]">Total TTC</span>
+            <span className="text-xl font-extrabold text-[#141b2b] tracking-tight">
               {formatPrice(total)}
             </span>
           </div>
-          <p className="text-[10px] text-slate-400 mt-0.5 text-right">
-            TVA incluse et livraison gratuite
+          <p className="text-[10px] text-[#524535]/70 mt-0.5 text-right">
+            TVA incluse et livraison offerte
           </p>
         </div>
       </div>
@@ -77,7 +77,7 @@ export default function OrderSummary({ subtotal, showActions = true }: OrderSumm
         <div className="space-y-2.5 pt-2">
           <Link
             to="/checkout"
-            className="w-full h-11 rounded-xl bg-slate-900 text-xs sm:text-sm font-semibold text-white shadow-md hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
+            className="w-full h-11 rounded-[0.25rem] bg-[#e59b22] text-xs sm:text-sm font-semibold text-white shadow-[0_4px_14px_0_rgba(229,155,34,0.35)] hover:bg-[#d97706] hover:shadow-[0_6px_20px_0_rgba(229,155,34,0.45)] transition-all flex items-center justify-center gap-2"
           >
             Passer la commande
             <ArrowRight className="h-4 w-4" />
@@ -85,7 +85,7 @@ export default function OrderSummary({ subtotal, showActions = true }: OrderSumm
 
           <Link
             to="/products"
-            className="w-full h-9 rounded-xl text-xs text-slate-600 hover:bg-slate-100 flex items-center justify-center"
+            className="w-full h-9 rounded-[0.25rem] text-xs font-semibold text-[#835500] hover:bg-[#e9edff] flex items-center justify-center transition-colors"
           >
             Poursuivre mes achats
           </Link>
@@ -93,7 +93,7 @@ export default function OrderSummary({ subtotal, showActions = true }: OrderSumm
       )}
 
       {/* Reassurance */}
-      <div className="rounded-xl bg-slate-50 p-3 border border-slate-100 flex items-center gap-2.5 text-[11px] text-slate-500">
+      <div className="rounded-[0.25rem] bg-[#f9f9ff] p-3 border border-[#e5e7eb] flex items-center gap-2.5 text-[11px] text-[#524535]">
         <ShieldCheck className="h-4 w-4 text-emerald-600 shrink-0" />
         <span>Commande sécurisée et données chiffrées</span>
       </div>

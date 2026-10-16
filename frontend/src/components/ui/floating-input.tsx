@@ -37,7 +37,7 @@ export const FloatingInput = React.forwardRef<
               ${
           isError
             ? "border-red-400 focus:border-red-300"
-            : "border-white/60 focus:border-cyan-400"
+            : "border-white/60 focus:border-[#e59b22]"
         } ${className || ""}`}
         {...props}
       />
@@ -48,7 +48,7 @@ export const FloatingInput = React.forwardRef<
         className={`pointer-events-none absolute left-1 top-2.5 text-lg transition-all duration-200 peer-focus:-translate-y-7 peer-focus:text-sm peer-not-placeholder-shown:-translate-y-7 peer-not-placeholder-shown:text-sm ${
           isError
             ? "text-red-300 peer-focus:text-red-300 peer-not-placeholder-shown:text-red-300"
-            : "text-white/80 peer-focus:text-cyan-400 peer-not-placeholder-shown:text-cyan-400"
+            : "text-white/80 peer-focus:text-[#e59b22] peer-not-placeholder-shown:text-[#e59b22]"
         }`}
       >
         {label}
@@ -60,7 +60,7 @@ export const FloatingInput = React.forwardRef<
           <button
             type="button"
             onClick={() => setShowPassword((prev) => !prev)}
-            className="rounded-md p-1 transition-colors hover:text-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400"
+            className="rounded-[0.25rem] p-1 transition-colors hover:text-[#e59b22] focus:outline-none focus:ring-1 focus:ring-[#e59b22]"
             aria-label={
               showPassword
                 ? "Masquer le mot de passe"

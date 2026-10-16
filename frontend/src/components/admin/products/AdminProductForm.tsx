@@ -99,22 +99,27 @@ export default function AdminProductForm({
         disabled={loading}
       />
 
-      <div className="flex justify-end gap-3 border-t pt-5">
+      <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2.5 sm:gap-3 border-t border-[#f1f3ff] pt-4">
         <Button
           type="button"
           variant="outline"
           onClick={onCancel}
           disabled={loading}
+          className="rounded-[0.25rem] border-[#e5e7eb] text-xs font-semibold text-[#524535] hover:bg-[#f1f3ff] hover:text-[#141b2b] h-10 px-5 cursor-pointer"
         >
-          Cancel
+          Annuler
         </Button>
 
-        <Button type="submit" disabled={loading}>
+        <Button
+          type="submit"
+          disabled={loading}
+          className="rounded-[0.25rem] bg-[#e59b22] text-xs font-semibold text-white shadow-[0_4px_14px_0_rgba(229,155,34,0.35)] hover:bg-[#d97706] h-10 px-6 cursor-pointer"
+        >
           {loading
-            ? "Saving..."
+            ? "Enregistrement..."
             : isEditing
-              ? "Update product"
-              : "Add product"}
+              ? "Mettre à jour le produit"
+              : "Ajouter au catalogue"}
         </Button>
       </div>
     </form>

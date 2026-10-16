@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import {
@@ -63,12 +63,11 @@ export default function useProductFavorites() {
     };
   }, []);
 
-  const addProductToFavorites = async (productId: string) => {
-    if (pendingFavoriteIds.includes(productId)) {
-      return;
-    }
-
-    setPendingFavoriteIds((current) => [...current, productId]);
+  const addProductToFavorites = useCallback(async (productId: string) => {
+    setPendingFavoriteIds((current) => {
+      if (current.includes(productId)) return current;
+      return [...current, productId];
+    });
 
     try {
       await addFavorite(productId);
@@ -92,14 +91,13 @@ export default function useProductFavorites() {
         current.filter((id) => id !== productId),
       );
     }
-  };
+  }, []);
 
-  const removeProductFromFavorites = async (productId: string) => {
-    if (pendingFavoriteIds.includes(productId)) {
-      return;
-    }
-
-    setPendingFavoriteIds((current) => [...current, productId]);
+  const removeProductFromFavorites = useCallback(async (productId: string) => {
+    setPendingFavoriteIds((current) => {
+      if (current.includes(productId)) return current;
+      return [...current, productId];
+    });
 
     try {
       await removeFavorite(productId);
@@ -123,7 +121,7 @@ export default function useProductFavorites() {
         current.filter((id) => id !== productId),
       );
     }
-  };
+  }, []);
 
   return {
     favoriteIds,

@@ -1,5 +1,4 @@
-import { useState } from "react";
-
+import { useCallback, useDeferredValue, useMemo, useState } from "react";
 import type { Product } from "@/types/product";
 
 interface StoreProductFilters {
@@ -12,102 +11,75 @@ const initialFilters: StoreProductFilters = {
   category: "all",
 };
 
-const matchesSearch = (
-  product: Product,
-  search: string,
-): boolean => {
+const matchesSearch = (product: Product, search: string): boolean => {
   if (!search) {
     return true;
   }
 
   return (
     product.name.toLowerCase().includes(search) ||
-    product.description
-      .toLowerCase()
-      .includes(search)
+    product.description.toLowerCase().includes(search) ||
+    product.category.toLowerCase().includes(search)
   );
 };
 
 const matchesCategory = (
   product: Product,
   category: string,
-  favoriteIds: string[],
+  favoriteIdSet: Set<string>,
 ): boolean => {
   if (category === "all") {
     return true;
   }
 
   if (category === "favorites") {
-    return favoriteIds.includes(product._id);
+    return favoriteIdSet.has(product._id);
   }
 
   return product.category === category;
-};
-
-const getCategories = (
-  products: Product[],
-): string[] => {
-  return Array.from(
-    new Set(
-      products.map(
-        (product) => product.category,
-      ),
-    ),
-  );
-};
-
-const filterProducts = (
-  products: Product[],
-  filters: StoreProductFilters,
-  favoriteIds: string[],
-): Product[] => {
-  const normalizedSearch =
-    filters.search.trim().toLowerCase();
-
-  return products.filter(
-    (product) =>
-      matchesSearch(
-        product,
-        normalizedSearch,
-      ) &&
-      matchesCategory(
-        product,
-        filters.category,
-        favoriteIds,
-      ),
-  );
 };
 
 export default function useStoreProductFilters(
   products: Product[],
   favoriteIds: string[],
 ) {
-  const [filters, setFilters] =
-    useState<StoreProductFilters>(
-      initialFilters,
+  const [filters, setFilters] = useState<StoreProductFilters>(initialFilters);
+
+  // useDeferredValue (React 19) pour garantir une frappe réactive sans latence minimale
+  const deferredSearch = useDeferredValue(filters.search);
+
+  // Set pour recherche O(1) ultra-rapide
+  const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
+
+  // Mémoisation des catégories uniques
+  const categories = useMemo(() => {
+    return Array.from(new Set(products.map((p) => p.category))).sort();
+  }, [products]);
+
+  // Mémoisation des produits filtrés
+  const filteredProducts = useMemo(() => {
+    const normalizedSearch = deferredSearch.trim().toLowerCase();
+
+    return products.filter(
+      (product) =>
+        matchesSearch(product, normalizedSearch) &&
+        matchesCategory(product, filters.category, favoriteIdSet),
     );
+  }, [products, deferredSearch, filters.category, favoriteIdSet]);
 
-  const categories = getCategories(products);
-
-  const filteredProducts = filterProducts(
-    products,
-    filters,
-    favoriteIds,
-  );
-
-  const setSearch = (search: string) => {
+  const setSearch = useCallback((search: string) => {
     setFilters((current) => ({
       ...current,
       search,
     }));
-  };
+  }, []);
 
-  const setCategory = (category: string) => {
+  const setCategory = useCallback((category: string) => {
     setFilters((current) => ({
       ...current,
       category,
     }));
-  };
+  }, []);
 
   return {
     search: filters.search,

@@ -1,4 +1,4 @@
-import { useState, type ChangeEvent, type  SyntheticEvent } from "react";
+import { useState, type ChangeEvent, type SyntheticEvent } from "react";
 import axios from "axios";
 import { KeyRound, Loader2, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
@@ -39,24 +39,24 @@ export default function ChangePasswordForm() {
   // SI L'UTILISATEUR S'EST CONNECTÉ AVEC GOOGLE : Afficher un bloc explicatif (UX)
   if (user?.authProvider === "google") {
     return (
-      <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm">
-        <CardContent className="p-6">
+      <Card className="rounded-lg border border-[#e5e7eb] bg-white shadow-xs">
+        <CardContent className="p-5 sm:p-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 border border-blue-100">
-              <p>null</p>
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[0.25rem] bg-[#f1f3ff] text-[#0053db] border border-[#e5e7eb]">
+              <ShieldCheck className="h-5 w-5" />
             </div>
             <div>
-              <h2 className="text-base font-semibold text-slate-900">
+              <h2 className="text-base font-bold text-[#141b2b]">
                 Sécurité du compte
               </h2>
-              <p className="mt-0.5 text-xs text-slate-500">
+              <p className="mt-0.5 text-xs text-[#524535]">
                 Authentification déléguée à Google.
               </p>
             </div>
           </div>
 
-          <div className="mt-4 rounded-xl border border-slate-200/80 bg-slate-50 p-4 text-xs text-slate-600 leading-relaxed">
-            Votre compte est associé à votre profil **Google**. Le mot de passe et l'authentification à deux facteurs sont directement gérés sur le portail de sécurité Google.
+          <div className="mt-4 rounded-[0.25rem] border border-[#e5e7eb] bg-[#f9f9ff] p-4 text-xs text-[#524535] leading-relaxed">
+            Votre compte est associé à votre profil Google. Le mot de passe et l'authentification à deux facteurs sont directement gérés sur le portail de sécurité Google.
           </div>
         </CardContent>
       </Card>
@@ -72,7 +72,7 @@ export default function ChangePasswordForm() {
     setVisibility((prev) => ({ ...prev, [field]: !prev[field] }));
   };
 
-  const handleSubmit = async (event:  SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: SyntheticEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
@@ -118,19 +118,19 @@ export default function ChangePasswordForm() {
   };
 
   return (
-    <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm">
-      <CardContent className="p-6">
-        <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-4">
+    <Card className="rounded-lg border border-[#e5e7eb] bg-white shadow-xs">
+      <CardContent className="p-5 sm:p-6">
+        <div className="flex items-start justify-between gap-4 border-b border-[#f1f3ff] pb-4">
           <div>
-            <h2 className="text-lg font-semibold tracking-tight text-slate-900">
+            <h2 className="text-base sm:text-lg font-bold text-[#141b2b]">
               Mot de passe
             </h2>
-            <p className="mt-0.5 text-xs text-slate-500">
+            <p className="mt-0.5 text-xs text-[#524535]">
               Mettez à jour la sécurité de votre compte local.
             </p>
           </div>
 
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[0.25rem] bg-[#f1f3ff] text-[#835500]">
             <KeyRound className="h-4 w-4" />
           </div>
         </div>
@@ -151,7 +151,7 @@ export default function ChangePasswordForm() {
           <div className="grid gap-4 sm:grid-cols-2">
             <PasswordField
               id="new-password"
-              label="Nouveau mot de passe"
+              label="Nouveau MDP"
               value={formData.newPassword}
               placeholder="••••••••"
               autoComplete="new-password"
@@ -179,7 +179,7 @@ export default function ChangePasswordForm() {
             <Button
               type="submit"
               disabled={isChanging}
-              className="rounded-xl bg-slate-900 text-white hover:bg-slate-800 text-xs sm:text-sm"
+              className="w-full sm:w-auto rounded-[0.25rem] bg-[#1a1c20] text-white hover:bg-[#e59b22] text-xs sm:text-sm font-semibold shadow-xs cursor-pointer transition-colors"
             >
               {isChanging ? (
                 <>

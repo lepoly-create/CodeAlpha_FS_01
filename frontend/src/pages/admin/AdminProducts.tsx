@@ -120,9 +120,10 @@ export default function AdminProducts() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="text-sm text-muted-foreground">
-          Loading products...
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3">
+        <div className="h-9 w-9 animate-spin rounded-full border-2 border-[#e59b22] border-t-transparent" />
+        <p className="text-xs sm:text-sm font-semibold text-[#524535]">
+          Chargement du catalogue de produits...
         </p>
       </div>
     );
@@ -142,18 +143,21 @@ export default function AdminProducts() {
           }
         }}
       >
-        <DialogContent className="max-h-[95vh] w-[calc(100%-1rem)] max-w-3xl overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>
+        <DialogContent className="max-h-[92vh] w-[calc(100vw-2rem)] max-w-2xl overflow-y-auto rounded-lg border border-[#e5e7eb] bg-white p-5 sm:p-6 shadow-2xl">
+          <DialogHeader className="border-b border-[#f1f3ff] pb-4">
+            <span className="text-xs font-bold uppercase tracking-[0.08em] text-[#835500]">
+              {selectedProduct ? "Édition référence" : "Nouveau matériel"}
+            </span>
+            <DialogTitle className="text-lg sm:text-xl font-extrabold text-[#141b2b]">
               {selectedProduct
-                ? "Edit product"
-                : "Add product"}
+                ? "Modifier le produit"
+                : "Ajouter un produit"}
             </DialogTitle>
 
-            <DialogDescription>
+            <DialogDescription className="text-xs text-[#524535]">
               {selectedProduct
-                ? "Update the product information."
-                : "Add a new product to your catalog."}
+                ? "Modifiez les informations, tarifs et stocks du produit sélectionné."
+                : "Ajoutez une nouvelle référence de matériel électronique au catalogue de la boutique."}
             </DialogDescription>
           </DialogHeader>
 
@@ -179,12 +183,12 @@ export default function AdminProducts() {
         categories={categories}
       />
 
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
-          {filteredProducts.length}{" "}
-          {filteredProducts.length === 1
-            ? "product"
-            : "products"}
+      <div className="flex items-center justify-between px-1">
+        <p className="text-xs sm:text-sm font-medium text-[#524535]">
+          <span className="font-bold text-[#141b2b]">{filteredProducts.length}</span>{" "}
+          {filteredProducts.length <= 1
+            ? "produit affiché"
+            : "produits affichés"}
         </p>
       </div>
 

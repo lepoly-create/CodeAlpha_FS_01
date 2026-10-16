@@ -14,15 +14,15 @@ interface RecentOrdersProps {
 const statusConfig: Record<string, { label: string; className: string }> = {
   pending: {
     label: "En attente",
-    className: "bg-amber-50 text-amber-700 border-amber-200",
+    className: "bg-[#ffddb5]/60 text-[#835500] border-[#835500]/20",
   },
   processing: {
     label: "En préparation",
-    className: "bg-blue-50 text-blue-700 border-blue-200",
+    className: "bg-[#e9edff] text-[#0053db] border-[#0053db]/20",
   },
   shipped: {
     label: "Expédiée",
-    className: "bg-indigo-50 text-indigo-700 border-indigo-200",
+    className: "bg-[#f1f3ff] text-[#141b2b] border-[#e5e7eb]",
   },
   confirmed: {
     label: "Confirmée",
@@ -34,7 +34,7 @@ const statusConfig: Record<string, { label: string; className: string }> = {
   },
   cancelled: {
     label: "Rejetée",
-    className: "bg-rose-50 text-rose-700 border-rose-200",
+    className: "bg-[#ffdad6] text-[#93000a] border-[#ba1a1a]/20",
   },
 };
 
@@ -52,21 +52,21 @@ export default function RecentOrders({
   onViewOrderDetails,
 }: RecentOrdersProps) {
   return (
-    <Card className="rounded-2xl border-slate-200/80 bg-white shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between gap-4 border-b border-slate-100 px-6 py-5">
+    <Card className="rounded-lg border border-[#e5e7eb] bg-white shadow-xs">
+      <CardHeader className="flex flex-row items-center justify-between gap-4 border-b border-[#f1f3ff] px-6 py-5">
         <div>
-          <CardTitle className="text-lg font-semibold text-slate-900">
+          <CardTitle className="text-base sm:text-lg font-bold text-[#141b2b]">
             Commandes récentes
           </CardTitle>
-          <p className="mt-0.5 text-xs text-slate-500">
-            Retrouvez vos dernieres commandes.
+          <p className="mt-0.5 text-xs text-[#524535]">
+            Retrouvez vos dernières commandes en cours et passées.
           </p>
         </div>
 
         <Button
           variant="ghost"
           onClick={onViewAll}
-          className="hidden rounded-xl text-xs sm:text-sm text-slate-600 hover:bg-slate-100 sm:flex"
+          className="hidden rounded-[0.25rem] text-xs sm:text-sm text-[#835500] hover:text-[#e59b22] hover:bg-[#e9edff] sm:flex font-semibold"
         >
           Voir tout
           <ArrowRight className="ml-1.5 h-4 w-4" />
@@ -76,24 +76,24 @@ export default function RecentOrders({
       <CardContent className="p-0">
         {orders.length === 0 ? (
           <div className="flex flex-col items-center justify-center px-6 py-12 text-center">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-100 text-slate-400">
+            <div className="flex h-12 w-12 items-center justify-center rounded-[0.25rem] bg-[#f1f3ff] text-[#524535]">
               <Package className="h-6 w-6" />
             </div>
 
-            <h3 className="mt-4 text-sm font-semibold text-slate-900">
+            <h3 className="mt-4 text-sm font-semibold text-[#141b2b]">
               Aucune commande enregistrée
             </h3>
 
-            <p className="mt-1 max-w-sm text-xs text-slate-500">
+            <p className="mt-1 max-w-sm text-xs text-[#524535]">
               Vos commandes apparaîtront ici dès que vous aurez validé votre premier panier.
             </p>
           </div>
         ) : (
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-[#f1f3ff]">
             {orders.map((order) => {
               const status = statusConfig[order.status] || {
                 label: order.status,
-                className: "bg-slate-100 text-slate-700 border-slate-200",
+                className: "bg-[#f1f3ff] text-[#141b2b] border-[#e5e7eb]",
               };
 
               const totalItems = order.items.reduce(
@@ -106,10 +106,10 @@ export default function RecentOrders({
               return (
                 <div
                   key={order._id}
-                  className="flex flex-col gap-4 p-5 transition-colors hover:bg-slate-50/80 sm:flex-row sm:items-center sm:justify-between"
+                  className="flex flex-col gap-4 p-5 transition-colors hover:bg-[#f9f9ff] sm:flex-row sm:items-center sm:justify-between"
                 >
                   <div className="flex min-w-0 items-center gap-4">
-                    <div className="h-12 w-12 shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
+                    <div className="h-12 w-12 shrink-0 overflow-hidden rounded-[0.25rem] border border-[#e5e7eb] bg-[#f9f9ff]">
                       {firstProduct?.image ? (
                         <img
                           src={firstProduct.image}
@@ -118,41 +118,40 @@ export default function RecentOrders({
                         />
                       ) : (
                         <div className="flex h-full w-full items-center justify-center">
-                          <Package className="h-5 w-5 text-slate-400" />
+                          <Package className="h-5 w-5 text-[#524535]/50" />
                         </div>
                       )}
                     </div>
 
                     <div className="min-w-0 space-y-0.5">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-semibold text-sm text-slate-900">
-                          Commande N {order._id.slice(-6).toUpperCase()}
+                        <span className="font-semibold text-sm text-[#141b2b]">
+                          Commande N° {order._id.slice(-6).toUpperCase()}
                         </span>
 
                         <span
-                          className={`rounded-full border px-2.5 py-0.5 text-[11px] font-medium ${status.className}`}
+                          className={`rounded-full border px-2.5 py-0.5 text-[11px] font-semibold ${status.className}`}
                         >
                           {status.label}
                         </span>
                       </div>
 
-                      <p className="truncate text-xs font-medium text-slate-600">
+                      <p className="truncate text-xs font-medium text-[#524535]">
                         {firstProduct?.name || "Produit"}
                         {order.items.length > 1 &&
-                          ` + ${order.items.length - 1} autre${
-                            order.items.length - 1 > 1 ? "s" : ""
+                          ` + ${order.items.length - 1} autre${order.items.length - 1 > 1 ? "s" : ""
                           }`}
                       </p>
 
-                      <p className="text-[11px] text-slate-400">
+                      <p className="text-[11px] text-[#524535]/70">
                         {totalItems} article{totalItems > 1 ? "s" : ""} •{" "}
                         {formatDate(order.createdAt)}
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between gap-4 border-t border-slate-100 pt-3 sm:border-0 sm:pt-0 sm:justify-end">
-                    <p className="text-sm font-bold text-slate-900">
+                  <div className="flex items-center justify-between gap-4 border-t border-[#f1f3ff] pt-3 sm:border sm:pt-0 sm:justify-end">
+                    <p className="text-sm font-bold text-[#141b2b]">
                       {formatPrice(order.totalAmount)}
                     </p>
 
@@ -160,7 +159,7 @@ export default function RecentOrders({
                       variant="outline"
                       size="sm"
                       onClick={() => onViewOrderDetails?.(order._id)}
-                      className="rounded-xl border-slate-200 hover:bg-slate-100 text-xs text-slate-700"
+                      className="rounded-[0.25rem] border-[#e5e7eb] hover:bg-[#f1f3ff] text-xs font-semibold text-[#141b2b]"
                     >
                       Détails
                       <ChevronRight className="ml-1 h-3.5 w-3.5" />
@@ -172,11 +171,11 @@ export default function RecentOrders({
           </div>
         )}
 
-        <div className="border-t border-slate-100 p-4 sm:hidden">
+        <div className="border-t border-[#f1f3ff] p-4 sm:hidden">
           <Button
             variant="outline"
             onClick={onViewAll}
-            className="w-full rounded-xl border-slate-200 text-xs"
+            className="w-full rounded-[0.25rem] border-[#e5e7eb] text-xs font-semibold"
           >
             Voir toutes les commandes
             <ArrowRight className="ml-2 h-4 w-4" />

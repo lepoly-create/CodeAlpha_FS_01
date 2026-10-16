@@ -34,7 +34,7 @@ export default function AdminStoreSettings() {
       } catch (error: unknown) {
         toast.error(
           (axios.isAxiosError(error) && error.response?.data?.message) ||
-            "Impossible de charger les paramètres de la boutique."
+          "Impossible de charger les paramètres de la boutique."
         );
       } finally {
         setLoading(false);
@@ -76,7 +76,7 @@ export default function AdminStoreSettings() {
     } catch (error: unknown) {
       toast.error(
         (axios.isAxiosError(error) && error.response?.data?.message) ||
-          "Impossible de mettre à jour les paramètres."
+        "Impossible de mettre à jour les paramètres."
       );
     } finally {
       setSaving(false);
@@ -85,41 +85,42 @@ export default function AdminStoreSettings() {
 
   if (loading) {
     return (
-      <section className="rounded-2xl border bg-card p-6 shadow-sm">
+      <section className="rounded-lg border border-[#e5e7eb] bg-white p-5 sm:p-6 shadow-xs">
         <div className="space-y-4">
-          <div className="h-6 w-48 animate-pulse rounded bg-muted" />
-          <div className="h-10 animate-pulse rounded bg-muted" />
-          <div className="h-10 animate-pulse rounded bg-muted" />
-          <div className="h-10 animate-pulse rounded bg-muted" />
+          <div className="h-6 w-48 animate-pulse rounded bg-[#f1f3ff]" />
+          <div className="h-10 animate-pulse rounded bg-[#f1f3ff]" />
+          <div className="h-10 animate-pulse rounded bg-[#f1f3ff]" />
+          <div className="h-10 animate-pulse rounded bg-[#f1f3ff]" />
         </div>
       </section>
     );
   }
 
   return (
-    <section className="rounded-2xl border  bg-card p-6 shadow-sm">
-      <div className="mb-6">
-        <h2 className="text-lg font-semibold">Store settings</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
-          Configure the information displayed for your store.
+    <section className="rounded-lg border border-[#e5e7eb] bg-white p-5 sm:p-6 shadow-xs">
+      <div className="border-b border-[#f1f3ff] pb-4 mb-5">
+        <h2 className="text-base font-bold text-[#141b2b]">Configuration de la boutique</h2>
+        <p className="mt-0.5 text-xs text-[#524535]">
+          Configurez les paramètres publics affichés pour votre boutique en ligne.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        <div className="grid gap-5 sm:grid-cols-2">
-          <div className="space-y-2">
-            <Label htmlFor="storeName">Store name</Label>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className="space-y-1.5">
+            <Label htmlFor="storeName" className="text-xs font-semibold uppercase tracking-wider text-[#141b2b]">Nom de la boutique</Label>
             <Input
               id="storeName"
               value={storeName}
               onChange={(event) => setStoreName(event.target.value)}
               placeholder="MarketElectro"
               disabled={saving}
+              className="h-10 rounded-[0.25rem] border-[#e5e7eb] bg-[#f9f9ff] text-xs sm:text-sm text-[#141b2b] focus-visible:bg-white focus-visible:border-[#e59b22] focus-visible:ring-1 focus-visible:ring-[#e59b22]"
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="contactEmail">Contact email</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="contactEmail" className="text-xs font-semibold uppercase tracking-wider text-[#141b2b]">Email de contact</Label>
             <Input
               id="contactEmail"
               type="email"
@@ -127,11 +128,12 @@ export default function AdminStoreSettings() {
               onChange={(event) => setContactEmail(event.target.value)}
               placeholder="contact@marketelectro.com"
               disabled={saving}
+              className="h-10 rounded-[0.25rem] border-[#e5e7eb] bg-[#f9f9ff] text-xs sm:text-sm text-[#141b2b] focus-visible:bg-white focus-visible:border-[#e59b22] focus-visible:ring-1 focus-visible:ring-[#e59b22]"
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="phone">Phone number</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="phone" className="text-xs font-semibold uppercase tracking-wider text-[#141b2b]">Téléphone</Label>
             <Input
               id="phone"
               type="tel"
@@ -139,30 +141,31 @@ export default function AdminStoreSettings() {
               onChange={(event) => setPhone(event.target.value)}
               placeholder="+228 XX XX XX XX"
               disabled={saving}
+              className="h-10 rounded-[0.25rem] border-[#e5e7eb] bg-[#f9f9ff] text-xs sm:text-sm text-[#141b2b] focus-visible:bg-white focus-visible:border-[#e59b22] focus-visible:ring-1 focus-visible:ring-[#e59b22]"
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="currency">Currency</Label>
+          <div className="space-y-1.5">
+            <Label htmlFor="currency" className="text-xs font-semibold uppercase tracking-wider text-[#141b2b]">Devise</Label>
             <Input
               id="currency"
               value={currency}
               onChange={(event) => setCurrency(event.target.value)}
-              placeholder="$"
+              placeholder="FCFA"
               disabled={saving}
+              className="h-10 rounded-[0.25rem] border-[#e5e7eb] bg-[#f9f9ff] text-xs sm:text-sm text-[#141b2b] focus-visible:bg-white focus-visible:border-[#e59b22] focus-visible:ring-1 focus-visible:ring-[#e59b22]"
             />
           </div>
         </div>
 
-        <div className="flex justify-end pt-5">
+        <div className="flex justify-end pt-3">
           <Button
             type="submit"
             disabled={saving}
-            className="gap-2"
+            className="w-full sm:w-auto rounded-[0.25rem] bg-[#e59b22] text-xs font-semibold text-white shadow-[0_4px_14px_0_rgba(229,155,34,0.35)] hover:bg-[#d97706] cursor-pointer h-10 px-5 gap-2"
           >
             <Save className="h-4 w-4" />
-
-            {saving ? "Saving..." : "Save changes"}
+            {saving ? "Enregistrement..." : "Enregistrer les paramètres"}
           </Button>
         </div>
       </form>

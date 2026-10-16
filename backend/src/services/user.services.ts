@@ -1,7 +1,10 @@
 import bcrypt from "bcryptjs";
 import User from "../models/User";
+import Cart from "../models/Cart";
 import cloudinary from "../config/cloudinary";
 import EmailChangeToken from "../models/EmailChangeToken";
+import EmailVerificationToken from "../models/EmailVerificationToken";
+import PasswordResetToken from "../models/PasswordResetToken";
 import {
     generateOpaqueToken,
     hashOpaqueToken,
@@ -283,4 +286,42 @@ export const verifyEmailChange = async (rawToken: string) => {
         newEmail: user.email,
         fullName: user.fullName,
     };
+};
+
+export const deleteMyAccount = async (userId: string) => {
+    const user = await User.findById(userId);
+
+    if (!user) {
+        throw new Error("Utilisateur introuvable");
+    }
+
+    if (user.role === "admin") {
+        throw new Error(
+            "Les comptes administrateurs ne peuvent pas être supprimés via cette interface."
+        );
+    }
+
+    if (user.profileImagePublicId) {
+        try {
+            await cloudinary.uploader.destroy(user.profileImagePublicId, {
+                resource_type: "image",
+            });
+        } catch (cloudinaryError) {
+            console.error(
+                "Erreur suppression image Cloudinary :",
+                cloudinaryError
+            );
+        }
+    }
+
+    await Promise.all([
+        Cart.deleteMany({ user: user._id }),
+        EmailChangeToken.deleteMany({ user: user._id }),
+        EmailVerificationToken.deleteMany({ user: user._id }),
+        PasswordResetToken.deleteMany({ user: user._id }),
+    ]);
+
+    await User.findByIdAndDelete(user._id);
+
+    return { success: true };
 };

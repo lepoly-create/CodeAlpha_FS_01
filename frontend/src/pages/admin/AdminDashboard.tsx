@@ -22,9 +22,10 @@ export default function AdminDashboard() {
 
   if (loading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <p className="text-sm text-neutral-500">
-          Chargement du dashboard...
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-3">
+        <div className="h-9 w-9 animate-spin rounded-full border-2 border-[#e59b22] border-t-transparent" />
+        <p className="text-xs sm:text-sm font-semibold text-[#524535]">
+          Chargement du tableau de bord administrateur...
         </p>
       </div>
     );
@@ -32,15 +33,24 @@ export default function AdminDashboard() {
 
   if (error || !dashboard || !user) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-lg font-semibold text-neutral-950">
-            Impossible de charger le dashboard
+      <div className="flex min-h-[60vh] items-center justify-center p-4">
+        <div className="w-full max-w-md rounded-lg border border-[#e5e7eb] bg-white p-6 text-center shadow-xs">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-[0.25rem] bg-[#ffdad6]/60 text-[#ba1a1a]">
+            <span className="text-xl font-bold">!</span>
+          </div>
+          <h2 className="mt-4 text-base font-bold text-[#141b2b]">
+            Impossible de charger le tableau de bord
           </h2>
-
-          <p className="mt-2 text-sm text-neutral-500">
-            {error || "Une erreur est survenue."}
+          <p className="mt-1.5 text-xs text-[#524535]">
+            {error || "Une erreur est survenue lors de la récupération des données."}
           </p>
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="mt-5 inline-flex h-9 items-center justify-center rounded-[0.25rem] bg-[#1a1c20] px-4 text-xs font-semibold text-white transition hover:bg-[#e59b22] cursor-pointer"
+          >
+            Réessayer
+          </button>
         </div>
       </div>
     );

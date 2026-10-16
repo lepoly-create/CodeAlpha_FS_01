@@ -6,7 +6,9 @@ import {
   getOrders,
   getOrder,
   updateOrderStatus,
-  getUsers
+  getUsers,
+  deleteUser,
+  deleteOrder,
 } from "../controllers/admin.controllers";
 
 import { authMiddleware } from "../middleware/auth.middleware";
@@ -26,6 +28,7 @@ import {
   orderIdSchema,
   updateOrderStatusSchema,
 } from "../schemas/order.schemas";
+import { userIdSchema } from "../schemas/user.schemas";
 
 const router = Router();
 
@@ -66,11 +69,27 @@ router.put(
   updateOrderStatus,
 );
 
+router.delete(
+  "/orders/:id",
+  authMiddleware,
+  authorizeRoles("admin"),
+  validate(orderIdSchema),
+  deleteOrder,
+);
+
 router.get(
   "/users",
   authMiddleware,
   authorizeRoles("admin"),
   getUsers
+);
+
+router.delete(
+  "/users/:id",
+  authMiddleware,
+  authorizeRoles("admin"),
+  validate(userIdSchema),
+  deleteUser,
 );
 
 router.get(

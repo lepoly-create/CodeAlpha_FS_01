@@ -19,14 +19,14 @@ export default function ProductGrid({
 }: ProductGridProps) {
   if (products.length === 0) {
     return (
-      <div className="flex min-h-[320px] w-full flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white/50 p-8 text-center">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+      <div className="flex min-h-[320px] w-full flex-col items-center justify-center rounded-lg border border-dashed border-[#e5e7eb] bg-white p-8 text-center shadow-xs">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#f1f3ff] text-[#524535]">
           <PackageSearch className="h-6 w-6" />
         </div>
-        <h3 className="mt-3 text-base font-semibold text-slate-900">
+        <h3 className="mt-3 text-base font-bold text-[#141b2b]">
           Aucun produit trouvé
         </h3>
-        <p className="mt-1 text-xs text-slate-500 max-w-sm">
+        <p className="mt-1 text-xs text-[#524535] max-w-sm">
           Essayez de modifier votre recherche ou vos filtres de catégorie.
         </p>
       </div>

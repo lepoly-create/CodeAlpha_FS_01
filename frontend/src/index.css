@@ -5,75 +5,76 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Emetix Tech Retail Design System Variables */
 :root {
-    --background: oklch(1 0 0);
-    --foreground: oklch(0.145 0 0);
-    --card: oklch(1 0 0);
-    --card-foreground: oklch(0.145 0 0);
-    --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.145 0 0);
-    --primary: oklch(0.205 0 0);
-    --primary-foreground: oklch(0.985 0 0);
-    --secondary: oklch(0.97 0 0);
-    --secondary-foreground: oklch(0.205 0 0);
-    --muted: oklch(0.97 0 0);
-    --muted-foreground: oklch(0.556 0 0);
-    --accent: oklch(0.97 0 0);
-    --accent-foreground: oklch(0.205 0 0);
-    --destructive: oklch(0.577 0.245 27.325);
-    --destructive-foreground: 210 40% 98%;
-    --border: oklch(0.922 0 0);
-    --input: oklch(0.922 0 0);
-    --ring: oklch(0.708 0 0);
-    --radius: 0.625rem;
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.985 0 0);
-    --sidebar-foreground: oklch(0.145 0 0);
-    --sidebar-primary: oklch(0.205 0 0);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.97 0 0);
-    --sidebar-accent-foreground: oklch(0.205 0 0);
-    --sidebar-border: oklch(0.922 0 0);
-    --sidebar-ring: oklch(0.708 0 0);
+    --background: #f9f9ff;
+    --foreground: #141b2b;
+    --card: #ffffff;
+    --card-foreground: #141b2b;
+    --popover: #ffffff;
+    --popover-foreground: #141b2b;
+    --primary: #e59b22;
+    --primary-foreground: #ffffff;
+    --secondary: #1a1c20;
+    --secondary-foreground: #ffffff;
+    --muted: #f1f3ff;
+    --muted-foreground: #524535;
+    --accent: #e9edff;
+    --accent-foreground: #141b2b;
+    --destructive: #ba1a1a;
+    --destructive-foreground: #ffffff;
+    --border: #e5e7eb;
+    --input: #e5e7eb;
+    --ring: #e59b22;
+    --radius: 0.25rem;
+    --chart-1: #e59b22;
+    --chart-2: #0053db;
+    --chart-3: #5d5e63;
+    --chart-4: #835500;
+    --chart-5: #141b2b;
+    --sidebar: #ffffff;
+    --sidebar-foreground: #141b2b;
+    --sidebar-primary: #e59b22;
+    --sidebar-primary-foreground: #ffffff;
+    --sidebar-accent: #f1f3ff;
+    --sidebar-accent-foreground: #141b2b;
+    --sidebar-border: #e5e7eb;
+    --sidebar-ring: #e59b22;
 }
 
 .dark {
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    --destructive: oklch(0.704 0.191 22.216);
-    --destructive-foreground: 210 40% 98%;
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    --chart-1: oklch(0.87 0 0);
-    --chart-2: oklch(0.556 0 0);
-    --chart-3: oklch(0.439 0 0);
-    --chart-4: oklch(0.371 0 0);
-    --chart-5: oklch(0.269 0 0);
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+    --background: #121316;
+    --foreground: #edf0ff;
+    --card: #1a1c20;
+    --card-foreground: #edf0ff;
+    --popover: #1a1c20;
+    --popover-foreground: #edf0ff;
+    --primary: #e59b22;
+    --primary-foreground: #141b2b;
+    --secondary: #22252a;
+    --secondary-foreground: #ffffff;
+    --muted: #22252a;
+    --muted-foreground: #d7c3ae;
+    --accent: #293040;
+    --accent-foreground: #edf0ff;
+    --destructive: #ffdad6;
+    --destructive-foreground: #93000a;
+    --border: #293040;
+    --input: #293040;
+    --ring: #e59b22;
+    --chart-1: #e59b22;
+    --chart-2: #8aa7ff;
+    --chart-3: #c6c6cb;
+    --chart-4: #ffb955;
+    --chart-5: #edf0ff;
+    --sidebar: #16171a;
+    --sidebar-foreground: #edf0ff;
+    --sidebar-primary: #e59b22;
+    --sidebar-primary-foreground: #141b2b;
+    --sidebar-accent: #22252a;
+    --sidebar-accent-foreground: #edf0ff;
+    --sidebar-border: #293040;
+    --sidebar-ring: #e59b22;
 }
 
 html {
@@ -83,23 +84,41 @@ html {
 body {
     margin: 0;
     font-family: Inter, system-ui, sans-serif;
-    color: hsl(var(--foreground));
-    background-color: hsl(var(--background));
+    color: var(--foreground);
+    background-color: var(--background);
     min-width: 320px;
 }
 
 * {
     box-sizing: border-box;
-    border-color: hsl(var(--border));
+    border-color: var(--border);
 }
 
 ::selection {
-    background: hsl(var(--primary) / 0.2);
+    background: #e59b22;
+    color: #ffffff;
 }
 
 @theme inline {
-    --font-heading: var(--font-sans);
-    --font-sans: 'Inter Variable', sans-serif;
+    --font-heading: 'Inter Variable', Inter, sans-serif;
+    --font-sans: 'Inter Variable', Inter, sans-serif;
+    
+    /* Emetix Tech Retail Palette */
+    --color-emetix-amber: #e59b22;
+    --color-emetix-amber-dark: #835500;
+    --color-emetix-amber-light: #ffddb5;
+    --color-emetix-carbon: #1a1c20;
+    --color-emetix-carbon-dark: #121316;
+    --color-emetix-carbon-light: #22252a;
+    --color-emetix-blue: #0053db;
+    --color-emetix-blue-light: #2563eb;
+    --color-emetix-surface: #f9f9ff;
+    --color-emetix-surface-card: #ffffff;
+    --color-emetix-charcoal: #141b2b;
+    --color-emetix-muted: #524535;
+    --color-emetix-border: #e5e7eb;
+
+    /* Theme mappings */
     --color-sidebar-ring: var(--sidebar-ring);
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -131,23 +150,115 @@ body {
     --color-card: var(--card);
     --color-foreground: var(--foreground);
     --color-background: var(--background);
-    --radius-sm: calc(var(--radius) * 0.6);
-    --radius-md: calc(var(--radius) * 0.8);
-    --radius-lg: var(--radius);
-    --radius-xl: calc(var(--radius) * 1.4);
-    --radius-2xl: calc(var(--radius) * 1.8);
-    --radius-3xl: calc(var(--radius) * 2.2);
-    --radius-4xl: calc(var(--radius) * 2.6);
+    
+    /* Soft corner radii */
+    --radius-sm: 0.125rem;
+    --radius-md: 0.25rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-full: 9999px;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    }
+  }
   body {
     @apply bg-background text-foreground;
-    }
+  }
   html {
     @apply font-sans;
+  }
+}
+
+/* Emetix Tech Retail Typography & Component Utilities */
+.headline-xl {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 56px;
+    letter-spacing: -0.02em;
+}
+
+@media (max-width: 768px) {
+    .headline-xl {
+        font-size: 32px;
+        line-height: 40px;
     }
+}
+
+.headline-lg {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 44px;
+    letter-spacing: -0.015em;
+}
+
+@media (max-width: 768px) {
+    .headline-lg {
+        font-size: 26px;
+        line-height: 34px;
+        letter-spacing: -0.01em;
+    }
+}
+
+.headline-md {
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+}
+
+.headline-sm {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 28px;
+}
+
+.label-lg {
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 18px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.label-md {
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 16px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.label-sm {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 14px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* Warm Amber Glow */
+.amber-glow {
+    box-shadow: 0 4px 14px 0 rgba(229, 155, 34, 0.35);
+}
+
+.amber-glow:hover {
+    box-shadow: 0 6px 20px 0 rgba(229, 155, 34, 0.45);
+}
+
+/* Ambient Card Lift */
+.card-tech-lift {
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.card-tech-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(17, 24, 39, 0.08);
+}
+
+/* Deep Carbon Linear Gradient */
+.bg-carbon-gradient {
+    background: linear-gradient(180deg, #22252a 0%, #16171a 100%);
 }

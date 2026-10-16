@@ -4,12 +4,26 @@ import api from "@/api/axios";
 import { Button } from "@/components/ui/button";
 import { Send, CheckCircle2, MessageSquare, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "@/contexts/useAuth";
 
 export default function ContactPage() {
+  const { user, isAuthenticated } = useAuth();
+
+  const getInitialNameParts = () => {
+    if (!user?.fullName) return { firstName: "", lastName: "" };
+    const parts = user.fullName.trim().split(" ");
+    return {
+      firstName: parts[0] || "",
+      lastName: parts.slice(1).join(" ") || "",
+    };
+  };
+
+  const initialNames = getInitialNameParts();
+
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
+    firstName: initialNames.firstName,
+    lastName: initialNames.lastName,
+    email: user?.email || "",
     message: "",
   });
   const [loading, setLoading] = useState(false);
@@ -30,7 +44,12 @@ export default function ContactPage() {
       await api.post("/contact", formData);
 
       setSuccess(true);
-      setFormData({ firstName: "", lastName: "", email: "", message: "" });
+      setFormData({
+        firstName: initialNames.firstName,
+        lastName: initialNames.lastName,
+        email: user?.email || "",
+        message: "",
+      });
     } catch (err: unknown) {
       if (axios.isAxiosError(err)) {
         setError(err.response?.data?.message || "Une erreur est survenue lors de l'envoi.");
@@ -45,61 +64,68 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-[85vh] bg-neutral-50/50 py-12 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
+    <div className="min-h-[85vh] bg-[#f9f9ff] py-10 px-4 sm:px-6 lg:px-8 flex flex-col justify-center">
       <div className="mx-auto max-w-xl w-full">
-        
         {/* Lien de retour */}
         <div className="mb-6">
           <Link
-            to="/"
-            className="inline-flex items-center gap-2 text-sm font-medium text-neutral-600 hover:text-neutral-950 transition-colors"
+            to={isAuthenticated ? "/dashboard" : "/"}
+            className="inline-flex items-center gap-2 text-xs font-semibold text-[#835500] hover:text-[#e59b22] transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
-            Retour à l'accueil
+            {isAuthenticated ? "Retour au tableau de bord" : "Retour à l'accueil"}
           </Link>
         </div>
 
         {/* Carte principale */}
-        <div className="bg-white rounded-3xl border border-neutral-200/80 p-8 shadow-xl shadow-neutral-900/5">
-          
-          <div className="flex items-center gap-3 mb-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-neutral-900 text-white shadow-md">
-              <MessageSquare className="h-6 w-6 stroke-[1.5]" />
+        <div className="bg-white rounded-lg border border-[#e5e7eb] p-5 sm:p-8 shadow-xs">
+          <div className="flex items-center gap-3.5 mb-6">
+            <div className="flex h-11 w-11 items-center justify-center rounded-[0.25rem] bg-[#1a1c20] text-[#e59b22] border border-[#293040] shadow-xs">
+              <MessageSquare className="h-5 w-5 stroke-[1.75]" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-neutral-900">Contactez-nous</h1>
-              <p className="text-sm text-neutral-500">Notre équipe vous répond sous 24h ouvrées.</p>
+              <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#835500]">
+                Support & Assistance
+              </span>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-[#141b2b]">
+                Contactez-nous
+              </h1>
+              <p className="text-xs text-[#524535]">
+                Notre équipe technique et commerciale vous répond sous 24h ouvrées.
+              </p>
             </div>
           </div>
 
           {success ? (
-            <div className="my-8 flex flex-col items-center justify-center rounded-2xl bg-emerald-50/60 border border-emerald-100 p-8 text-center text-emerald-900 animate-in fade-in zoom-in-95 duration-200">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-600 text-white mb-4 shadow-sm">
+            <div className="my-6 flex flex-col items-center justify-center rounded-lg bg-[#e9edff]/60 border border-[#0053db]/20 p-6 sm:p-8 text-center text-[#00174b] animate-in fade-in zoom-in-95 duration-200">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-600 text-white mb-4 shadow-xs">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
-              <h3 className="font-semibold text-lg text-emerald-950">Message envoyé avec succès !</h3>
-              <p className="text-sm text-emerald-700 mt-1 max-w-sm">
+              <h3 className="font-bold text-base sm:text-lg text-[#141b2b]">
+                Message envoyé avec succès !
+              </h3>
+              <p className="text-xs sm:text-sm text-[#524535] mt-1 max-w-sm">
                 Merci pour votre message. Une copie a été transmise à notre support et nous vous répondrons directement par e-mail.
               </p>
               <Button
                 onClick={() => setSuccess(false)}
-                className="mt-6 rounded-xl bg-neutral-900 text-white hover:bg-neutral-800"
+                className="mt-6 rounded-[0.25rem] bg-[#1a1c20] text-white hover:bg-[#22252a] text-xs font-semibold px-5 h-10"
                 variant="default"
               >
                 Envoyer un autre message
               </Button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <div className="rounded-xl bg-rose-50 border border-rose-100 p-4 text-sm text-rose-700 animate-in fade-in">
+                <div className="rounded-[0.25rem] bg-[#ffdad6]/60 border border-[#ba1a1a]/20 p-3 text-xs font-medium text-[#93000a] animate-in fade-in">
                   {error}
                 </div>
               )}
 
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-1.5">
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#524535] mb-1">
                     Prénom
                   </label>
                   <input
@@ -108,12 +134,12 @@ export default function ContactPage() {
                     required
                     value={formData.firstName}
                     onChange={handleChange}
-                    className="w-full rounded-xl border border-neutral-200 bg-neutral-50/50 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:bg-white focus:border-neutral-900 focus:outline-none transition-all"
+                    className="w-full rounded-[0.25rem] border border-[#e5e7eb] bg-[#f9f9ff] px-3.5 py-2.5 text-sm text-[#141b2b] placeholder:text-[#524535]/50 focus:bg-white focus:border-[#e59b22] focus:outline-none focus:ring-1 focus:ring-[#e59b22] transition-all"
                     placeholder="Jean"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-1.5">
+                  <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#524535] mb-1">
                     Nom
                   </label>
                   <input
@@ -122,14 +148,14 @@ export default function ContactPage() {
                     required
                     value={formData.lastName}
                     onChange={handleChange}
-                    className="w-full rounded-xl border border-neutral-200 bg-neutral-50/50 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:bg-white focus:border-neutral-900 focus:outline-none transition-all"
+                    className="w-full rounded-[0.25rem] border border-[#e5e7eb] bg-[#f9f9ff] px-3.5 py-2.5 text-sm text-[#141b2b] placeholder:text-[#524535]/50 focus:bg-white focus:border-[#e59b22] focus:outline-none focus:ring-1 focus:ring-[#e59b22] transition-all"
                     placeholder="Dupont"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-1.5">
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#524535] mb-1">
                   Adresse e-mail
                 </label>
                 <input
@@ -138,22 +164,22 @@ export default function ContactPage() {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-neutral-200 bg-neutral-50/50 px-4 py-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:bg-white focus:border-neutral-900 focus:outline-none transition-all"
+                  className="w-full rounded-[0.25rem] border border-[#e5e7eb] bg-[#f9f9ff] px-3.5 py-2.5 text-sm text-[#141b2b] placeholder:text-[#524535]/50 focus:bg-white focus:border-[#e59b22] focus:outline-none focus:ring-1 focus:ring-[#e59b22] transition-all"
                   placeholder="jean.dupont@example.com"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-neutral-600 mb-1.5">
+                <label className="block text-[11px] font-semibold uppercase tracking-wider text-[#524535] mb-1">
                   Votre message
                 </label>
                 <textarea
                   name="message"
                   required
-                  rows={5}
+                  rows={4}
                   value={formData.message}
                   onChange={handleChange}
-                  className="w-full rounded-xl border border-neutral-200 bg-neutral-50/50 p-4 text-sm text-neutral-900 placeholder:text-neutral-400 focus:bg-white focus:border-neutral-900 focus:outline-none transition-all resize-none"
+                  className="w-full rounded-[0.25rem] border border-[#e5e7eb] bg-[#f9f9ff] p-3 text-sm text-[#141b2b] placeholder:text-[#524535]/50 focus:bg-white focus:border-[#e59b22] focus:outline-none focus:ring-1 focus:ring-[#e59b22] transition-all resize-none"
                   placeholder="Décrivez votre demande en détail (question produit, suivi de commande, etc.)..."
                 />
               </div>
@@ -161,7 +187,7 @@ export default function ContactPage() {
               <Button
                 type="submit"
                 disabled={loading}
-                className="w-full h-12 gap-2 rounded-xl bg-neutral-900 text-white font-semibold hover:bg-neutral-800 transition-all active:scale-[0.98] shadow-md"
+                className="w-full h-11 min-h-[44px] gap-2 rounded-[0.25rem] bg-[#e59b22] text-white font-semibold shadow-[0_4px_14px_0_rgba(229,155,34,0.35)] hover:bg-[#d97706] transition-all active:scale-[0.98]"
               >
                 {loading ? (
                   <span className="flex items-center gap-2">

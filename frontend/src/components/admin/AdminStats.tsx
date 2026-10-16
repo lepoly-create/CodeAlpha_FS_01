@@ -45,33 +45,33 @@ export default function AdminStats({
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
       {stats.map((stat) => {
         const Icon = stat.icon;
 
         return (
           <Card
             key={stat.label}
-            className="rounded-2xl border-neutral-200 bg-white shadow-none transition-all duration-200 hover:-translate-y-1.5 hover:shadow-sm"
+            className="rounded-lg border border-[#e5e7eb] bg-white shadow-xs transition-all duration-200 hover:-translate-y-0.5 hover:border-[#e59b22]/50 hover:shadow-md"
           >
-            <CardContent className="p-5">
-              <div className="flex items-start justify-between gap-4">
-                <div>
-                  <p className="text-sm font-bold text-neutral-800">
+            <CardContent className="p-4 sm:p-5">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="text-xs sm:text-sm font-semibold text-[#524535]">
                     {stat.label}
                   </p>
 
-                  <p className="mt-3 text-2xl font-bold tracking-tight text-neutral-950">
+                  <p className="mt-2 text-xl sm:text-2xl font-bold tracking-tight text-[#141b2b] truncate">
                     {stat.value}
                   </p>
 
-                  <p className="mt-1 text-xs text-neutral-500">
+                  <p className="mt-1 text-[11px] sm:text-xs text-[#524535]/80 truncate">
                     {stat.description}
                   </p>
                 </div>
 
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-neutral-100">
-                  <Icon className="h-5 w-5 text-neutral-700" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[0.25rem] bg-[#e9edff] text-[#0053db]">
+                  <Icon className="h-5 w-5" />
                 </div>
               </div>
             </CardContent>

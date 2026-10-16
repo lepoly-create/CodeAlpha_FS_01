@@ -28,25 +28,25 @@ export default function Products() {
   } = useStoreProductFilters(products, favoriteIds);
 
   return (
-    <section className="min-h-screen w-full bg-slate-50/60 p-4 sm:p-6 lg:p-8">
-      <div className="mx-auto max-w-[1600px] space-y-6">
-        
+    <section className="min-h-screen w-full bg-[#f9f9ff] p-4 sm:p-6 lg:p-8">
+      <div className="mx-auto max-w-[1400px] space-y-6">
+
         {/* Entête moderne */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-wider text-blue-600">
+            <span className="text-xs font-bold uppercase tracking-[0.08em] text-[#835500]">
               Catalogue MarketElectro
             </span>
-            <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl">
+            <h1 className="mt-1 text-2xl font-extrabold tracking-tight text-[#141b2b] sm:text-3xl">
               Explorez nos Produits
             </h1>
-            <p className="mt-1 text-xs sm:text-sm text-slate-500">
+            <p className="mt-1 text-xs sm:text-sm text-[#524535]">
               Découvrez le meilleur de la technologie et des accessoires électroniques.
             </p>
           </div>
 
-          <div className="inline-flex items-center rounded-xl bg-white px-3 py-1.5 border border-slate-200/80 shadow-sm text-xs font-medium text-slate-600 self-start sm:self-auto">
-            <span className="font-bold text-slate-900 mr-1">
+          <div className="inline-flex items-center rounded-full bg-white px-3.5 py-1.5 border border-[#e5e7eb] shadow-xs text-xs font-medium text-[#524535] self-start sm:self-auto">
+            <span className="font-bold text-[#141b2b] mr-1.5">
               {filteredProducts.length}
             </span>
             {filteredProducts.length > 1 ? "produits disponibles" : "produit disponible"}
@@ -56,12 +56,12 @@ export default function Products() {
         {/* Barre de Recherche + Filtres */}
         <div className="space-y-4">
           <div className="relative max-w-xl">
-            <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+            <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-[#524535]/60" />
             <Input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Rechercher par nom, marque, référence..."
-              className="h-11 rounded-xl focus:border-0 border-slate-200/80 bg-white pl-10 pr-4 text-xs sm:text-sm shadow-sm transition-all focus-visible:ring-2 focus-visible:ring-slate-900 placeholder:text-slate-400"
+              className="h-11 rounded-[0.25rem] border border-[#e5e7eb] bg-white pl-10 pr-4 text-xs sm:text-sm shadow-xs transition-all focus-visible:ring-1 focus-visible:ring-[#e59b22] focus-visible:border-[#e59b22] placeholder:text-[#524535]/50"
             />
           </div>
 
@@ -78,15 +78,15 @@ export default function Products() {
             {Array.from({ length: 10 }).map((_, index) => (
               <div
                 key={index}
-                className="flex flex-col overflow-hidden rounded-2xl border border-slate-200/60 bg-white p-3 shadow-sm"
+                className="flex flex-col overflow-hidden rounded-lg border border-[#e5e7eb] bg-white p-3 shadow-xs"
               >
-                <div className="aspect-square w-full animate-pulse rounded-xl bg-slate-100" />
+                <div className="aspect-square w-full animate-pulse rounded-md bg-[#f1f3ff]" />
                 <div className="mt-3 space-y-2">
-                  <div className="h-3 w-1/3 animate-pulse rounded bg-slate-100" />
-                  <div className="h-4 w-3/4 animate-pulse rounded bg-slate-100" />
-                  <div className="h-3 w-full animate-pulse rounded bg-slate-100" />
-                  <div className="pt-2 h-6 w-1/2 animate-pulse rounded bg-slate-100" />
-                  <div className="h-8 w-full animate-pulse rounded-xl bg-slate-100" />
+                  <div className="h-3 w-1/3 animate-pulse rounded bg-[#f1f3ff]" />
+                  <div className="h-4 w-3/4 animate-pulse rounded bg-[#f1f3ff]" />
+                  <div className="h-3 w-full animate-pulse rounded bg-[#f1f3ff]" />
+                  <div className="pt-2 h-6 w-1/2 animate-pulse rounded bg-[#f1f3ff]" />
+                  <div className="h-8 w-full animate-pulse rounded-[0.25rem] bg-[#f1f3ff]" />
                 </div>
               </div>
             ))}
@@ -95,12 +95,12 @@ export default function Products() {
 
         {/* État d'erreur */}
         {error && !loading && (
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-red-200 bg-red-50/50 p-8 text-center">
-            <AlertCircle className="h-8 w-8 text-red-500 mb-2" />
-            <p className="text-sm font-semibold text-red-900">
+          <div className="flex flex-col items-center justify-center rounded-lg border border-[#ba1a1a]/20 bg-[#ffdad6]/40 p-8 text-center">
+            <AlertCircle className="h-8 w-8 text-[#ba1a1a] mb-2" />
+            <p className="text-sm font-semibold text-[#141b2b]">
               Une erreur est survenue lors du chargement des produits.
             </p>
-            <p className="text-xs text-red-600 mt-1">{error}</p>
+            <p className="text-xs text-[#524535] mt-1">{error}</p>
           </div>
         )}
 

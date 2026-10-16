@@ -32,7 +32,7 @@ export default function PasswordField({
 }: PasswordFieldProps) {
   return (
     <div className="space-y-1.5">
-      <Label htmlFor={id} className="text-xs font-medium text-slate-700">
+      <Label htmlFor={id} className="text-xs font-semibold uppercase tracking-wider text-[#524535]">
         {label}
       </Label>
 
@@ -47,14 +47,14 @@ export default function PasswordField({
           autoComplete={autoComplete}
           disabled={disabled}
           required
-          className="h-10 rounded-xl border-slate-200 pr-10 focus-visible:ring-slate-950 text-sm"
+          className="h-10 rounded-[0.25rem] border-[#e5e7eb] bg-[#f9f9ff] text-[#141b2b] pr-10 focus:bg-white focus:border-[#e59b22] focus:ring-1 focus:ring-[#e59b22] text-sm"
         />
 
         <Button
           type="button"
           variant="ghost"
           size="icon"
-          className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-slate-400 hover:text-slate-600 hover:bg-transparent"
+          className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8 text-[#524535]/60 hover:text-[#141b2b] hover:bg-transparent cursor-pointer"
           onClick={onToggleVisibility}
           disabled={disabled}
           aria-label={visible ? `Masquer ${label}` : `Afficher ${label}`}
@@ -64,7 +64,7 @@ export default function PasswordField({
       </div>
 
       {description && (
-        <p className="text-[11px] text-slate-500">{description}</p>
+        <p className="text-[11px] text-[#524535]">{description}</p>
       )}
     </div>
   );
