@@ -15,6 +15,7 @@ import {
   verifyEmail,
   resendVerification,
 } from "@/services/auth.service";
+import BrandLogo from "@/components/common/BrandLogo";
 
 type Status =
   | "ready"
@@ -104,6 +105,9 @@ export default function VerifyEmail() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-neutral-100 px-4">
         <Card className="w-full max-w-lg rounded-2xl p-8 text-center">
+          <div className="mb-6 flex justify-center">
+            <BrandLogo to="/" size="md" rounded="lg" priority />
+          </div>
           <MailCheck className="mx-auto h-14 w-14 text-neutral-800" />
 
           <h1 className="mt-6 text-2xl font-bold">
@@ -135,7 +139,10 @@ export default function VerifyEmail() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-neutral-100 px-4">
         <Card className="w-full max-w-lg rounded-2xl p-8 text-center">
-          <Loader2 className="mx-auto h-12 w-12 animate-spin" />
+          <div className="mb-6 flex justify-center">
+            <BrandLogo to="/" size="md" rounded="lg" priority />
+          </div>
+          <Loader2 className="mx-auto h-12 w-12 animate-spin text-[#e59b22]" />
 
           <h1 className="mt-6 text-2xl font-bold">
             Vérification en cours
@@ -156,6 +163,9 @@ export default function VerifyEmail() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-neutral-100 px-4">
         <Card className="w-full max-w-lg rounded-2xl p-8 text-center">
+          <div className="mb-6 flex justify-center">
+            <BrandLogo to="/" size="md" rounded="lg" priority />
+          </div>
           <CheckCircle2 className="mx-auto h-14 w-14 text-green-600" />
 
           <h1 className="mt-6 text-2xl font-bold">
@@ -177,6 +187,9 @@ export default function VerifyEmail() {
     return (
       <main className="flex min-h-screen items-center justify-center bg-neutral-100 px-4">
         <Card className="w-full max-w-lg rounded-2xl p-8 text-center">
+          <div className="mb-6 flex justify-center">
+            <BrandLogo to="/" size="md" rounded="lg" priority />
+          </div>
           <AlertTriangle className="mx-auto h-14 w-14 text-red-600" />
 
           <h1 className="mt-6 text-2xl font-bold">
@@ -226,7 +239,10 @@ export default function VerifyEmail() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-neutral-100 px-4">
       <Card className="w-full max-w-lg rounded-2xl p-8 text-center">
-        <MailCheck className="mx-auto h-14 w-14" />
+        <div className="mb-6 flex justify-center">
+          <BrandLogo to="/" size="md" rounded="lg" priority />
+        </div>
+        <MailCheck className="mx-auto h-14 w-14 text-[#e59b22]" />
 
         <h1 className="mt-6 text-2xl font-bold">
           Vérifiez votre adresse email

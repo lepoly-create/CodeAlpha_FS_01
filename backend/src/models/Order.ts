@@ -64,4 +64,9 @@ const orderSchema = new Schema<IOrder>(
     }
 );
 
+// Indexations ultra-rapides pour 1000+ utilisateurs
+orderSchema.index({ user: 1, createdAt: -1 });
+orderSchema.index({ user: 1, status: 1 });
+orderSchema.index({ status: 1, createdAt: -1 });
+
 export default mongoose.model<IOrder>("Order", orderSchema);

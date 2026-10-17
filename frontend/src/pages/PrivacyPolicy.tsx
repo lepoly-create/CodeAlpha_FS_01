@@ -1,11 +1,13 @@
+import BrandLogo from "@/components/common/BrandLogo";
+
 export default function PrivacyPolicy() {
   return (
     <main className="bg-[#f9f9ff] px-4 py-16 sm:px-6 lg:px-8">
       <article className="mx-auto max-w-4xl rounded-lg bg-white p-6 shadow-xs border border-[#e5e7eb] sm:p-10">
         <header className="border-b border-[#e5e7eb] pb-8">
-          <p className="text-sm font-semibold uppercase tracking-wider text-[#835500]">
-            MarketElectro
-          </p>
+          <div className="mb-3">
+            <BrandLogo to="/" size="sm" rounded="md" />
+          </div>
           <h1 className="mt-2 text-3xl font-bold tracking-tight text-[#141b2b] sm:text-4xl">
             Politique de Confidentialité
           </h1>

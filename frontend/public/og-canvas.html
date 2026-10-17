@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>MarketElectro OG Banner Generator (Minimalist 1200x630)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #060913;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px;
+    }
+    #status {
+      margin-bottom: 20px;
+      font-size: 16px;
+      color: #38bdf8;
+      font-weight: 600;
+    }
+    canvas {
+      width: 1200px;
+      height: 630px;
+      box-shadow: 0 30px 80px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(56, 189, 248, 0.2);
+      border-radius: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div id="status">Génération de la bannière Open Graph épurée (1200x630)...</div>
+  <canvas id="ogCanvas" width="1200" height="630"></canvas>
+
+  <script>
+    let hasGenerated = false;
+
+    async function generateBanner() {
+      if (hasGenerated) return;
+      hasGenerated = true;
+
+      const canvas = document.getElementById('ogCanvas');
+      const ctx = canvas.getContext('2d');
+      const status = document.getElementById('status');
+
+      // Nettoyage complet
+      ctx.clearRect(0, 0, 1200, 630);
+      resetShadow(ctx);
+
+      // 1. Logo officiel
+      const logo = new Image();
+      logo.src = '/images/logo.png';
+      await new Promise(r => { logo.onload = r; logo.onerror = r; });
+
+      // 2. Fond épuré & élégant (Midnight Slate moderne)
+      const bgGrad = ctx.createLinearGradient(0, 0, 1200, 630);
+      bgGrad.addColorStop(0, '#09101f');
+      bgGrad.addColorStop(0.5, '#0f172a');
+      bgGrad.addColorStop(1, '#0b1222');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, 1200, 630);
+
+      // Halo ambiant doux et subtil sur la droite (bleu roi & cyan)
+      const softGlow = ctx.createRadialGradient(920, 280, 50, 920, 280, 500);
+      softGlow.addColorStop(0, 'rgba(56, 189, 248, 0.12)');
+      softGlow.addColorStop(0.5, 'rgba(37, 99, 235, 0.06)');
+      softGlow.addColorStop(1, 'rgba(15, 23, 42, 0)');
+      ctx.fillStyle = softGlow;
+      ctx.fillRect(0, 0, 1200, 630);
+
+      // ==========================================
+      // SECTION GAUCHE : ACCROCHE SIMPLE & PUISSANTE
+      // ==========================================
+      const leftX = 90;
+
+      // 1. Tag discret
+      ctx.font = 'bold 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText('●  BOUTIQUE ÉLECTRONIQUE OFFICIELLE', leftX, 120);
+
+      // 2. Grand Titre Accrocheur (Style UpTe : simple, 4-5 mots maximum)
+      ctx.font = '800 52px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText("Le High-Tech,", leftX, 205);
+
+      const titleGrad = ctx.createLinearGradient(leftX, 225, leftX + 400, 275);
+      titleGrad.addColorStop(0, '#38bdf8');
+      titleGrad.addColorStop(1, '#60a5fa');
+      ctx.fillStyle = titleGrad;
+      ctx.fillText("en toute confiance.", leftX, 270);
+
+      // 3. Description ultra claire et humaine
+      ctx.font = '500 20px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.fillStyle = '#94a3b8';
+      ctx.fillText("Smartphones, PC portables & accessoires.", leftX, 328);
+      ctx.fillText("Appareils 100% neufs avec garantie constructeur.", leftX, 358);
+
+      // 4. Badges clés simples
+      ctx.font = '600 15px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.fillStyle = '#cbd5e1';
+      ctx.fillText('✓ Expédition rapide 24/48h    ✓ Paiement sécurisé', leftX, 415);
+
+      // 5. Signature Marque & Logo en bas à gauche
+      const brandY = 485;
+      
+      // Conteneur Logo arrondi
+      ctx.save();
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.3)';
+      ctx.shadowBlur = 15;
+      roundRect(ctx, leftX, brandY, 70, 70, 18);
+      ctx.fillStyle = '#0f172a';
+      ctx.fill();
+      ctx.strokeStyle = 'rgba(56, 189, 248, 0.3)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.restore();
+
+      // Dessin du logo avec coins arrondis
+      ctx.save();
+      roundRect(ctx, leftX + 3, brandY + 3, 64, 64, 15);
+      ctx.clip();
+      ctx.drawImage(logo, leftX + 3, brandY + 3, 64, 64);
+      ctx.restore();
+
+      // Nom de marque & Domaine
+      resetShadow(ctx);
+      ctx.font = '800 28px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText('MarketElectro', leftX + 88, brandY + 32);
+
+      ctx.font = '600 15px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.fillStyle = '#38bdf8';
+      ctx.fillText('marketelectro.polydev.live', leftX + 88, brandY + 56);
+
+      // ==========================================
+      // SECTION DROITE : 2 CARTES ÉPURÉES (Style UpTe)
+      // ==========================================
+      const rightX = 675;
+      const cardW = 440;
+
+      // Carte 1 : Produits & Disponibilité
+      drawCleanCard(ctx, rightX, 130, cardW, 160, {
+        topBadge: '● En stock • Prêt à expédier',
+        topBadgeColor: '#059669',
+        topBadgeBg: '#ecfdf5',
+        title: 'Smartphones & Ordinateurs',
+        subtitle: 'Apple, Samsung, Dell, HP & grandes marques',
+        tag: '🛡️ Garantie constructeur 6 à 12 mois',
+        tagColor: '#0284c7',
+        tagBg: '#f0f9ff'
+      });
+
+      // Carte 2 : Confiance & Avis
+      drawCleanCard(ctx, rightX, 325, cardW, 160, {
+        topBadge: '★★★★★ 4.9 / 5 • Avis vérifiés',
+        topBadgeColor: '#d97706',
+        topBadgeBg: '#fffbeb',
+        title: 'Livraison express & SAV réactif',
+        subtitle: 'Paiement sécurisé et service client disponible',
+        tag: '⚡ Plus de 1 000 clients satisfaits',
+        tagColor: '#4f46e5',
+        tagBg: '#eef2ff'
+      });
+
+      // ==========================================
+      // EXPORT & ENVOI
+      // ==========================================
+      status.innerText = "Exportation de l'image...";
+
+      const jpgData = canvas.toDataURL('image/jpeg', 0.95);
+      const pngData = canvas.toDataURL('image/png');
+
+      try {
+        await fetch('http://localhost:5099/save-og', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dataUrl: jpgData, filename: 'og-image.jpg' })
+        });
+
+        await fetch('http://localhost:5099/save-og', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ dataUrl: pngData, filename: 'og-image.png' })
+        });
+
+        status.innerHTML = "✅ Bannière Open Graph épurée générée et enregistrée avec succès (1200x630) !";
+      } catch (err) {
+        status.innerText = "Erreur de sauvegarde: " + err.message;
+      }
+    }
+
+    function resetShadow(ctx) {
+      ctx.shadowColor = 'transparent';
+      ctx.shadowBlur = 0;
+      ctx.shadowOffsetX = 0;
+      ctx.shadowOffsetY = 0;
+    }
+
+    function drawCleanCard(ctx, x, y, w, h, data) {
+      // 1. Fond blanc pur avec ombre douce et élégante
+      ctx.save();
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.35)';
+      ctx.shadowBlur = 25;
+      ctx.shadowOffsetY = 12;
+
+      roundRect(ctx, x, y, w, h, 20);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+      ctx.restore();
+
+      resetShadow(ctx);
+
+      // 2. Badge supérieur
+      const bX = x + 24;
+      const bY = y + 20;
+      ctx.font = 'bold 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      const bW = ctx.measureText(data.topBadge).width + 18;
+      roundRect(ctx, bX, bY, bW, 26, 13);
+      ctx.fillStyle = data.topBadgeBg;
+      ctx.fill();
+      ctx.fillStyle = data.topBadgeColor;
+      ctx.fillText(data.topBadge, bX + 9, bY + 17);
+
+      // 3. Titre
+      ctx.font = '800 22px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.fillStyle = '#0f172a';
+      ctx.fillText(data.title, x + 24, y + 80);
+
+      // 4. Sous-titre
+      ctx.font = '500 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.fillStyle = '#64748b';
+      ctx.fillText(data.subtitle, x + 24, y + 106);
+
+      // 5. Tag inférieur
+      const tX = x + 24;
+      const tY = y + 120;
+      ctx.font = '600 12px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      const tW = ctx.measureText(data.tag).width + 16;
+      roundRect(ctx, tX, tY, tW, 24, 8);
+      ctx.fillStyle = data.tagBg;
+      ctx.fill();
+      ctx.fillStyle = data.tagColor;
+      ctx.fillText(data.tag, tX + 8, tY + 16);
+    }
+
+    function roundRect(ctx, x, y, width, height, radius) {
+      ctx.beginPath();
+      ctx.moveTo(x + radius, y);
+      ctx.lineTo(x + width - radius, y);
+      ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+      ctx.lineTo(x + width, y + height - radius);
+      ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+      ctx.lineTo(x + radius, y + height);
+      ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+      ctx.lineTo(x, y + radius);
+      ctx.quadraticCurveTo(x, y, x + radius, y);
+      ctx.closePath();
+    }
+
+    window.onload = () => {
+      setTimeout(generateBanner, 200);
+    };
+  </script>
+</body>
+</html>

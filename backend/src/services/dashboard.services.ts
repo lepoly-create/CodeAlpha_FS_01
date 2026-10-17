@@ -3,93 +3,91 @@ import Order from "../models/Order";
 import Cart from "../models/Cart";
 import Product from "../models/Product";
 
-export const getUserDashboard = async (
-    userId: string
-) => {
+export const getUserDashboard = async (userId: string) => {
+  // Exécution 100% parallèle des requêtes MongoDB via Promise.all
+  // Utilisation de .lean() et sélection ciblée des champs pour des performances maximales
+  const [user, recentOrders, allOrderStats, cart, recommendedProducts] =
+    await Promise.all([
+      User.findById(userId)
+        .select("fullName email role profileImage favoriteProducts")
+        .lean(),
 
-    const user = await User.findById(userId)
-        .select("-password");
+      // Seules les 5 commandes les plus récentes ont besoin d'être peuplées avec leurs produits
+      Order.find({ user: userId })
+        .sort({ createdAt: -1 })
+        .limit(5)
+        .populate("items.product", "name price image")
+        .lean(),
 
-    if (!user) {
-        throw new Error("Utilisateur introuvable");
-    }
+      // Statistiques globales ultra-rapides (uniquement status et totalAmount sans population lourde)
+      Order.find({ user: userId })
+        .select("status totalAmount")
+        .lean(),
 
-    const orders = await Order.find({
-        user: userId
-    })
-        .populate("items.product")
-        .sort({
-            createdAt: -1
-        });
+      Cart.findOne({ user: userId })
+        .select("items.quantity")
+        .lean(),
 
-    const cart = await Cart.findOne({
-        user: userId
-    });
-
-    const recommendedProducts = await Product.find({
+      Product.find({
         isActive: true,
         stock: { $gt: 0 },
-    })
+      })
+        .select("name price image")
         .sort({ createdAt: -1 })
-        .limit(4);
+        .limit(4)
+        .lean(),
+    ]);
 
-    const totalOrders = orders.length;
+  if (!user) {
+    throw new Error("Utilisateur introuvable");
+  }
 
-    const pendingOrders = orders.filter(
-        order => order.status === "pending"
-    ).length;
+  // Calcul instantané des métriques en mémoire en une seule passe O(N)
+  let totalOrders = 0;
+  let pendingOrders = 0;
+  let confirmedOrders = 0;
+  let cancelledOrders = 0;
+  let totalSpent = 0;
 
-    const confirmedOrders = orders.filter(
-        order => order.status === "confirmed"
-    ).length;
+  for (const order of allOrderStats) {
+    totalOrders++;
+    if (order.status === "confirmed") {
+      confirmedOrders++;
+      totalSpent += order.totalAmount || 0;
+    } else if (order.status === "pending") {
+      pendingOrders++;
+    } else if (order.status === "cancelled") {
+      cancelledOrders++;
+    }
+  }
 
-    const cancelledOrders = orders.filter(
-        order => order.status === "cancelled"
-    ).length;
+  const favoriteCount = user.favoriteProducts?.length || 0;
 
-    const totalSpent = orders
-        .filter(order => order.status === "confirmed")
-        .reduce(
-            (total, order) =>
-                total + order.totalAmount,
-            0
-        );
+  const cartItemsCount =
+    cart?.items?.reduce(
+      (total: number, item: { quantity: number }) =>
+        total + (item.quantity || 0),
+      0
+    ) || 0;
 
-    const favoriteCount =
-        user.favoriteProducts?.length || 0;
-
-    const cartItemsCount =
-        cart?.items.reduce(
-            (total, item) =>
-                total + item.quantity,
-            0
-        ) || 0;
-
-    const recentOrders = orders.slice(0, 5);
-
-    return {
-
-        user: {
-            id: user._id,
-            fullName: user.fullName,
-            email: user.email,
-            role: user.role,
-            profileImage: user.profileImage || null
-        },
-
-        statistics: {
-            totalOrders,
-            pendingOrders,
-            confirmedOrders,
-            cancelledOrders,
-            totalSpent,
-            favoriteCount,
-            cartItemsCount
-        },
-
-         recentOrders,
-
-        recommendedProducts
-
-    };
+  return {
+    user: {
+      id: user._id,
+      fullName: user.fullName,
+      email: user.email,
+      role: user.role,
+      profileImage: user.profileImage || null,
+    },
+    statistics: {
+      totalOrders,
+      pendingOrders,
+      confirmedOrders,
+      cancelledOrders,
+      totalSpent,
+      favoriteCount,
+      cartItemsCount,
+    },
+    recentOrders,
+    recommendedProducts,
+  };
 };

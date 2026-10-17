@@ -42,7 +42,6 @@ export default function OrdersPage() {
 
     const loadOrders = async () => {
       try {
-        setLoading(true);
         const data = await getMyOrders();
 
         if (isMounted) {

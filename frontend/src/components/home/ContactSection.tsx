@@ -27,7 +27,7 @@ const faqs: FaqItem[] = [
     category: "Qualité & Garantie",
     question: "Les appareils vendus sont-ils 100% neufs et sous garantie constructeur ?",
     answer:
-      "Absolument. MarketElectro ne propose aucun appareil reconditionné masqué ou d'origine douteuse. Tous nos équipements sont 100% neufs, certifiés constructeurs et livrés dans leur emballage d'origine scellé avec numéro de série traçable. Ils bénéficient tous d'une garantie matérielle constructeur de 12 à 24 mois selon les catégories.",
+      "Absolument. MarketElectro ne propose aucun appareil reconditionné masqué ou d'origine douteuse. Tous nos équipements sont 100% neufs, certifiés constructeurs et livrés dans leur emballage d'origine scellé avec numéro de série traçable. Ils bénéficient tous d'une garantie matérielle constructeur de 6 à 12 mois selon les catégories.",
   },
   {
     category: "Livraison & Suivi",

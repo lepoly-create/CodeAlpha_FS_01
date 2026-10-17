@@ -1,6 +1,6 @@
 import { SiGithub, SiWhatsapp } from "react-icons/si";
 import { FaLinkedinIn } from "react-icons/fa6";
-import { MonitorSmartphone } from "lucide-react";
+import BrandLogo from "@/components/common/BrandLogo";
 import { Link } from "react-router-dom";
 
 export default function PublicFooter() {
@@ -34,16 +34,13 @@ export default function PublicFooter() {
 
           {/* Logo & Description */}
           <div className="lg:col-span-2">
-            <Link to="/"
+            <BrandLogo
+              to="/"
               onClick={(e) => handleNavClick(e, "/")}
-              className="inline-flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-[0.25rem] bg-[#1a1c20] text-[#e59b22] border border-[#293040] shadow-sm">
-                <MonitorSmartphone className="h-5 w-5" />
-              </div>
-              <span className="text-xl font-bold tracking-tight text-white">
-                Market<span className="text-[#e59b22]">Electro</span>
-              </span>
-            </Link>
+              size="md"
+              rounded="lg"
+              variant="dark"
+            />
 
             <p className="mt-4 max-w-sm text-xs leading-relaxed text-[#dce2f7]/70">
               Votre destination privilégiée pour l'achat de produits électroniques de haute qualité. Sécurité, rapidité et service client irréprochable.

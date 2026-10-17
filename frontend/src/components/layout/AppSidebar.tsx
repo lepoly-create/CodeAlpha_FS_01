@@ -13,6 +13,7 @@ import { NavLink } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/useAuth";
+import BrandLogo from "@/components/common/BrandLogo";
 
 interface AppSidebarProps {
   open: boolean;
@@ -60,6 +61,26 @@ const adminNavigationItems = [
   { label: "Paramètres", icon: Settings, path: "/admin/settings" },
 ];
 
+const routePrefetchers: Record<string, () => Promise<unknown>> = {
+  "/dashboard": () => import("@/pages/Dashboard"),
+  "/products": () => import("@/pages/Products"),
+  "/cart": () => import("@/pages/CartPage"),
+  "/orders": () => import("@/pages/OrdersPage"),
+  "/profile": () => import("@/pages/Profile"),
+  "/admin": () => import("@/pages/admin/AdminDashboard"),
+  "/admin/products": () => import("@/pages/admin/AdminProducts"),
+  "/admin/orders": () => import("@/pages/admin/AdminOrders"),
+  "/admin/users": () => import("@/pages/admin/AdminUsers"),
+  "/admin/settings": () => import("@/pages/admin/AdminSettings"),
+};
+
+const prefetchRoute = (path: string) => {
+  const prefetcher = routePrefetchers[path];
+  if (prefetcher) {
+    void prefetcher();
+  }
+};
+
 export default function AppSidebar({ open, onClose }: AppSidebarProps) {
   const { user, logout } = useAuth();
   const navigationItems =
@@ -83,11 +104,12 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
       >
         {/* Logo */}
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <span className="text-xl font-bold tracking-tight text-[#141b2b]">
-              Market<span className="text-[#e59b22]">Electro</span>
-            </span>
-          </div>
+          <BrandLogo
+            to={user?.role === "admin" ? "/admin" : "/dashboard"}
+            size="md"
+            rounded="lg"
+            badge={user?.role === "admin" ? "Admin" : undefined}
+          />
 
           <Button
             variant="ghost"
@@ -111,6 +133,8 @@ export default function AppSidebar({ open, onClose }: AppSidebarProps) {
                 to={item.path}
                 end={item.path === "/admin" || item.path === "/dashboard"}
                 onClick={onClose}
+                onMouseEnter={() => prefetchRoute(item.path)}
+                onFocus={() => prefetchRoute(item.path)}
                 className={({ isActive }) => `flex min-h-[44px] items-center gap-3 rounded-[0.25rem] px-3.5 text-sm font-medium transition-colors ${isActive
                   ? "bg-[#1a1c20] text-white border-l-2 border-[#e59b22] font-semibold shadow-xs"
                   : "text-[#524535] hover:bg-[#f1f3ff] hover:text-[#141b2b]"
