@@ -26,6 +26,8 @@ import {
   requestPasswordReset,
 } from "@/services/auth.service";
 
+import BrandLogo from "@/components/common/BrandLogo";
+
 export default function ForgotPassword() {
   const [
     email,
@@ -78,6 +80,9 @@ export default function ForgotPassword() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f9f9ff] px-4">
       <Card className="w-full max-w-md rounded-lg border border-[#e5e7eb] bg-white p-8 shadow-xs">
+        <div className="mb-6 flex justify-center">
+          <BrandLogo to="/" size="md" rounded="lg" priority />
+        </div>
 
         <div className="text-center">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-[0.25rem] bg-[#ffddb5]/50 text-[#835500] border border-[#835500]/20">

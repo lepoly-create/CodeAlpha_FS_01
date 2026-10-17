@@ -6,13 +6,13 @@ import {
   AlertCircle,
   Eye,
   EyeOff,
-  MonitorSmartphone,
 } from "lucide-react";
 import axios from "axios";
 
 import { useAuth } from "@/contexts/useAuth";
 import { Button } from "@/components/ui/button";
 import GoogleLoginButton from "@/components/auth/GoogleLoginButton";
+import BrandLogo from "@/components/common/BrandLogo";
 
 // Helper pour extraire proprement les messages d'erreur API
 const parseAuthError = (error: unknown): string => {
@@ -108,19 +108,14 @@ export default function Login() {
         <div className="relative hidden w-1/2 flex-col justify-between p-12 text-white lg:flex">
           {/* Subtle gradient overlay interne */}
           <div className="absolute inset-0 -z-10 bg-gradient-to-b from-[#835500]/15 via-transparent to-black/60" />
-          <Link
+          <BrandLogo
             to="/"
             onClick={(e) => handleNavClick(e, "/")}
-            className="group flex items-center gap-3"
-            aria-label="MarketElectro - Accueil"
-          >
-            <div className="flex h-10 w-10 items-center justify-center rounded-[0.25rem] bg-[#1a1c20] border border-[#293040] text-[#e59b22] shadow-sm">
-              <MonitorSmartphone className="h-5 w-5 transition-transform duration-300 group-hover:rotate-6" />
-            </div>
-            <span className="text-xl font-bold tracking-tight text-white">
-              Market<span className="text-[#e59b22]">Electro</span>
-            </span>
-          </Link>
+            size="md"
+            rounded="lg"
+            variant="dark"
+            priority
+          />
 
           {/* Message de bienvenue inspirant */}
           <div className="space-y-4">
@@ -147,19 +142,13 @@ export default function Login() {
 
             {/* Header Mobile avec Logo */}
             <div className="mb-6 flex items-center justify-between lg:hidden">
-              <Link
+              <BrandLogo
                 to="/"
                 onClick={(e) => handleNavClick(e, "/")}
-                className="group flex items-center gap-2.5"
-                aria-label="MarketElectro - Accueil"
-              >
-                <div className="flex h-9 w-9 items-center justify-center rounded-[0.25rem] bg-[#1a1c20] border border-[#293040] text-[#e59b22] shadow-xs">
-                  <MonitorSmartphone className="h-4 w-4" />
-                </div>
-                <span className="text-lg font-bold tracking-tight text-white">
-                  Market<span className="text-[#e59b22]">Electro</span>
-                </span>
-              </Link>
+                size="sm"
+                rounded="md"
+                variant="dark"
+              />
 
               <Link
                 to="/"

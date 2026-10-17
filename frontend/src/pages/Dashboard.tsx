@@ -1,4 +1,3 @@
-import { useCallback, useEffect, useState } from "react";
 import { AlertCircle, RefreshCw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
@@ -11,53 +10,11 @@ import RecentOrders from "@/components/dashboard/RecentOrders";
 import AccountSummary from "@/components/dashboard/AccountSummary";
 import RecommendedProducts from "@/components/dashboard/RecommendedProducts";
 
-import {
-  getUserDashboard,
-  type UserDashboard,
-} from "@/services/dashboard.service";
+import { useUserDashboard } from "@/hooks/useUserDashboard";
 
 export default function Dashboard() {
-  const [dashboard, setDashboard] = useState<UserDashboard | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  const { dashboard, loading, error, refresh } = useUserDashboard();
   const navigate = useNavigate();
-
-  const fetchDashboard = useCallback(async () => {
-    try {
-      setLoading(true);
-      setError("");
-      const data = await getUserDashboard();
-      setDashboard(data);
-    } catch (err) {
-      console.error("Erreur chargement dashboard :", err);
-      setError("Impossible de charger les données de votre tableau de bord.");
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    let isCancelled = false;
-
-    getUserDashboard()
-      .then((data) => {
-        if (!isCancelled) {
-          setDashboard(data);
-          setLoading(false);
-        }
-      })
-      .catch((err) => {
-        if (!isCancelled) {
-          console.error("Erreur chargement dashboard :", err);
-          setError("Impossible de charger les données de votre tableau de bord.");
-          setLoading(false);
-        }
-      });
-
-    return () => {
-      isCancelled = true;
-    };
-  }, []);
 
   /* Skeleton Loading */
   if (loading) {
@@ -110,7 +67,7 @@ export default function Dashboard() {
             </div>
 
             <Button
-              onClick={fetchDashboard}
+              onClick={refresh}
               className="mt-2 flex items-center gap-2 rounded-[0.25rem] bg-[#1a1c20] text-white hover:bg-[#22252a] text-xs font-semibold px-4 h-9"
             >
               <RefreshCw className="h-4 w-4" />

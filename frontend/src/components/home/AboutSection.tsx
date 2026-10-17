@@ -8,7 +8,7 @@ export default function AboutSection() {
         <div className="grid gap-12 lg:grid-cols-12 lg:items-center">
 
           <div className="lg:col-span-5">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#835500]/40 bg-[#835500]/15 px-3.5 py-1 text-xs font-semibold text-[#ffb955]">
+            <span className="inline-flex items-center gap-1.5 rounded border-0 border-[#835500]/40 bg-[#835500]/15 px-3.5 py-1 text-xs font-semibold text-[#ffb955]">
               Plateforme Nouvelle Génération
             </span>
 

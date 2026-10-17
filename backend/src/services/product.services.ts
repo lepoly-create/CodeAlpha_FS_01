@@ -28,19 +28,16 @@ export const createProduct = async (
 };
 
 export const getAllProducts = async () => {
-
     return await Product.find({
         isActive: true
     }).sort({
         createdAt: -1
-    });
-
+    }).lean();
 };
 
 export const getProductById = async (
     id: string
 ) => {
-
     if (!mongoose.isValidObjectId(id)) {
         throw new Error("Identifiant produit invalide");
     }
@@ -48,7 +45,7 @@ export const getProductById = async (
     const product = await Product.findOne({
         _id: id,
         isActive: true,
-    });
+    }).lean();
 
     if (!product) {
         throw new Error("Produit introuvable");

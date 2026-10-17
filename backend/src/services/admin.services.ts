@@ -69,11 +69,13 @@ export const getAdminDashboard = async () => {
       .populate("user", "fullName email")
       .populate("items.product", "name price image")
       .sort({ createdAt: -1 })
-      .limit(5),
+      .limit(5)
+      .lean(),
 
     Product.find()
       .sort({ createdAt: -1 })
-      .limit(5),
+      .limit(5)
+      .lean(),
 
     Product.find({
       isActive: true,
@@ -83,7 +85,8 @@ export const getAdminDashboard = async () => {
       },
     })
       .sort({ stock: 1 })
-      .limit(5),
+      .limit(5)
+      .lean(),
   ]);
 
   const totalRevenue = revenueResult[0]?.total || 0;

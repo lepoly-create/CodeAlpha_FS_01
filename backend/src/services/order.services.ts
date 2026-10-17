@@ -105,41 +105,32 @@ export const createOrder = async (
 export const getMyOrders = async (
     userId: string
 ) => {
-
     return await Order.find({
-
         user: userId
     })
-
     .populate("items.product")
-
     .sort({
         createdAt: -1
-    });
-
+    })
+    .lean();
 };
 
-
 // Voir une commande
-
 export const getOrderById = async (
     orderId: string,
     userId: string
 ) => {
-
     const order = await Order.findOne({
-
         _id: orderId,
         user: userId
-
-    }).populate("items.product");
+    })
+    .populate("items.product")
+    .lean();
 
     if (!order) {
-
         throw new Error(
             "Commande introuvable"
         );
-
     }
     return order;
 };

@@ -61,4 +61,8 @@ const productSchema = new Schema<IProduct>(
     }
 );
 
+// Indexations ultra-rapides pour catalogue, filtres et recommandations
+productSchema.index({ isActive: 1, stock: 1, createdAt: -1 });
+productSchema.index({ category: 1, isActive: 1 });
+
 export default mongoose.model<IProduct>("Product", productSchema);

@@ -70,7 +70,7 @@ export default function WhyMarketElectroSection() {
 
         {/* Entête de section */}
         <div className="max-w-3xl space-y-3">
-          <span className="inline-flex items-center gap-2 rounded border border-[#835500]/30 bg-[#ffddb5]/15 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-[#ffb955]">
+          <span className="inline-flex items-center gap-2 rounded border-0 border-[#835500]/30 bg-[#ffddb5]/15 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-[#ffb955]">
             Pourquoi choisir MarketElectro ?
           </span>
 

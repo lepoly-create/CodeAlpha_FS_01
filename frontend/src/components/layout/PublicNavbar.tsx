@@ -1,7 +1,8 @@
-import { Menu, MonitorSmartphone, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import BrandLogo from "@/components/common/BrandLogo";
 
 export type NavSection = "hero" | "about" | "products" | "why-us" | "contact";
 
@@ -94,19 +95,13 @@ export default function PublicNavbar() {
   return (
     <header className="sticky top-0 z-50 border-b border-[#e5e7eb] bg-white/90 backdrop-blur-md shadow-xs transition-all duration-300">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link
+        <BrandLogo
           to="/"
           onClick={(e) => handleNavClick(e, "/")}
-          className="group flex items-center gap-3 transition-transform duration-200 hover:scale-[1.02]"
-          aria-label="MarketElectro - Accueil"
-        >
-          <div className="flex h-9 w-9 items-center justify-center rounded-[0.25rem] bg-[#1a1c20] text-[#e59b22] shadow-sm transition-transform duration-300 group-hover:rotate-6">
-            <MonitorSmartphone className="h-5 w-5" />
-          </div>
-          <span className="text-xl font-bold tracking-tight text-[#141b2b]">
-            Market<span className="text-[#e59b22]">Electro</span>
-          </span>
-        </Link>
+          size="md"
+          rounded="lg"
+          priority
+        />
 
         {/* Navigation Desktop */}
         <nav className="hidden items-center gap-8 md:flex" aria-label="Navigation principale">

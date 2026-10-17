@@ -23,6 +23,8 @@ import {
   resetPassword,
 } from "@/services/auth.service";
 
+import BrandLogo from "@/components/common/BrandLogo";
+
 export default function ResetPassword() {
   const [
     searchParams,
@@ -133,6 +135,9 @@ export default function ResetPassword() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f9f9ff] px-4">
       <Card className="w-full max-w-md rounded-lg border border-[#e5e7eb] bg-white p-8 shadow-xs">
+        <div className="mb-6 flex justify-center">
+          <BrandLogo to="/" size="md" rounded="lg" priority />
+        </div>
 
         <h1 className="text-2xl font-bold text-[#141b2b]">
           Nouveau mot de passe

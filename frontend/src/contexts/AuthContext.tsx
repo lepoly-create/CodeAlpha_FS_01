@@ -15,6 +15,8 @@ import {
   AuthContext,
 } from "@/contexts/auth-context";
 
+import { purgeAllClientDataCaches } from "@/api/axios";
+
 interface AuthProviderProps {
   children: ReactNode;
 }
@@ -119,6 +121,8 @@ export function AuthProvider({
           user: newUser,
         } = response.data;
 
+        purgeAllClientDataCaches();
+
         persistAuth(
           newToken,
           newUser,
@@ -152,6 +156,8 @@ export function AuthProvider({
           user: newUser,
         } = response.data;
 
+        purgeAllClientDataCaches();
+
         persistAuth(
           newToken,
           newUser,
@@ -180,6 +186,8 @@ export function AuthProvider({
         localStorage.removeItem(
           "user",
         );
+
+        purgeAllClientDataCaches();
 
         setToken(null);
         setUser(null);
@@ -212,6 +220,8 @@ export function AuthProvider({
           newToken: string,
           newUser: AuthUser,
         ) => {
+          purgeAllClientDataCaches();
+
           localStorage.setItem(
             "token",
             newToken,

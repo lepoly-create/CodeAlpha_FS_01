@@ -2,13 +2,13 @@ import {
   Bell,
   CircleUserRound,
   Menu,
-  MonitorSmartphone,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import CartButton from "@/components/cart/CartButton";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/contexts/useAuth";
+import BrandLogo from "@/components/common/BrandLogo";
 
 interface AppHeaderProps {
   onMenuClick: () => void;
@@ -31,18 +31,12 @@ export default function AppHeader({ onMenuClick }: AppHeaderProps) {
           <Menu className="h-5 w-5" />
         </Button>
 
-        <Link
+        <BrandLogo
           to={user?.role === "admin" ? "/admin" : "/dashboard"}
-          className="flex items-center gap-2 lg:hidden"
-          aria-label="MarketElectro"
-        >
-          <div className="flex h-8 w-8 items-center justify-center rounded-[0.25rem] bg-[#1a1c20] text-[#e59b22]">
-            <MonitorSmartphone className="h-4 w-4" />
-          </div>
-          <span className="text-lg font-bold tracking-tight text-[#141b2b]">
-            Market<span className="text-[#e59b22]">Electro</span>
-          </span>
-        </Link>
+          className="lg:hidden"
+          size="sm"
+          rounded="md"
+        />
       </div>
 
       {/* Centre : Espace fluide */}
